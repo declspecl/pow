@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import ThemeGroupItem from "./ThemeGroupItem";
 
-
 type ThemeGroupProps = {
 	theme: string,
 	setTheme: Dispatch< SetStateAction<string> >

@@ -1,52 +1,92 @@
 "use client";
 
 import clsx from "clsx";
+import { inter } from "@/Fonts";
+import { useState } from "react";
 import useTheme from "@/hooks/useTheme";
+import ThemeGroup from "@/components/Theme/ThemeGroup";
 import { PaletteIcon, XIcon } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
-import ThemeGroup from "./ThemeGroup";
-import { inter } from "@/Fonts";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 
-type ThemeSelectorProps = {
-	
-}
-
-export default function ThemeSelector({  }: ThemeSelectorProps) {
+export default function ThemeSelector() {
 	const [theme, setTheme] = useTheme();
+	const [isPortalOpen, setIsPortalOpen] = useState(false);
+
+	const contentVariants: Variants = {
+		initial: {
+			y: 20,
+			opacity: 0,
+			scale: 0.95
+		},
+		animate: {
+			y: 0,
+			opacity: 1,
+			scale: 1,
+			transition: {
+				duration: 0.125
+			}
+		},
+		exit: {
+			y: 10,
+			opacity: 0,
+			scale: 0.9,
+			transition: {
+				duration: 0.125
+			}
+		}
+	}
 
 	return (
 		<Popover.Root>
 			<Popover.Trigger asChild>
-				<button className={clsx(
-					"p-2 bg-background text-text rounded-xl transition-[background-color]",
-					"hover:bg-background-shade-2"
-				)}>
+				<button
+					onClick={() => setIsPortalOpen(true)}
+					className={clsx(
+						"p-2 bg-background text-text rounded-xl transition-[background-color]",
+						"hover:bg-background-shade-2"
+					)}
+				>
 					<PaletteIcon />
 				</button>
 			</Popover.Trigger>
 
-			<Popover.Portal>
-				<Popover.Content className={clsx(inter.className, "relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")}>
-					<Popover.Arrow className="w-3 h-1.5 fill-text" />
+			<AnimatePresence>
+				{isPortalOpen && (
+					<Popover.Portal forceMount={true}>
+						<Popover.Content className={clsx(inter.className, "relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")} asChild>
+							<motion.div
+								variants={contentVariants}
+								initial="initial"
+								animate="animate"
+								exit="exit"
+							>
+								<Popover.Arrow className="w-3 h-1.5 fill-text" />
 
-					<div className="flex flex-col gap-8">
-						<div className="flex flex-row justify-between items-center">
-							<h1 className="text-2xl font-semibold text-text">Select Theme</h1>
+								<div className="flex flex-col gap-8">
+									<div className="flex flex-row justify-between items-center">
+										<h1 className="text-2xl font-semibold text-text">Select Theme</h1>
 
-							<Popover.Close asChild>
-								<button className={clsx(
-									"p-1 flex flex-row justify-center items-center bg-background text-text rounded-lg transition-[background-color]",
-									"hover:bg-background-shade-2"
-								)}>
-									<XIcon />
-								</button>
-							</Popover.Close>
-						</div>
+										<Popover.Close asChild>
+											<button
+												onClick={() => setIsPortalOpen(false)}
+												className={clsx(
+													"p-1 flex flex-row justify-center items-center bg-background text-text rounded-lg transition-[background-color]",
+													"hover:bg-background-shade-2"
+												)}
+											>
+												<XIcon />
+											</button>
+										</Popover.Close>
+									</div>
 
-						<ThemeGroup theme={theme} setTheme={setTheme} />
-					</div>
-				</Popover.Content>
-			</Popover.Portal>
+									<ThemeGroup theme={theme} setTheme={setTheme} />
+								</div>
+							</motion.div>
+						</Popover.Content>
+					</Popover.Portal>
+				)}
+			</AnimatePresence>
 		</Popover.Root>
 	);
 }
