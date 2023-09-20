@@ -14,7 +14,9 @@ type Props = {
 export default function RootLayout({ children }: Props) {
 	return (
 		<html lang="en">
-			<body className="flex flex-col">{children}</body>
+			<body className="flex flex-col">
+				{children}
+			</body>
 		</html>
 	)
 }
