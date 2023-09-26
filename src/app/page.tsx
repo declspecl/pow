@@ -2,8 +2,9 @@
 
 import React from "react";
 import NavBar from "@/components/Navigation/NavBar";
-import DirectoryContents from "@/components/DirectoryContents";
+import FolderContents from "@/components/FolderContents/FolderContents";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import FileTree from "@/components/FileTree/FileTree";
 
 export default function Home() {
 	return (
@@ -22,7 +23,7 @@ export default function Home() {
 						minSize={50}
 						className="bg-background"
 					>
-						
+						<FileTree />
 					</Panel>
 
 					<PanelResizeHandle className="w-1 h-full bg-background-shade-2" />
@@ -31,7 +32,7 @@ export default function Home() {
 						minSize={50}
 						className="bg-background overflow-auto"
 					>
-						<DirectoryContents />
+						<FolderContents />
 					</Panel>
 				</PanelGroup>
 			</div>

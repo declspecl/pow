@@ -3,22 +3,23 @@
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import clsx from "clsx";
 
 export default function FolderContents() {
 	const [contents, setContents] = useState<string[] | null>(null);
-	const currentDirectory = useNaviHistoryStore((state) => state.history[state.current]);
+	const naviHistory = useNaviHistoryStore();
 
 	useEffect(() => {
 		console.log("DOING IT");
 
-		invoke<string[]>("get_directory_contents", { currentDirectory: currentDirectory })
+		invoke<string[]>("get_directory_contents", { currentDirectory: naviHistory.history[naviHistory.current] })
 			.then((contents) => {
 				setContents(contents);
 			})
 			.catch((error) => {
 				console.error(error);
 			})
-	}, [currentDirectory])
+	}, [naviHistory])
 
 	let displayFriendlyContents: React.ReactNode;
 
@@ -36,14 +37,26 @@ export default function FolderContents() {
 		{
 			displayFriendlyContents = contents.map((item) => {
 				return (
-					<p key={item}>{item}</p>
+					<button
+						key={item}
+						className={clsx(
+							"w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
+							"hover:bg-background-shade-2"
+						)}
+					>
+						{item}
+					</button>
 				);
 			})
 		}
 	}
 
 	return (
-		<div className="text-text scroll-auto">
+		<div
+			className={clsx(
+				"flex flex-col items-start",
+			)}
+		>
 			{displayFriendlyContents}
 		</div>
 	);
