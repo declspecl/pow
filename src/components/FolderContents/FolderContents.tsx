@@ -1,10 +1,10 @@
 "use client";
 
-import { useNaviHistoryStore } from "@/lib/NaviHistory";
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
-export default function DirectoryContents() {
+export default function FolderContents() {
 	const [contents, setContents] = useState<string[] | null>(null);
 	const currentDirectory = useNaviHistoryStore((state) => state.history[state.current]);
 
