@@ -1,25 +1,19 @@
 "use client";
 
+import clsx from "clsx";
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import clsx from "clsx";
 
 export default function FolderContents() {
 	const [contents, setContents] = useState<string[] | null>(null);
 	const naviHistory = useNaviHistoryStore();
 
 	useEffect(() => {
-		console.log("DOING IT");
-
 		invoke<string[]>("get_directory_contents", { currentDirectory: naviHistory.history[naviHistory.current] })
-			.then((contents) => {
-				setContents(contents);
-			})
-			.catch((error) => {
-				console.error(error);
-			})
-	}, [naviHistory])
+			.then((contents) => setContents(contents))
+			.catch((error) => console.error(error));
+	}, [naviHistory]);
 
 	let displayFriendlyContents: React.ReactNode;
 

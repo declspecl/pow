@@ -1,6 +1,5 @@
 "use client";
 
-import { invoke } from "@tauri-apps/api";
 import landmarkFolders from "./LandmarkFolders";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import clsx from "clsx";
