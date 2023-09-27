@@ -33,6 +33,9 @@ const config: Config = {
 			"accent-light": "hsl(var(--accent-light) / <alpha-value>)",
 			"accent-lighter": "hsl(var(--accent-lighter) / <alpha-value>)",
 		},
+		fontFamily: {
+			"inter": "inter"
+		},
 		extend: {},
 	},
 	plugins: [],

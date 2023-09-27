@@ -32,6 +32,7 @@ export default function FolderContents() {
 					<button
 						key={item}
 						className={clsx(
+							"font-inter",
 							"w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
 							"hover:bg-background-shade-2"
 						)}
