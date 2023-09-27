@@ -1,5 +1,3 @@
-"use client";
-
 import clsx from "clsx";
 import { inter } from "@/Fonts";
 import { useState } from "react";

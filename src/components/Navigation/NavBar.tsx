@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect } from "react";
 import ThemeSelector from "../Theme/ThemeSelector";
 import NextDirectoryButton from "./NextDirectoryButton";
