@@ -1,6 +1,3 @@
-"use client";
-
-import React from "react";
 import NavBar from "@/components/Navigation/NavBar";
 import FileTree from "@/components/FileTree/FileTree";
 import FolderContents from "@/components/FolderContents/FolderContents";

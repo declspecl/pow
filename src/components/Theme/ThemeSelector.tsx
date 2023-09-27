@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { inter } from "@/Fonts";
 import { useState } from "react";
 import useTheme from "@/hooks/useTheme";
 import ThemeGroup from "@/components/Theme/ThemeGroup";
@@ -52,7 +51,7 @@ export default function ThemeSelector() {
 			<AnimatePresence>
 				{isPortalOpen && (
 					<Popover.Portal forceMount={true}>
-						<Popover.Content className={clsx(inter.className, "relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")} asChild>
+						<Popover.Content className={clsx("relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")} asChild>
 							<motion.div
 								variants={contentVariants}
 								initial="initial"

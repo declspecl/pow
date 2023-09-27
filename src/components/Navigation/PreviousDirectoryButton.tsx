@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { ArrowLeftIcon } from "lucide-react";
-import React, { useState, Dispatch, SetStateAction } from "react";
 
 interface PreviousDirectoryProps {
 	onClick: () => void,

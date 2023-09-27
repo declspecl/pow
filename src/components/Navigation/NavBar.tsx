@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import ThemeSelector from "../Theme/ThemeSelector";
 import NextDirectoryButton from "./NextDirectoryButton";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";

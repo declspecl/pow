@@ -1,7 +1,3 @@
-type LandmarkFolder = {
-	path: string,
-}
-
 type LandmarkFolders = {
 	pinnedFolders: string[],
 	shellFolders: string[],

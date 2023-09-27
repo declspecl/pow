@@ -1,6 +1,5 @@
 import clsx from "clsx";
 import { ArrowRightIcon } from "lucide-react";
-import React, { useState, Dispatch, SetStateAction } from "react";
 
 interface NextDirectoryProps {
 	onClick: () => void,

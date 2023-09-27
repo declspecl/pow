@@ -2,7 +2,8 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
 	content: [
-		"./src/**/*.{ts,tsx}",
+		"./**/*.html",
+		"./src/**/*.{ts,tsx}"
 	],
 	theme: {
 		colors: {
@@ -31,7 +32,8 @@ const config: Config = {
 			"accent-darker": "hsl(var(--accent-darker) / <alpha-value>)",
 			"accent-light": "hsl(var(--accent-light) / <alpha-value>)",
 			"accent-lighter": "hsl(var(--accent-lighter) / <alpha-value>)",
-		}
+		},
+		extend: {},
 	},
 	plugins: [],
 };

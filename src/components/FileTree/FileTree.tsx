@@ -1,12 +1,6 @@
-"use client";
-
 import landmarkFolders from "./LandmarkFolders";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import clsx from "clsx";
-
-interface FileTreeProps {
-
-}
 
 export default function FileTree() {
 	const shellFolders: string[] = landmarkFolders.shellFolders;

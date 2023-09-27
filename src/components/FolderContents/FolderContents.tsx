@@ -1,5 +1,3 @@
-"use client";
-
 import clsx from "clsx";
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
