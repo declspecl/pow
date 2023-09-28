@@ -1,20 +1,21 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-pub mod config;
+pub mod user_config;
 
-use config::ConfigState;
+use std::{path::Path, fs};
+use tauri::api::{self, dir::{self, DiskEntry}};
+
+use user_config::UserConfig;
 
 fn main()
 {
     tauri::Builder::default()
         .setup(|app| {
-            let mut config: ConfigState = ConfigState::load_from_config(&app.config());
+            let mut config: UserConfig = UserConfig::deserialize_from_config(&app.config())?;
 
-            println!("{:#?}", config);
+            config.window_title("yoyoyo".into());
 
-            config.width(1280).height(720);
-
-            config.serialize(&app.config());
+            config.serialize_to_config(&app.config())?;
 
             return Ok(());
         })
@@ -26,18 +27,15 @@ fn main()
 #[tauri::command]
 fn get_directory_contents(current_directory: String) -> Result< Vec<String>, String>
 {
-    use std::fs;
-    use std::path::Path;
+    let current_directory = Path::new(current_directory.as_str());
 
-    let path = Path::new(current_directory.as_str());
-
-    if !path.is_dir() {
+    if !current_directory.is_dir() {
         return Err("not a directory".into());
     }
 
     let items: Vec<String> =
     {
-        if let Ok(dir_items) = fs::read_dir(path)
+        if let Ok(dir_items) = fs::read_dir(&current_directory)
         {
             dir_items.filter_map(|entry|
             {
@@ -54,7 +52,7 @@ fn get_directory_contents(current_directory: String) -> Result< Vec<String>, Str
         }
         else
         {
-            return Err("failed to read dir".into());
+            return Err(format!{"Failed to read directory at path \"{}\"", current_directory.display()}.into());
         }
     };
 
