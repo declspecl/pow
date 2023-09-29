@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 pub mod user_config;
+pub mod filesystem;
 
 use std::{path::{Path, PathBuf}, fs, sync::Mutex};
 use tauri::{api::{self, dir::{self, DiskEntry}, path}, Manager};
