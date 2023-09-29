@@ -28,7 +28,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "dev.pow",
+      "identifier": "pow",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
