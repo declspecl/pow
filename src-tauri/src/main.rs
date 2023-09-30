@@ -2,79 +2,51 @@
 
 pub mod user_config;
 pub mod filesystem;
+pub mod logging;
 
-use std::{path::{Path, PathBuf}, fs, sync::Mutex};
+use user_config::{UserConfig, UserConfigState};
+use std::{path::{Path, PathBuf}, fs, sync::Mutex, io};
 use tauri::{api::{self, dir::{self, DiskEntry}, path}, Manager};
-use tauri::PathResolver;
-
-use user_config::UserConfig;
-
-struct UserConfigState{
-    pub cfg: Mutex<UserConfig>
-}
 
 fn main()
 {
     tauri::Builder::default()
         .setup(|app| {
-            if let Some(config_file_path) = app.path_resolver().app_config_dir()
+            if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
             {
-                app.manage(
-                    UserConfigState{
-                        cfg: Mutex::new(UserConfig::deserialize_from_config(config_file_path).expect("failed to deserialize from config"))
-                    }
-                );
-            }
-            else
-            {
-                println!("failed to load config file");
-                
-                app.manage(
-                    UserConfigState{
-                        cfg: Mutex::new(UserConfig::new())
-                    }
-                );
+                UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap()).unwrap();
             }
 
             return Ok(());
         })
-        .invoke_handler(tauri::generate_handler![get_directory_contents, serialize_user_config, deserialize_user_config, get_user_config, set_user_config])
+        .invoke_handler(tauri::generate_handler![get_directory_contents, serialize_user_config, deserialize_user_config])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
 
 #[tauri::command]
-fn serialize_user_config(state: tauri::State<UserConfigState>, app_handle: tauri::AppHandle)
+fn serialize_user_config(user_config: UserConfig, app_handle: tauri::AppHandle) -> Result<(), String>
 {
     if let Some(config_file_path) = app_handle.path_resolver().app_config_dir()
     {
-        state.cfg.lock().unwrap().serialize_to_config(config_file_path).expect("failed to serialize");
+        user_config.serialize_to_config(config_file_path).expect("failed to serialize");
     }
+
+    return Ok(());
 }
 
 #[tauri::command]
-fn deserialize_user_config(state: tauri::State<UserConfigState>, app_handle: tauri::AppHandle)
+fn deserialize_user_config(app_handle: tauri::AppHandle) -> Result<UserConfig, String>
 {
-    if let Some(config_file_path) = app_handle.path_resolver().app_config_dir()
+    return match app_handle.path_resolver().app_config_dir()
     {
-        let mut st = state.cfg.lock().unwrap();
-
-        (*st) = UserConfig::deserialize_from_config(config_file_path).unwrap();
+        Some(config_file_path) => match UserConfig::deserialize_from_config(config_file_path)
+        {
+            Ok(user_config) => Ok(user_config),
+            io::Result::Err(why) => Err(why.to_string())
+        }
+        None => Err("Could not open app config dir in deserialize_user_config".into())
     }
-}
-
-#[tauri::command]
-fn get_user_config(state: tauri::State<UserConfigState>) -> UserConfig
-{
-    return state.cfg.lock().unwrap().clone();
-}
-
-#[tauri::command]
-fn set_user_config(config: UserConfig, state: tauri::State<UserConfigState>)
-{
-    let mut st = state.cfg.lock().unwrap();
-
-    *st = config;
 }
 
 #[tauri::command]

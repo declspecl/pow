@@ -18,6 +18,8 @@ impl Directory
 
     pub fn walk(&mut self) -> io::Result<()>
     {
+        unimplemented!();
+
         let children: Vec<String> =
         {
             if let Ok(children) = fs::read_dir(self.path)
@@ -47,6 +49,6 @@ impl Directory
     // 
     pub fn lazy_walk(&mut self) -> io::Result<()>
     {
-
+        return Ok(());
     }
 }
