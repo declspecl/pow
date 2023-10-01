@@ -3,22 +3,25 @@ import { Variants, motion } from "framer-motion";
 interface SpinnerProps {
 	width?: number,
 	height?: number,
+	fill?: string,
+	stroke?: string,
 	className?: string
 }
 
-export default function Spinner({ width, height, className }: SpinnerProps) {
+export default function Spinner({ width, height, fill, stroke, className }: SpinnerProps) {
 	const spinnerPathVariants: Variants = {
 		initial: {
 			pathLength: 0,
-			rotate: "0deg"
+			rotate: "0deg",
 		},
 		animate: {
-			pathLength: 1,
-			rotate: "360deg",
+			pathLength: [0, 1, 0],
+			rotate: ["0deg", "360deg", "720deg"],
 
 			transition: {
-				repeat: Infinity,
-				repeatType: "loop"
+				ease: "linear",
+				duration: 2,
+				repeat: Infinity
 			}
 		}
 	};
@@ -29,6 +32,9 @@ export default function Spinner({ width, height, className }: SpinnerProps) {
 			width={width ? width : 24}
 			height={height ? height : 24}
 			viewBox="0 0 24 24"
+			fill={fill ? fill : "none"}
+			stroke={stroke ? stroke : "currentColor"}
+			strokeWidth="2"
 			strokeLinecap="round"
 			strokeLinejoin="round"
 			className={className ? className : ""}

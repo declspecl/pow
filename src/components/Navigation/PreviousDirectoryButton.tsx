@@ -16,11 +16,13 @@ export default function PreviousDirectoryButton({ onClick, disabled }: PreviousD
 				{ "hover:bg-background-shade-2" : !disabled }
 			)}
 		>
-			<ArrowLeftIcon className={clsx(
-				"transition-[stroke]",
-				{ "stroke-text" : !disabled },
-				{ "stroke-background-shade-2" : disabled}
-			)}/>
+			<ArrowLeftIcon
+					className={clsx(
+					"transition-[stroke]",
+					{ "stroke-text" : !disabled },
+					{ "stroke-background-shade-2" : disabled}
+				)}
+			/>
 		</button>
 	);
 }

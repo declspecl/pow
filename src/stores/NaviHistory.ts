@@ -12,8 +12,8 @@ export interface NaviHistoryState extends NaviHistory {
 }
 
 export const useNaviHistoryStore = create<NaviHistoryState>()((set) => ({
-	history: ["C:\\Users\\Gavin"],
-	current: 0,
+	history: [],
+	current: -1,
 	gotoArbitrary: (directory: string) => set((state) => ({
 		history: state.history.slice(0, state.current + 1).concat(directory),
 		current: state.current + 1

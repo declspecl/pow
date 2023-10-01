@@ -2,8 +2,12 @@ import ThemeSelector from "../Theme/ThemeSelector";
 import NextDirectoryButton from "./NextDirectoryButton";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import PreviousDirectoryButton from "./PreviousDirectoryButton";
+import { useState } from "react";
+import { isEnvironmentVariable, validateEnvironmentVariable } from "@/lib/Utils";
 
 export default function NavBar() {
+	const [inputVal, setInputVal] = useState("");
+
 	const naviHistory = useNaviHistoryStore();
 
 	return (
@@ -17,7 +21,15 @@ export default function NavBar() {
 			<div className="grow flex flex-row">
 				<input
 					type="text"
-					onMouseLeave={() => naviHistory.gotoArbitrary("C:\\")}
+					onChange={(e) => setInputVal(e.target.value)}
+					onMouseLeave={async () => {
+						if (isEnvironmentVariable(inputVal)) {
+							naviHistory.gotoArbitrary(await validateEnvironmentVariable(inputVal));
+						}
+						else {
+							naviHistory.gotoArbitrary(inputVal);
+						}
+					}}
 					className="p-1 grow min-w-[80rex] bg-background text-text border border-text-shade-2 rounded-sm"
 				/>
 			</div>
