@@ -1,18 +1,23 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-pub mod user_config;
+pub mod error;
 pub mod filesystem;
-pub mod errors;
+pub mod user_config;
 
-use user_config::{UserConfig, UserConfigState};
-use std::{path::{Path, PathBuf}, fs, sync::Mutex, io};
-use tauri::{api::{self, dir::{self, DiskEntry}, path}, Manager};
+use user_config::{serialize_user_config, deserialize_user_config};
+
+use std::{path::Path, fs};
+use user_config::UserConfig;
 
 fn main()
 {
+    // -----------------
+    // -- tauri setup --
+    // -----------------
+
     tauri::Builder::default()
         .setup(|app| -> Result<(), Box<dyn std::error::Error> > {
-            if !UserConfig::exists(app.path_resolver().app_config_dir()?)
+            if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
             {
                 UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap())?;
             }
@@ -24,34 +29,9 @@ fn main()
         .expect("error while running tauri application");
 }
 
-#[tauri::command]
-fn serialize_user_config(user_config: UserConfig, app_handle: tauri::AppHandle) -> Result<(), String>
-{
-    if let Some(config_file_path) = app_handle.path_resolver().app_config_dir()
-    {
-        user_config.serialize_to_config(config_file_path).expect("failed to serialize");
-    }
-    else
-    {
-        app_handle.emit_all
-    }
-
-    return Ok(());
-}
-
-#[tauri::command]
-fn deserialize_user_config(app_handle: tauri::AppHandle) -> Result<UserConfig, String>
-{
-    return match app_handle.path_resolver().app_config_dir()
-    {
-        Some(config_file_path) => match UserConfig::deserialize_from_config(config_file_path)
-        {
-            Ok(user_config) => Ok(user_config),
-            io::Result::Err(why) => Err(why.to_string())
-        }
-        None => Err("Could not open app config dir in deserialize_user_config".into())
-    }
-}
+// --------------------
+// -- tauri commands --
+// --------------------
 
 #[tauri::command]
 fn get_directory_contents(current_directory: String) -> Result< Vec<String>, String>
@@ -65,7 +45,7 @@ fn get_directory_contents(current_directory: String) -> Result< Vec<String>, Str
 
     let items: Vec<String> =
     {
-        if let Ok(dir_items) = fs::read_dir(&current_directory)
+        if let Ok(dir_items) = fs::read_dir(current_directory)
         {
             dir_items.filter_map(|entry|
             {
@@ -82,7 +62,7 @@ fn get_directory_contents(current_directory: String) -> Result< Vec<String>, Str
         }
         else
         {
-            return Err(format!{"Failed to read directory at path \"{}\"", current_directory.display()}.into());
+            return Err(format!("Failed to read directory at path \"{}\"", current_directory.display()).into());
         }
     };
 
