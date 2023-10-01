@@ -2,7 +2,7 @@
 
 pub mod user_config;
 pub mod filesystem;
-pub mod logging;
+pub mod errors;
 
 use user_config::{UserConfig, UserConfigState};
 use std::{path::{Path, PathBuf}, fs, sync::Mutex, io};
@@ -11,10 +11,10 @@ use tauri::{api::{self, dir::{self, DiskEntry}, path}, Manager};
 fn main()
 {
     tauri::Builder::default()
-        .setup(|app| {
-            if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
+        .setup(|app| -> Result<(), Box<dyn std::error::Error> > {
+            if !UserConfig::exists(app.path_resolver().app_config_dir()?)
             {
-                UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap()).unwrap();
+                UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap())?;
             }
 
             return Ok(());
@@ -30,6 +30,10 @@ fn serialize_user_config(user_config: UserConfig, app_handle: tauri::AppHandle) 
     if let Some(config_file_path) = app_handle.path_resolver().app_config_dir()
     {
         user_config.serialize_to_config(config_file_path).expect("failed to serialize");
+    }
+    else
+    {
+        app_handle.emit_all
     }
 
     return Ok(());
