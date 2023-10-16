@@ -39,7 +39,7 @@ export default function Settings({ userConfig, setUserConfig }: SettingsProps) {
 					newUserConfig.height = height;
 
 					setTimeout(async () => {
-						await invoke("serialize_user_config", { userConfig: newUserConfig });
+						await invoke("serialize_user_config", { user_config: newUserConfig });
 						
 						setUserConfig(newUserConfig);
 

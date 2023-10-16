@@ -1,60 +1,68 @@
-import { invoke } from "@tauri-apps/api/tauri";
-import { useState, useEffect } from "react";
-import { BackendUserConfig, UserConfig } from "@/lib/UserConfig";
-import Loading from "@/components/Loading/Loading";
-import useTheme from "@/hooks/useTheme";
 import Pow from "@/components/Pow/Pow";
+import { useState, useEffect } from "react";
+import { UserConfig } from "@/lib/UserConfig";
+import { invoke } from "@tauri-apps/api/tauri";
+import Loading from "@/components/Loading/Loading";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import { isEnvironmentVariable, validateEnvironmentVariable } from "@/lib/Utils";
+import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
 
 export default function App() {
-	const [theme, setTheme] = useTheme();
-	const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
+    const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
 
-	const naviHistoryHistory = useNaviHistoryStore().history;
-	const naviHistoryGotoArbitrary = useNaviHistoryStore().gotoArbitrary;
+    const naviHistoryGotoArbitrary = useNaviHistoryStore().gotoArbitrary;
+    const naviHistoryReset = useNaviHistoryStore().reset;
 
-	useEffect(() => {
-		async function getUserConfig() {
-			const user_config = await invoke<BackendUserConfig>("deserialize_user_config");
+    useEffect(() => {
+        let isDeserialized = false;
 
-			console.log(user_config);
+        invoke<UserConfig>("deserialize_user_config")
+            .then((user_config) => {
+                if (!isDeserialized) {
+                    if (isEnvironmentVariable(user_config.default_folder)) {
+                        resolveEnvironmentVariable(user_config.default_folder)
+                            .then((initialFolder) => {
+                                naviHistoryGotoArbitrary(initialFolder);
+                            })
+                            .catch((err) => {
+                                console.error(err); // some error happened internally with resolving the env var
+                                naviHistoryGotoArbitrary(user_config.default_folder);
+                            });
+                    }
+                    else {
+                        naviHistoryGotoArbitrary(user_config.default_folder);
+                    }
 
-			if (naviHistoryHistory.length === 0) {
-				let initialFolder: string;
+                    setUserConfig({
+                        width: user_config.width,
+                        height: user_config.height,
+                        theme: user_config.theme,
+                        window_title: user_config.window_title,
+                        pinned_folders: user_config.pinned_folders,
+                        default_folder: user_config.default_folder,
+                        excluded_extensions: user_config.excluded_extensions
+                    });
+                }
+            })
+            .catch((err) => {
+                // some error happened internally with deserializing the user config
+                // TODO: make some sort of alert modal that will tell the user its going to assume default config
+                console.error(err);
+            })
 
-				if (isEnvironmentVariable(user_config.default_folder)) {
-					initialFolder = await validateEnvironmentVariable(user_config.default_folder);
-				}
-				else {
-					initialFolder = user_config.default_folder;
-				}
+        return () => {
+            isDeserialized = true;
 
-				naviHistoryGotoArbitrary(initialFolder);
-			}
+            naviHistoryReset();
+        }
+    }, [naviHistoryGotoArbitrary, naviHistoryReset]);
 
-			setUserConfig({
-				width: user_config.width,
-				height: user_config.height,
-				theme: user_config.theme,
-				windowTitle: user_config.window_title,
-				pinnedFolders: user_config.pinned_folders,
-				defaultFolder: user_config.default_folder,
-				excludedExtensions: user_config.excluded_extensions
-			});
-		}
-
-		getUserConfig();
-	}, [naviHistoryGotoArbitrary, naviHistoryHistory]);
-
-	return (
-		<main className="bg-background h-screen">
-		{userConfig === null ? (
-			<Loading />
-		) : (
-			<Pow />
-		)}
-		</main>
-	);
+    return (
+        <main className="bg-background h-screen">
+            {userConfig === null ? (
+                <Loading />
+            ) : (
+                <Pow />
+            )}
+        </main>
+    );
 }
-

@@ -8,7 +8,7 @@ pub mod user_config;
 
 use user_config::{serialize_user_config, deserialize_user_config};
 
-use std::{env, path::Path, fs, ffi::OsString};
+use std::{env, path::Path, fs};
 use user_config::UserConfig;
 
 fn main()
@@ -40,7 +40,7 @@ fn main()
 // -- tauri commands --
 // --------------------
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 fn get_directory_contents(current_directory: String) -> Result< Vec<String>, String>
 {
     let current_directory = Path::new(current_directory.as_str());
@@ -76,12 +76,12 @@ fn get_directory_contents(current_directory: String) -> Result< Vec<String>, Str
     return Ok(items);
 }
 
-#[tauri::command]
+#[tauri::command(rename_all = "snake_case")]
 fn resolve_environment_variable(environment_variable: String) -> PowResult<String>
 {
     let bytes = environment_variable.as_bytes();
     
-    if bytes[0] == b'%' && bytes[bytes.len() - 1] == b'%'
+    if bytes.len() > 2 && (bytes[0] == b'%' && bytes[bytes.len() - 1] == b'%')
     {
         return match std::env::var_os(String::from_utf8_lossy(&bytes[1..bytes.len() - 1]).to_string())
         {
@@ -89,7 +89,7 @@ fn resolve_environment_variable(environment_variable: String) -> PowResult<Strin
             None => Err(PowError::InvalidEnvironmentVariableError(environment_variable))
         }
     }
-    else if bytes[0] == b'$'
+    else if bytes.len() > 1 && bytes[0] == b'$'
     {
          return match std::env::var_os(String::from_utf8_lossy(&bytes[1..]).to_string())
          {
