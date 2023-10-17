@@ -1,28 +1,26 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import ThemeGroupItem from "./ThemeGroupItem";
+import { Themes, getCurrentTheme, setCurrentTheme } from "@/lib/Theme";
 
-type ThemeGroupProps = {
-	theme: string,
-	setTheme: Dispatch< SetStateAction<string> >
-}
+export default function ThemeGroup() {
+    const currentTheme = getCurrentTheme();
 
-export default function ThemeGroup({ theme, setTheme }: ThemeGroupProps) {
 	let themeIndex: number;
 
-	switch (theme) {
-		case "light":
+	switch (currentTheme) {
+		case Themes.Light:
 			themeIndex = 0;
 			break;
 
-		case "dark":
+		case Themes.Dark:
 			themeIndex = 1;
 			break;
 
-		case "rose-pine":
+		case Themes.RosePine:
 			themeIndex = 2;
 			break;
 
-		case "tokyonight":
+		case Themes.TokyoNight:
 			themeIndex = 3;
 			break;
 
@@ -40,7 +38,7 @@ export default function ThemeGroup({ theme, setTheme }: ThemeGroupProps) {
 				dataTheme="light"
 				selected={selectedIndex === 0}
 				onClick={() => {
-					setTheme("light");
+					setCurrentTheme(Themes.Light);
 					setSelectedIndex(0);
 				}}
 			/>
@@ -50,7 +48,7 @@ export default function ThemeGroup({ theme, setTheme }: ThemeGroupProps) {
 				dataTheme="dark"
 				selected={selectedIndex === 1}
 				onClick={() => {
-					setTheme("dark");
+					setCurrentTheme(Themes.Dark);
 					setSelectedIndex(1);
 				}}
 			/>
@@ -60,7 +58,7 @@ export default function ThemeGroup({ theme, setTheme }: ThemeGroupProps) {
 				dataTheme="rose-pine"
 				selected={selectedIndex === 2}
 				onClick={() => {
-					setTheme("rose-pine");
+					setCurrentTheme(Themes.RosePine);
 					setSelectedIndex(2);
 				}}
 			/>
@@ -70,7 +68,7 @@ export default function ThemeGroup({ theme, setTheme }: ThemeGroupProps) {
 				dataTheme="tokyonight"
 				selected={selectedIndex === 3}
 				onClick={() => {
-					setTheme("tokyonight");
+					setCurrentTheme(Themes.TokyoNight);
 					setSelectedIndex(3);
 				}}
 			/>

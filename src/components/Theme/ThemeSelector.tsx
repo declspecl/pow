@@ -1,13 +1,11 @@
 import clsx from "clsx";
 import { useState } from "react";
-import useTheme from "@/hooks/useTheme";
 import ThemeGroup from "@/components/Theme/ThemeGroup";
 import { PaletteIcon, XIcon } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 
 export default function ThemeSelector() {
-	const [theme, setTheme] = useTheme();
 	const [isPortalOpen, setIsPortalOpen] = useState(false);
 
 	const contentVariants: Variants = {
@@ -50,7 +48,7 @@ export default function ThemeSelector() {
 
 			<AnimatePresence>
 				{isPortalOpen && (
-					<Popover.Portal forceMount={true}>
+					<Popover.Portal forceMount>
 						<Popover.Content className={clsx("relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")} asChild>
 							<motion.div
 								variants={contentVariants}
@@ -77,7 +75,7 @@ export default function ThemeSelector() {
 										</Popover.Close>
 									</div>
 
-									<ThemeGroup theme={theme} setTheme={setTheme} />
+									<ThemeGroup />
 								</div>
 							</motion.div>
 						</Popover.Content>

@@ -5,6 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import Loading from "@/components/Loading/Loading";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
+import { getCurrentTheme, setCurrentTheme } from "@/lib/Theme";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -13,11 +14,13 @@ export default function App() {
     const naviHistoryReset = useNaviHistoryStore().reset;
 
     useEffect(() => {
-        let isDeserialized = false;
+        setCurrentTheme(getCurrentTheme());
+
+        let isCancelled = false;
 
         invoke<UserConfig>("deserialize_user_config")
             .then((user_config) => {
-                if (!isDeserialized) {
+                if (!isCancelled) {
                     if (isEnvironmentVariable(user_config.default_folder)) {
                         resolveEnvironmentVariable(user_config.default_folder)
                             .then((initialFolder) => {
@@ -50,7 +53,7 @@ export default function App() {
             })
 
         return () => {
-            isDeserialized = true;
+            isCancelled = true;
 
             naviHistoryReset();
         }
