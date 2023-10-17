@@ -1,9 +1,9 @@
 import { useState } from "react";
 import ThemeGroupItem from "./ThemeGroupItem";
-import { Themes, getCurrentTheme, setCurrentTheme } from "@/lib/Theme";
+import { Themes, getLocalStorageTheme, setLocalStorageTheme, setPageTheme } from "@/lib/Theme";
 
 export default function ThemeGroup() {
-    const currentTheme = getCurrentTheme();
+    const currentTheme = getLocalStorageTheme();
 
 	let themeIndex: number;
 
@@ -38,7 +38,9 @@ export default function ThemeGroup() {
 				dataTheme="light"
 				selected={selectedIndex === 0}
 				onClick={() => {
-					setCurrentTheme(Themes.Light);
+					setPageTheme(Themes.Light);
+                    setLocalStorageTheme(Themes.Light);
+
 					setSelectedIndex(0);
 				}}
 			/>
@@ -48,7 +50,9 @@ export default function ThemeGroup() {
 				dataTheme="dark"
 				selected={selectedIndex === 1}
 				onClick={() => {
-					setCurrentTheme(Themes.Dark);
+					setPageTheme(Themes.Dark);
+                    setLocalStorageTheme(Themes.Dark);
+
 					setSelectedIndex(1);
 				}}
 			/>
@@ -58,7 +62,9 @@ export default function ThemeGroup() {
 				dataTheme="rose-pine"
 				selected={selectedIndex === 2}
 				onClick={() => {
-					setCurrentTheme(Themes.RosePine);
+					setPageTheme(Themes.RosePine);
+                    setLocalStorageTheme(Themes.RosePine);
+
 					setSelectedIndex(2);
 				}}
 			/>
@@ -68,7 +74,9 @@ export default function ThemeGroup() {
 				dataTheme="tokyonight"
 				selected={selectedIndex === 3}
 				onClick={() => {
-					setCurrentTheme(Themes.TokyoNight);
+					setPageTheme(Themes.TokyoNight);
+                    setLocalStorageTheme(Themes.TokyoNight);
+
 					setSelectedIndex(3);
 				}}
 			/>
