@@ -18,7 +18,7 @@ pub fn get_directory_contents(current_directory: String) -> SystemResult< Vec<St
     // checking if directory is valid
     if !current_directory.is_dir()
     {
-        return Err(SystemError::InvalidEnvironmentVariableError(format!("Not a directory: {}", current_directory.display())));
+        return Err(SystemError::InvalidDirectoryError(format!("Not a directory: {}", current_directory.display())));
     }
 
     // reading directory contents into Vec<String>
