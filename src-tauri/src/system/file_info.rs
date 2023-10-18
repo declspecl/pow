@@ -1,4 +1,4 @@
-use std::{time::SystemTime, convert, fs::DirEntry};
+use std::{time::SystemTime, convert, fs::DirEntry, path::PathBuf};
 
 use crate::system::SystemResult;
 
@@ -8,6 +8,7 @@ use super::SystemError;
 // - FileType definition -
 // -----------------------
 
+#[derive(Debug)]
 pub enum FileType
 {
     FILE,
@@ -18,6 +19,7 @@ pub enum FileType
 // - FileInfo definition -
 // -----------------------
 
+#[derive(Debug)]
 pub struct FileInfo
 {
     pub name: String,
@@ -61,7 +63,32 @@ impl convert::TryFrom<DirEntry> for FileInfo
         return Ok(Self
         {
             name: value.file_name().into_string()?,
-            file_type: if value.file_type()?.is_file() { FileType::FILE } else { FileType::DIRECTORY },
+            file_type: if value.file_type()?.is_file() || value.file_type()?.is_symlink() { FileType::FILE } else { FileType::DIRECTORY },
+            size: metadata.len(),
+            last_modified: metadata.modified()?,
+            last_accessed: metadata.accessed()?,
+            time_created: metadata.created()?,
+            is_readonly: metadata.permissions().readonly()
+        });
+    }
+}
+
+impl convert::TryFrom<PathBuf> for FileInfo
+{
+    type Error = SystemError;
+
+    fn try_from(value: PathBuf) -> SystemResult<Self>
+    {
+        let metadata = value.metadata()?;
+
+        return Ok(Self
+        {
+            name: value.file_name()
+                .ok_or(SystemError::OSStringConversionError(value.as_os_str().to_owned()))?
+                .to_str()
+                .ok_or(SystemError::OSStringConversionError(value.as_os_str().to_owned()))?
+                .to_string(),
+            file_type: if metadata.is_file() || metadata.is_symlink() { FileType::FILE } else { FileType::DIRECTORY },
             size: metadata.len(),
             last_modified: metadata.modified()?,
             last_accessed: metadata.accessed()?,

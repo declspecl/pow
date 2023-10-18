@@ -1,4 +1,4 @@
-use std::{error, fmt};
+use std::{error, fmt, convert};
 use serde::{Serialize, Deserialize};
 
 use crate::{user_config::UserConfigError, system::SystemError};
@@ -32,5 +32,21 @@ impl fmt::Display for PowError
             Self::UserConfigError(why) => write!(f, "Underlying UserConfigError: {}", why.to_string()),
             Self::SystemError(why) => write!(f, "Underlying SystemError: {}", why.to_string())
         }
+    }
+}
+
+impl convert::From<UserConfigError> for PowError
+{
+    fn from(error: UserConfigError) -> Self
+    {
+        return Self::UserConfigError(error);
+    }
+}
+
+impl convert::From<SystemError> for PowError
+{
+    fn from(error: SystemError) -> Self
+    {
+        return Self::SystemError(error);
     }
 }
