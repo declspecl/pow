@@ -5,7 +5,7 @@ pub mod system;
 pub mod user_config;
 
 use user_config::{UserConfig, {serialize_user_config, deserialize_user_config}};
-use system::{get_directory_contents, resolve_environment_variable};
+use system::{get_directory_contents, get_parent_directory, resolve_environment_variable};
 
 fn main()
 {
@@ -29,6 +29,7 @@ fn main()
         })
         .invoke_handler(tauri::generate_handler![
             get_directory_contents,
+            get_parent_directory,
             serialize_user_config,
             deserialize_user_config,
             resolve_environment_variable

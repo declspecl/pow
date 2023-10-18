@@ -39,30 +39,46 @@ export default function FolderContents() {
         }
         else
         {
-            displayFriendlyContents = contents.map((item) => {
-                return (
+            displayFriendlyContents = (
+                <div className="overflow-scroll">
                     <button
-                        key={item}
+                        onClick={() => {
+                            invoke<string>("get_parent_directory", { path: naviHistory.history[naviHistory.current] })
+                                .then((parentDir) => {
+                                    naviHistory.gotoArbitrary(parentDir);
+                                })
+                                .catch((err) => {
+                                    console.error(err);
+                                })
+                        }}
                         className={clsx(
                             "font-inter",
                             "w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
                             "hover:bg-background-shade-2"
                         )}
                     >
-                        {item}
+                        ..
                     </button>
-                );
-            })
+
+                    {contents.map((item) => (
+                        <button
+                            key={item}
+                            onClick={() => {
+                                naviHistory.gotoArbitrary(`${naviHistory.getCurrentDirectory()}\\${item}`);
+                            }}
+                            className={clsx(
+                                "font-inter",
+                                "w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
+                                "hover:bg-background-shade-2"
+                            )}
+                        >
+                            {item}
+                        </button>
+                    ))}
+                </div>
+            );
         }
     }
 
-    return (
-        <div
-            className={clsx(
-                "flex flex-col items-start",
-            )}
-        >
-            {displayFriendlyContents}
-        </div>
-    );
+    return displayFriendlyContents;
 }

@@ -18,7 +18,7 @@ export function getLocalStorageTheme(): Themes {
     if (theme === null || !possibleThemes.includes(theme)) {
         const systemTheme = getSystemTheme();
         
-        setPageTheme(systemTheme);
+        setVisibleTheme(systemTheme);
         setLocalStorageTheme(systemTheme);
 
         return systemTheme;
@@ -31,6 +31,6 @@ export function setLocalStorageTheme(newTheme: Themes) {
     localStorage.setItem("theme", newTheme);
 }
 
-export function setPageTheme(newTheme: Themes) {
+export function setVisibleTheme(newTheme: Themes) {
     document.documentElement.setAttribute("data-theme", newTheme);
 }

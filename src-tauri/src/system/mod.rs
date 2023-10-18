@@ -4,7 +4,7 @@ pub mod file_tree_node;
 
 pub use error::{SystemError, SystemResult};
 
-use std::{fs, path::Path};
+use std::{fs, path::{Path, PathBuf}};
 
 // ------------------
 // - tauri commands -
@@ -37,6 +37,19 @@ pub fn get_directory_contents(current_directory: String) -> SystemResult< Vec<St
         .collect();
 
     return Ok(items);
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn get_parent_directory(path: String) -> SystemResult<String>
+{
+    let path = PathBuf::from(path.as_str());
+
+    return Ok(path.parent()
+        .ok_or(SystemError::InvalidDirectoryError(path.to_string_lossy().to_string()))?
+        .to_str()
+            .ok_or(SystemError::OSStringConversionError(path.to_string_lossy().to_string().into()))?
+            .to_string()
+    );
 }
 
 #[tauri::command(rename_all = "snake_case")]

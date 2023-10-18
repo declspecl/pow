@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useState } from "react";
-import ThemeGroup from "@/components/Theme/ThemeGroup";
 import { PaletteIcon, XIcon } from "lucide-react";
 import * as Popover from "@radix-ui/react-popover";
+import ThemeGroup from "@/components/Theme/ThemeGroup";
 import { motion, Variants, AnimatePresence } from "framer-motion";
 
 export default function ThemeSelector() {

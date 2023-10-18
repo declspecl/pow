@@ -5,7 +5,7 @@ import { invoke } from "@tauri-apps/api/tauri";
 import Loading from "@/components/Loading/Loading";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
-import { setPageTheme, getLocalStorageTheme } from "@/lib/Theme";
+import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -14,7 +14,7 @@ export default function App() {
     const naviHistoryReset = useNaviHistoryStore().reset;
 
     useEffect(() => {
-        setPageTheme(getLocalStorageTheme());
+        setVisibleTheme(getLocalStorageTheme());
 
         let isCancelled = false;
 

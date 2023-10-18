@@ -10,7 +10,8 @@ export interface NaviHistoryState extends NaviHistory {
     gotoNext: () => void,
     gotoPrevious: () => void,
     pop: () => void,
-    reset: () => void
+    reset: () => void,
+    getCurrentDirectory: () => string
 }
 
 export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
@@ -45,5 +46,8 @@ export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
         console.log("reset");
 
         set(() => ({ history: [], current: -1 }));
+    },
+    getCurrentDirectory: () => {
+        return get().history[get().current];
     }
 }))

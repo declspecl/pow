@@ -1,4 +1,4 @@
-use std::{fmt, error, convert, ffi::OsString};
+use std::{fmt, error, convert, ffi::OsString, path::Path};
 use serde::{Serialize, Deserialize};
 
 // defining custom Result wrapper type
@@ -13,7 +13,8 @@ pub enum SystemError
     InvalidDirectoryError(String),
     InvalidEnvironmentVariableError(String),
     IOError(String),
-    OSStringConversionError(OsString)
+    OSStringConversionError(OsString),
+    DirectoryUnderflowError(Box<Path>)
 }
 
 impl error::Error for SystemError {}
@@ -30,7 +31,8 @@ impl fmt::Display for SystemError
             Self::InvalidDirectoryError(path) => write!(f, "Path \"{}\" is not a directory", path),
             Self::InvalidEnvironmentVariableError(var) => write!(f, "Invalid environment variable \"{}\"", var),
             Self::IOError(why) => write!(f, "Underlying IO error: \"{}\"", why),
-            Self::OSStringConversionError(os_string) => write!(f, "Failed to convert OSString \"{}\" to String", os_string.to_string_lossy())
+            Self::OSStringConversionError(os_string) => write!(f, "Failed to convert OSString \"{}\" to String", os_string.to_string_lossy()),
+            Self::DirectoryUnderflowError(path) => write!(f, "Cannot get parent directory of \"{}\"", path.to_string_lossy())
         }
     }
 }
