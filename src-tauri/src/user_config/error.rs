@@ -1,12 +1,12 @@
 use serde::{Serialize, Deserialize};
-use std::{io, error, convert, fmt, path::PathBuf};
+use std::{io, fmt, error, convert::From, path::PathBuf};
 
 // exporting custom Result type
 pub type UserConfigResult<T> = Result<T, UserConfigError>;
 
-// --------------------------------
-// -- UserConfigError definition --
-// --------------------------------
+// ------------------------------
+// - UserConfigError definition -
+// ------------------------------
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum UserConfigError
@@ -21,9 +21,9 @@ pub enum UserConfigError
 
 impl error::Error for UserConfigError {}
 
-// ---------------------------------
-// -- fmt::Display implementation --
-// ---------------------------------
+// -------------------------------
+// - fmt::Display implementation -
+// -------------------------------
 
 impl fmt::Display for UserConfigError
 {
@@ -40,11 +40,11 @@ impl fmt::Display for UserConfigError
     }
 }
 
-// ------------------------------------------------------
-// -- supporting From conversions of other Error types --
-// ------------------------------------------------------
+// ----------------------------------------------------
+// - supporting From conversions of other Error types -
+// ----------------------------------------------------
 
-impl convert::From<io::Error> for UserConfigError
+impl From<io::Error> for UserConfigError
 {
     fn from(value: io::Error) -> Self
     {

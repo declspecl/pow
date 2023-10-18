@@ -1,12 +1,13 @@
 pub mod error;
+
 pub use error::{UserConfigResult, UserConfigError};
 
 use serde::{Serialize, Deserialize};
 use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
 
-// ---------------------------
-// -- UserConfig definition --
-// ---------------------------
+// -------------------------
+// - UserConfig definition -
+// -------------------------
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UserConfig
@@ -98,9 +99,9 @@ impl UserConfig
     }
 }
 
-// --------------------
-// -- tauri commands --
-// --------------------
+// ------------------
+// - tauri commands -
+// ------------------
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn serialize_user_config(user_config: UserConfig, app_handle: tauri::AppHandle) -> UserConfigResult<()>
