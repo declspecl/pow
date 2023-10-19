@@ -54,27 +54,16 @@ impl FSDirectory
 
         return Ok(());
     }
+}
 
-    pub fn flatten(&self) -> Vec<FSNode>
+impl IntoIterator for FSDirectory
+{
+    type Item = FSNode;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter
     {
-        let mut flattened = Vec::new();
-
-        for child in self.children.iter()
-        {
-            match child
-            {
-                FSNode::Directory(directory) =>
-                {
-                    flattened.append(&mut directory.flatten());
-                },
-                FSNode::File(file) =>
-                {
-                    flattened.push(FSNode::File(file.clone()));
-                }
-            }
-        }
-
-        return flattened;
+        return self.children.into_iter();
     }
 }
 

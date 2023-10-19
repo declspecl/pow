@@ -18,6 +18,25 @@ pub enum FSNode
     File(FSFile)
 }
 
+// --------------------------
+// - FSNode implementation -
+// --------------------------
+
+impl IntoIterator for FSNode
+{
+    type Item = FSNode;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter
+    {
+        match self
+        {
+            FSNode::Directory(directory) => directory.children.into_iter(),
+            FSNode::File(file) => file.into_iter()
+        }
+    }
+}
+
 // -------------------------
 // - FSNode implementation -
 // -------------------------

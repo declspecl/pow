@@ -12,21 +12,18 @@ use system::{get_directory_contents, get_parent_directory, resolve_environment_v
 
 fn main() -> PowResult<()>
 {
-    let mut file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Users\\Gavin\\Pictures"))?;
+    let file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Users\\Gavin\\Desktop\\school\\math"))?;
 
     match file_tree
     {
-        fs_tree::FSNode::Directory(ref mut directory) =>
+        fs_tree::FSNode::Directory(mut directory) =>
         {
             directory.populate_recursively()?;
 
-            let flattened = directory.flatten();
-
-            for node in flattened.iter()
+            for node in directory.into_iter()
             {
-                println!("{}: {}", node.path().display(), node.path().extension().unwrap().to_str().unwrap().to_string());
+                println!("{}", node.path().display().to_string());
             }
-
         },
         _ => ()
     }

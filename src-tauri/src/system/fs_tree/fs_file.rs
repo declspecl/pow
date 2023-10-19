@@ -2,6 +2,8 @@ use std::{path::PathBuf, fs::{self, DirEntry}, convert};
 
 use crate::system::{SystemError, SystemResult};
 
+use super::FSNode;
+
 // ---------------------
 // - FSFile definition -
 // ---------------------
@@ -11,6 +13,21 @@ pub struct FSFile
 {
     pub path: PathBuf,
     pub metadata: fs::Metadata
+}
+
+// -------------------------
+// - FSFile implementation -
+// -------------------------
+
+impl IntoIterator for FSFile
+{
+    type Item = FSNode;
+    type IntoIter = std::vec::IntoIter<Self::Item>;
+
+    fn into_iter(self) -> Self::IntoIter
+    {
+        return vec![FSNode::File(self)].into_iter();
+    }
 }
 
 // ----------------------
