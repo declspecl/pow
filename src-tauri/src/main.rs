@@ -8,15 +8,28 @@ use std::path::{Path, PathBuf};
 
 use error::PowResult;
 use user_config::{UserConfig, {serialize_user_config, deserialize_user_config}};
-use system::{get_directory_contents, get_parent_directory, resolve_environment_variable, file_tree_node::FileTreeNode};
+use system::{get_directory_contents, get_parent_directory, resolve_environment_variable, fs_tree};
 
 fn main() -> PowResult<()>
 {
-    let mut file_tree: FileTreeNode = FileTreeNode::try_from(PathBuf::from("C:/Users/Gavin/Pictures/"))?;
+    let mut file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Users\\Gavin\\Pictures"))?;
 
-    file_tree.populate_recursively()?;
+    match file_tree
+    {
+        fs_tree::FSNode::Directory(ref mut directory) =>
+        {
+            directory.populate_recursively()?;
 
-    println!("{:#?}", file_tree);
+            let flattened = directory.flatten();
+
+            for node in flattened.iter()
+            {
+                println!("{}: {}", node.path().display(), node.path().extension().unwrap().to_str().unwrap().to_string());
+            }
+
+        },
+        _ => ()
+    }
 
     // ---------------
     // - tauri setup -

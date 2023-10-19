@@ -1,41 +1,29 @@
 pub mod error;
-pub mod file_tree_node;
+pub mod fs_tree;
 
 pub use error::{SystemError, SystemResult};
 
 use std::{fs, path::{Path, PathBuf}};
+
+use self::fs_tree::FSNode;
 
 // ------------------
 // - tauri commands -
 // ------------------
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn get_directory_contents(current_directory: String) -> SystemResult< Vec<String> >
+pub fn get_directory_contents(current_directory: String) -> SystemResult<FSNode>
 {
-    let current_directory = Path::new(current_directory.as_str());
+    let current_directory = PathBuf::from(current_directory.as_str());
 
-    // checking if directory is valid
-    if !current_directory.is_dir()
+    let mut file_tree = FSNode::try_from(current_directory)?;
+
+    if let FSNode::Directory(ref mut fs_directory) = file_tree
     {
-        return Err(SystemError::InvalidDirectoryError(format!("Not a directory: {}", current_directory.display())));
+        fs_directory.populate()?;
     }
 
-    // reading directory contents into Vec<String>
-    let items: Vec<String> = fs::read_dir(current_directory)?
-        .filter_map(|entry|
-        {
-            entry.ok().and_then(|entry|
-            {
-                entry
-                    .file_name()
-                    .into_string()
-                    .ok()
-                    .map(|s| s.to_owned())
-            })
-        })
-        .collect();
-
-    return Ok(items);
+    return Ok(file_tree);
 }
 
 #[tauri::command(rename_all = "snake_case")]
