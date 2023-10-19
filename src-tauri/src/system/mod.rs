@@ -1,5 +1,4 @@
 pub mod error;
-pub mod file_info;
 pub mod file_tree_node;
 
 pub use error::{SystemError, SystemResult};

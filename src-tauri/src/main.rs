@@ -12,9 +12,11 @@ use system::{get_directory_contents, get_parent_directory, resolve_environment_v
 
 fn main() -> PowResult<()>
 {
-    let mut file_tree: FileTreeNode = FileTreeNode::try_from(PathBuf::from("C:/Users/Gavin/programming/"))?;
+    let mut file_tree: FileTreeNode = FileTreeNode::try_from(PathBuf::from("C:/Users/Gavin/Pictures/"))?;
 
     file_tree.populate_recursively()?;
+
+    println!("{:#?}", file_tree);
 
     // ---------------
     // - tauri setup -
