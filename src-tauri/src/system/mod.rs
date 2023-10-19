@@ -5,18 +5,18 @@ pub use error::{SystemError, SystemResult};
 
 use std::path::PathBuf;
 
-use self::fs_tree::{FSNode, FSDirectory};
+use self::fs_tree::FSDirectory;
 
 // ------------------
 // - tauri commands -
 // ------------------
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn get_directory_contents(current_directory: String) -> SystemResult<FSDirectory>
+pub fn get_directory_contents(directory: String) -> SystemResult<FSDirectory>
 {
-    let current_directory = PathBuf::from(current_directory.as_str());
+    let directory = PathBuf::from(directory.as_str());
 
-    let mut file_tree = FSDirectory::try_from(current_directory)?;
+    let mut file_tree = FSDirectory::try_from(directory)?;
 
     file_tree.populate();
 
@@ -24,7 +24,7 @@ pub fn get_directory_contents(current_directory: String) -> SystemResult<FSDirec
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn get_parent_directory(path: String) -> SystemResult<FSNode>
+pub fn get_parent_directory(path: String) -> SystemResult<FSDirectory>
 {
     let path = PathBuf::from(path.as_str());
 
@@ -36,7 +36,7 @@ pub fn get_parent_directory(path: String) -> SystemResult<FSNode>
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn resolve_environment_variable(environment_variable: String) -> SystemResult<String>
+pub fn resolve_environment_variable(environment_variable: String) -> Option<String>
 {
     let bytes = environment_variable.as_bytes();
     
@@ -46,8 +46,8 @@ pub fn resolve_environment_variable(environment_variable: String) -> SystemResul
         // should always return some
         return match std::env::var_os(String::from_utf8_lossy(&bytes[1..bytes.len() - 1]).to_string())
         {
-            Some(val) => Ok(val.into_string()?),
-            None => Err(SystemError::InvalidEnvironmentVariableError(environment_variable))
+            Some(val) => Some(val.to_string_lossy().to_string()),
+            None => None
         }
     }
     // checking if the environment variable follows the $... format
@@ -56,13 +56,13 @@ pub fn resolve_environment_variable(environment_variable: String) -> SystemResul
         // should always return Some
         return match std::env::var_os(String::from_utf8_lossy(&bytes[1..]).to_string())
         {
-            Some(val) => Ok(val.into_string().unwrap()),
-            None => Err(SystemError::InvalidEnvironmentVariableError(environment_variable))
+            Some(val) => Some(val.to_string_lossy().to_string()),
+            None => None
         }
     }
     // otherwise, its invalid
     else
     {
-        return Err(SystemError::InvalidEnvironmentVariableError(environment_variable));
+        return None
     }
 }

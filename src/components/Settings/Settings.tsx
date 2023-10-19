@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction  } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
-import { UserConfig } from "@/lib/UserConfig";
+import { UserConfig } from "@/backend/UserConfig";
 
 interface SettingsProps {
 	userConfig: UserConfig,

@@ -1,6 +1,6 @@
-use std::{path::PathBuf, fs::{self, DirEntry}, convert, ffi::OsString};
+use std::{path::PathBuf, fs::DirEntry, convert, ffi::OsString};
 
-use serde::{Deserialize, Serialize};
+use serde::{Serialize, ser::SerializeStruct};
 
 use crate::system::{SystemError, SystemResult};
 
@@ -10,7 +10,7 @@ use super::{FSNode, fs_info::FSInfo};
 // - FSFile definition -
 // ---------------------
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub struct FSFile
 {
     pub name: OsString,
@@ -20,6 +20,21 @@ pub struct FSFile
 // -------------------------
 // - FSFile implementation -
 // -------------------------
+
+impl Serialize for FSFile
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: serde::Serializer
+    {
+        let mut state = serializer.serialize_struct("FSFile", 2)?;
+
+        state.serialize_field("name", &self.name.to_string_lossy().to_string())?;
+        state.serialize_field("info", &self.info)?;
+
+        return state.end();
+    }
+}
 
 impl IntoIterator for FSFile
 {
@@ -45,7 +60,8 @@ impl convert::TryFrom<PathBuf> for FSFile
         return Ok(Self
         {
             name: value.file_name()
-                .ok_or_else(|| SystemError::InvalidDirectoryError(value.display().to_string()))?.to_os_string(),
+                .ok_or_else(|| SystemError::InvalidDirectoryError(value.display().to_string()))?
+                .to_os_string(),
             info: value.try_into()?
         });
     }

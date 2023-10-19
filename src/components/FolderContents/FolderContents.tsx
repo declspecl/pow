@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import { FSNode, FSDirectory } from "@/backend/FSNode";
+import { FSDirectory } from "@/backend/FSNode";
 
 export default function FolderContents() {
     const [contents, setContents] = useState<FSDirectory | null>(null);
@@ -12,12 +12,12 @@ export default function FolderContents() {
         let isCancelled = false;
 
         if (naviHistory.history[naviHistory.current]) {
-            invoke<FSDirectory>("get_directory_contents", { current_directory: naviHistory.history[naviHistory.current] })
-                .then((node) => {
-                    console.log(node);
+            invoke<FSDirectory>("get_directory_contents", { directory: naviHistory.getCurrentDirectory() })
+                .then((fsDirectory) => {
+                    console.log(fsDirectory);
 
                     if (!isCancelled) {
-                        setContents(node);
+                        setContents(fsDirectory);
                     }
                 })
                 .catch((error) => console.error(error));
@@ -43,12 +43,12 @@ export default function FolderContents() {
         else
         {
             displayFriendlyContents = (
-                <div className="overflow-scroll">
+                <div>
                     <button
                         onClick={() => {
-                            invoke<string>("get_parent_directory", { path: naviHistory.history[naviHistory.current] })
+                            invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
                                 .then((parentDir) => {
-                                    naviHistory.gotoArbitrary(parentDir);
+                                    naviHistory.gotoArbitrary(parentDir.path);
                                 })
                                 .catch((err) => {
                                     console.error(err);
@@ -63,11 +63,15 @@ export default function FolderContents() {
                         ..
                     </button>
 
-                    {contents.children.map((fsNode) => (
+                    {contents.children.map((fsNode, index) => (
                         <button
-                            key={fsNode.File?.name ?? fsNode.Directory?.path}
+                            key={fsNode.tag === "file" ? `${fsNode.data.name}-${index}` : fsNode.data.path}
                             onClick={() => {
-                                naviHistory.gotoArbitrary(fsNode.File?.name ?? fsNode.Directory?.path ?? "wat");
+                                naviHistory.gotoArbitrary(
+                                    fsNode.tag === "file"
+                                        ? naviHistory.getCurrentDirectory()
+                                        : fsNode.data.path
+                                );
                             }}
                             className={clsx(
                                 "font-inter",
@@ -75,7 +79,9 @@ export default function FolderContents() {
                                 "hover:bg-background-shade-2"
                             )}
                         >
-                            {fsNode.File?.name ?? fsNode.Directory?.path ?? "wat"}
+                            {fsNode.tag === "file"
+                                ? fsNode.data.name
+                                : fsNode.data.path.split("\\").pop()}
                         </button>
                     ))}
                 </div>

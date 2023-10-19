@@ -13,17 +13,20 @@ export interface FSInfo {
 }
 
 export interface FSFile {
-    info: FSInfo,
-    name: string
+    name: string,
+    info: FSInfo
 }
 
 export interface FSDirectory {
-    info: FSInfo,
     path: string,
+    info: FSInfo,
     children: FSNode[]
 }
 
-export interface FSNode {
-    Directory?: FSDirectory,
-    File?: FSFile
+export type FSNode = {
+    tag: "file",
+    data: FSFile
+} | {
+    tag: "directory",
+    data: FSDirectory
 }

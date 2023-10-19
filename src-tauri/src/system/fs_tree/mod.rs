@@ -1,22 +1,23 @@
 pub mod fs_info;
 pub mod fs_file;
 pub mod fs_directory;
-pub mod osstring;
 
 pub use fs_file::FSFile;
 pub use fs_directory::FSDirectory;
-use serde::{Deserialize, Serialize};
+
+use super::{SystemResult, SystemError};
+
+use serde::{Serialize, ser::SerializeStruct};
 
 use self::fs_info::FSInfo;
 
-use super::{SystemResult, SystemError};
 use std::{convert, path::PathBuf, fs::{self, DirEntry}};
 
 // ---------------------
 // - FSNode definition -
 // ---------------------
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone)]
 pub enum FSNode
 {
     Directory(FSDirectory),
@@ -26,6 +27,32 @@ pub enum FSNode
 // --------------------------
 // - FSNode implementation -
 // --------------------------
+
+impl Serialize for FSNode
+{
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+        where
+            S: serde::Serializer
+    {
+        let mut state = serializer.serialize_struct("FSNode", 2)?;
+
+        match self
+        {
+            FSNode::File(file) =>
+            {
+                state.serialize_field("tag", "file")?;
+                state.serialize_field("data", file)?;
+            },
+            FSNode::Directory(directory) =>
+            {
+                state.serialize_field("tag", "directory")?;
+                state.serialize_field("data", directory)?;
+            }
+        }
+
+        return state.end();
+    }
+}
 
 impl IntoIterator for FSNode
 {

@@ -1,4 +1,4 @@
-use serde::{Deserialize, Serialize};
+use serde::Serialize;
 
 use super::{FSNode, fs_info::FSInfo};
 use crate::system::{SystemError, SystemResult};
@@ -9,7 +9,7 @@ use std::{path::PathBuf, fs::{self, DirEntry}, convert};
 // - FSDirectory definition -
 // --------------------------
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize)]
 pub struct FSDirectory
 {
     pub path: PathBuf,

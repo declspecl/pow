@@ -1,11 +1,14 @@
 import Pow from "@/components/Pow/Pow";
-import { useState, useEffect } from "react";
-import { UserConfig } from "@/lib/UserConfig";
-import { invoke } from "@tauri-apps/api/tauri";
 import Loading from "@/components/Loading/Loading";
+
+import { UserConfig } from "@/backend/UserConfig";
+
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
+
+import { useState, useEffect } from "react";
+import { invoke } from "@tauri-apps/api/tauri";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
+import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -47,8 +50,8 @@ export default function App() {
                 }
             })
             .catch((err) => {
-                // some error happened internally with deserializing the user config
-                // TODO: make some sort of alert modal that will tell the user its going to assume default config
+                // some error happened internally with deserializing the user config (likely improper formatting)
+                // TODO: make global toast system to display errors
                 console.error(err);
             })
 
