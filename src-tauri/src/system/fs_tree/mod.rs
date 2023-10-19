@@ -1,8 +1,12 @@
+pub mod fs_info;
 pub mod fs_file;
 pub mod fs_directory;
 
 pub use fs_file::FSFile;
 pub use fs_directory::FSDirectory;
+use serde::{Deserialize, Serialize};
+
+use self::fs_info::FSInfo;
 
 use super::{SystemResult, SystemError};
 use std::{convert, path::PathBuf, fs::{self, DirEntry}};
@@ -11,7 +15,7 @@ use std::{convert, path::PathBuf, fs::{self, DirEntry}};
 // - FSNode definition -
 // ---------------------
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum FSNode
 {
     Directory(FSDirectory),
@@ -52,12 +56,12 @@ impl FSNode
         }
     }
 
-    pub fn metadata(&self) -> &fs::Metadata
+    pub fn info(&self) -> &FSInfo
     {
         match self
         {
-            FSNode::Directory(directory) => &directory.metadata,
-            FSNode::File(file) => &file.metadata
+            FSNode::Directory(directory) => &directory.info,
+            FSNode::File(file) => &file.info
         }
     }
 }

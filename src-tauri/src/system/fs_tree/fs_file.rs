@@ -1,18 +1,20 @@
 use std::{path::PathBuf, fs::{self, DirEntry}, convert};
 
+use serde::{Deserialize, Serialize};
+
 use crate::system::{SystemError, SystemResult};
 
-use super::FSNode;
+use super::{FSNode, fs_info::FSInfo};
 
 // ---------------------
 // - FSFile definition -
 // ---------------------
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FSFile
 {
     pub path: PathBuf,
-    pub metadata: fs::Metadata
+    pub info: FSInfo,
 }
 
 // -------------------------
@@ -40,10 +42,12 @@ impl convert::TryFrom<PathBuf> for FSFile
 
     fn try_from(value: PathBuf) -> SystemResult<Self>
     {
+        let metadata: fs::Metadata = value.metadata()?;
+
         return Ok(Self
         {
             path: value.clone(),
-            metadata: std::fs::symlink_metadata(value)?
+            info: value.try_into()?
         });
     }
 }

@@ -1,4 +1,6 @@
-use super::FSNode;
+use serde::{Deserialize, Serialize};
+
+use super::{FSNode, fs_info::FSInfo};
 use crate::system::{SystemError, SystemResult};
 
 use std::{path::PathBuf, fs::{self, DirEntry}, convert};
@@ -7,11 +9,11 @@ use std::{path::PathBuf, fs::{self, DirEntry}, convert};
 // - FSDirectory definition -
 // --------------------------
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FSDirectory
 {
     pub path: PathBuf,
-    pub metadata: fs::Metadata,
+    pub info: FSInfo,
     pub children: Vec<FSNode>
 }
 
@@ -21,38 +23,105 @@ pub struct FSDirectory
 
 impl FSDirectory
 {
-    pub fn populate(&mut self) -> SystemResult<()>
+    pub fn populate(&mut self) -> Option<SystemError>
     {
-        for entry in fs::read_dir(self.path.as_path())?
+        let mut err_encountered: Option<SystemError> = None;
+
+        match fs::read_dir(self.path.as_path())
         {
-            self.children.push(entry?.try_into()?);
+            // successfully started reading directory
+            Ok(entry) =>
+            {
+                for entry in entry.into_iter()
+                {
+                    match entry
+                    {
+                        // was able to read directory for this entry
+                        Ok(entry) => match entry.try_into()
+                        {
+                            // successfully transformed entry into FSNode
+                            Ok(entry) => self.children.push(entry),
+                            Err(why) =>
+                            {
+                                err_encountered = Some(why);
+
+                                continue;
+                            }
+                        },
+                        // was unable to read directory for this entry
+                        Err(why) =>
+                        {
+                            err_encountered = Some(why.into());
+
+                            continue;
+                        }
+                    }
+                }
+            },
+            Err(why) =>
+            {
+                err_encountered = Some(why.into());
+            }
         }
 
-        return Ok(());
+        return err_encountered;
     }
 
-    pub fn populate_recursively(&mut self) -> SystemResult<()>
+    pub fn populate_recursively(&mut self) -> Option<SystemError>
     {
-        for entry in fs::read_dir(self.path.as_path())?
+        let mut err_encountered: Option<SystemError> = None;
+
+        match fs::read_dir(self.path.as_path())
         {
-            let entry: FSNode = match entry?.try_into()?
+            // successfully started reading directory
+            Ok(entry) =>
             {
-                FSNode::Directory(mut directory) =>
+                for entry in entry.into_iter()
                 {
-                    let _ = directory.populate_recursively();
+                    let entry = match entry
+                    {
+                        // was able to read directory for this entry
+                        Ok(entry) => match entry.try_into()
+                        {
+                            // successfully transformed entry into FSNode
+                            Ok(mut entry) => match entry
+                            {
+                                // if entry is a directory, populate it recursively
+                                FSNode::File(_) => entry,
+                                FSNode::Directory(ref mut directory) =>
+                                {
+                                    directory.populate_recursively();
 
-                    FSNode::Directory(directory)
-                },
-                FSNode::File(file) =>
-                {
-                    FSNode::File(file)
+                                    entry
+                                }
+                            },
+                            Err(why) =>
+                            {
+                                err_encountered = Some(why);
+
+                                continue;
+                            }
+                        },
+                        Err(why) =>
+                        {
+                            err_encountered = Some(why.into());
+
+                            continue;
+                        }
+                    };
+
+                    // finally, add this entry to children
+                    println!("{}", entry.path().display());
+                    self.children.push(entry);
                 }
-            };
-
-            self.children.push(entry);
+            },
+            Err(why) =>
+            {
+                err_encountered = Some(why.into());
+            }
         }
 
-        return Ok(());
+        return err_encountered;
     }
 }
 
@@ -80,7 +149,7 @@ impl convert::TryFrom<PathBuf> for FSDirectory
         return Ok(Self
         {
             path: value.clone(),
-            metadata: std::fs::symlink_metadata(value)?,
+            info: value.try_into()?,
             children: Vec::new()
         });
     }

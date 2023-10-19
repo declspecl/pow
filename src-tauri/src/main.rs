@@ -12,13 +12,16 @@ use system::{get_directory_contents, get_parent_directory, resolve_environment_v
 
 fn main() -> PowResult<()>
 {
-    let file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Users\\Gavin\\Desktop\\school\\math"))?;
+    let file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Windows\\System32"))?;
 
     match file_tree
     {
         fs_tree::FSNode::Directory(mut directory) =>
         {
-            directory.populate_recursively()?;
+            if let Some(why) = directory.populate_recursively()
+            {
+                println!("ERROR WITH POPULATING DIRECTORY: {why}");
+            }
 
             for node in directory.into_iter()
             {

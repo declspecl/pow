@@ -3,7 +3,7 @@ pub mod fs_tree;
 
 pub use error::{SystemError, SystemResult};
 
-use std::{fs, path::{Path, PathBuf}};
+use std::path::PathBuf;
 
 use self::fs_tree::FSNode;
 
@@ -20,23 +20,22 @@ pub fn get_directory_contents(current_directory: String) -> SystemResult<FSNode>
 
     if let FSNode::Directory(ref mut fs_directory) = file_tree
     {
-        fs_directory.populate()?;
+        fs_directory.populate();
     }
 
     return Ok(file_tree);
 }
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn get_parent_directory(path: String) -> SystemResult<String>
+pub fn get_parent_directory(path: String) -> SystemResult<FSNode>
 {
     let path = PathBuf::from(path.as_str());
 
-    return Ok(path.parent()
-        .ok_or(SystemError::InvalidDirectoryError(path.to_string_lossy().to_string()))?
-        .to_str()
-            .ok_or(SystemError::OSStringConversionError(path.to_string_lossy().to_string().into()))?
-            .to_string()
-    );
+    return match path.parent()
+    {
+        Some(parent) => parent.to_owned().try_into(),
+        None => Err(SystemError::DirectoryUnderflowError(path))
+    };
 }
 
 #[tauri::command(rename_all = "snake_case")]
