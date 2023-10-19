@@ -12,52 +12,33 @@ use system::{get_directory_contents, get_parent_directory, resolve_environment_v
 
 fn main() -> PowResult<()>
 {
-    let file_tree = fs_tree::FSNode::try_from(PathBuf::from("C:\\Windows\\System32"))?;
-
-    match file_tree
-    {
-        fs_tree::FSNode::Directory(mut directory) =>
-        {
-            if let Some(why) = directory.populate_recursively()
-            {
-                println!("ERROR WITH POPULATING DIRECTORY: {why}");
-            }
-
-            for node in directory.into_iter()
-            {
-                println!("{}", node.path().display().to_string());
-            }
-        },
-        _ => ()
-    }
-
     // ---------------
     // - tauri setup -
     // ---------------
 
-    // tauri::Builder::default()
-    //     .setup(|app| -> Result<(), Box<dyn std::error::Error> > {
-    //         if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
-    //         {
-    //             UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap())?;
-    //         }
+    tauri::Builder::default()
+        .setup(|app| -> Result<(), Box<dyn std::error::Error> > {
+            if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
+            {
+                UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap())?;
+            }
 
-    //         for (key, value) in std::env::vars_os()
-    //         {
-    //             println!("{:?} : {:?}", key, value);
-    //         }
+            for (key, value) in std::env::vars_os()
+            {
+                println!("{:?} : {:?}", key, value);
+            }
 
-    //         return Ok(());
-    //     })
-    //     .invoke_handler(tauri::generate_handler![
-    //         get_directory_contents,
-    //         get_parent_directory,
-    //         serialize_user_config,
-    //         deserialize_user_config,
-    //         resolve_environment_variable
-    //     ])
-    //     .run(tauri::generate_context!())
-    //     .expect("error while running tauri application");
+            return Ok(());
+        })
+        .invoke_handler(tauri::generate_handler![
+            get_directory_contents,
+            get_parent_directory,
+            serialize_user_config,
+            deserialize_user_config,
+            resolve_environment_variable
+        ])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 
     return Ok(());
 }

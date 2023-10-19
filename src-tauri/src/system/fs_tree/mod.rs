@@ -1,6 +1,7 @@
 pub mod fs_info;
 pub mod fs_file;
 pub mod fs_directory;
+pub mod osstring;
 
 pub use fs_file::FSFile;
 pub use fs_directory::FSDirectory;
@@ -47,15 +48,6 @@ impl IntoIterator for FSNode
 
 impl FSNode
 {
-    pub fn path(&self) -> &PathBuf
-    {
-        match self
-        {
-            FSNode::Directory(directory) => &directory.path,
-            FSNode::File(file) => &file.path
-        }
-    }
-
     pub fn info(&self) -> &FSInfo
     {
         match self

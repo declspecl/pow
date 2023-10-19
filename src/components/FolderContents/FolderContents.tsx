@@ -2,26 +2,29 @@ import clsx from "clsx";
 import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import { FSNode, FSDirectory } from "@/backend/FSNode";
 
 export default function FolderContents() {
-    const [contents, setContents] = useState<string[] | null>(null);
+    const [contents, setContents] = useState<FSDirectory | null>(null);
     const naviHistory = useNaviHistoryStore();
 
     useEffect(() => {
-        let areContentsFetched = false;
+        let isCancelled = false;
 
         if (naviHistory.history[naviHistory.current]) {
-            invoke<string[]>("get_directory_contents", { current_directory: naviHistory.history[naviHistory.current] })
-                .then((contents) => {
-                    if (!areContentsFetched) {
-                        setContents(contents);
+            invoke<FSDirectory>("get_directory_contents", { current_directory: naviHistory.history[naviHistory.current] })
+                .then((node) => {
+                    console.log(node);
+
+                    if (!isCancelled) {
+                        setContents(node);
                     }
                 })
                 .catch((error) => console.error(error));
         }
 
         return () => {
-            areContentsFetched = true;
+            isCancelled = true;
         }
     }, [naviHistory]);
 
@@ -33,7 +36,7 @@ export default function FolderContents() {
     }
     else
     {
-        if (contents.length === 0)
+        if (contents.children.length === 0)
         {
             displayFriendlyContents = <p>empty!</p>
         }
@@ -60,11 +63,11 @@ export default function FolderContents() {
                         ..
                     </button>
 
-                    {contents.map((item) => (
+                    {contents.children.map((fsNode) => (
                         <button
-                            key={item}
+                            key={fsNode.File?.name ?? fsNode.Directory?.path}
                             onClick={() => {
-                                naviHistory.gotoArbitrary(`${naviHistory.getCurrentDirectory()}\\${item}`);
+                                naviHistory.gotoArbitrary(fsNode.File?.name ?? fsNode.Directory?.path ?? "wat");
                             }}
                             className={clsx(
                                 "font-inter",
@@ -72,7 +75,7 @@ export default function FolderContents() {
                                 "hover:bg-background-shade-2"
                             )}
                         >
-                            {item}
+                            {fsNode.File?.name ?? fsNode.Directory?.path ?? "wat"}
                         </button>
                     ))}
                 </div>

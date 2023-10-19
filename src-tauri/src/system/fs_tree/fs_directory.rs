@@ -111,7 +111,6 @@ impl FSDirectory
                     };
 
                     // finally, add this entry to children
-                    println!("{}", entry.path().display());
                     self.children.push(entry);
                 }
             },

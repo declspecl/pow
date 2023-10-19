@@ -1,4 +1,4 @@
-use std::{path::PathBuf, fs::{self, DirEntry}, convert};
+use std::{path::PathBuf, fs::{self, DirEntry}, convert, ffi::OsString};
 
 use serde::{Deserialize, Serialize};
 
@@ -13,7 +13,7 @@ use super::{FSNode, fs_info::FSInfo};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct FSFile
 {
-    pub path: PathBuf,
+    pub name: OsString,
     pub info: FSInfo,
 }
 
@@ -42,11 +42,10 @@ impl convert::TryFrom<PathBuf> for FSFile
 
     fn try_from(value: PathBuf) -> SystemResult<Self>
     {
-        let metadata: fs::Metadata = value.metadata()?;
-
         return Ok(Self
         {
-            path: value.clone(),
+            name: value.file_name()
+                .ok_or_else(|| SystemError::InvalidDirectoryError(value.display().to_string()))?.to_os_string(),
             info: value.try_into()?
         });
     }

@@ -5,23 +5,20 @@ pub use error::{SystemError, SystemResult};
 
 use std::path::PathBuf;
 
-use self::fs_tree::FSNode;
+use self::fs_tree::{FSNode, FSDirectory};
 
 // ------------------
 // - tauri commands -
 // ------------------
 
 #[tauri::command(rename_all = "snake_case")]
-pub fn get_directory_contents(current_directory: String) -> SystemResult<FSNode>
+pub fn get_directory_contents(current_directory: String) -> SystemResult<FSDirectory>
 {
     let current_directory = PathBuf::from(current_directory.as_str());
 
-    let mut file_tree = FSNode::try_from(current_directory)?;
+    let mut file_tree = FSDirectory::try_from(current_directory)?;
 
-    if let FSNode::Directory(ref mut fs_directory) = file_tree
-    {
-        fs_directory.populate();
-    }
+    file_tree.populate();
 
     return Ok(file_tree);
 }
