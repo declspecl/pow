@@ -30,7 +30,6 @@ const LambView = React.forwardRef<HTMLDivElement, LambViewProps>((props, ref) =>
             ref={ref}
             style={style}
             className={clsx(
-                "overflow-auto",
                 props.className
             )}
         >

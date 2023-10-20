@@ -20,11 +20,11 @@ export default function WolfView({ children, className }: WolfViewProps) {
         <div
             style={style}
             className={clsx(
-                "grow overflow-auto",
+                "flex-1",
                 className
             )}
         >
             {children}
         </div>
     );
-};
+}

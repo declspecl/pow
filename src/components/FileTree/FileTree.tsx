@@ -8,7 +8,7 @@ export default function FileTree() {
 	const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
 	return (
-		<div>
+		<div className="flex flex-col items-start">
 			{shellFolders.map((folderName) => (
 				<button
 					key={folderName}

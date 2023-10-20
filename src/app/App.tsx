@@ -1,12 +1,9 @@
 import Pow from "@/components/Pow/Pow";
-import Loading from "@/components/Loading/Loading";
-
-import { UserConfig } from "@/backend/UserConfig";
-
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
-
 import { useState, useEffect } from "react";
 import { invoke } from "@tauri-apps/api/tauri";
+import { UserConfig } from "@/backend/UserConfig";
+import Loading from "@/components/Loading/Loading";
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
 import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
 
@@ -63,7 +60,7 @@ export default function App() {
     }, [naviHistoryGotoArbitrary, naviHistoryReset]);
 
     return (
-        <main className="bg-background h-screen">
+        <main className="w-full h-full bg-background">
             {userConfig === null ? (
                 <Loading />
             ) : (

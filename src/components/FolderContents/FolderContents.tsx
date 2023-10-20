@@ -1,8 +1,9 @@
-import clsx from "clsx";
 import { invoke } from "@tauri-apps/api";
+import { FolderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import FSNodeListing from "./FSNodeListing";
 import { FSDirectory } from "@/backend/FSNode";
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 export default function FolderContents() {
     const [contents, setContents] = useState<FSDirectory | null>(null);
@@ -28,24 +29,17 @@ export default function FolderContents() {
         }
     }, [naviHistory]);
 
-    let displayFriendlyContents: React.ReactNode;
-
-    if (contents === null)
-    {
-        displayFriendlyContents = <p>loading...</p>
-    }
-    else
-    {
-        if (contents.children.length === 0)
-        {
-            displayFriendlyContents = <p>empty!</p>
-        }
-        else
-        {
-            displayFriendlyContents = (
-                <div>
+    return (
+        <div>
+            {contents === null ? (
+                <p>loading...</p>
+            ) : contents.children.length === 0 ? (
+                <p>empty!</p>
+            ) : (
+                <div className="flex flex-col">
                     <button
-                        onClick={() => {
+                        className="flex flex-row items-center gap-2"
+                        onDoubleClick={() => {
                             invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
                                 .then((parentDir) => {
                                     naviHistory.gotoArbitrary(parentDir.path);
@@ -54,40 +48,23 @@ export default function FolderContents() {
                                     console.error(err);
                                 })
                         }}
-                        className={clsx(
-                            "font-inter",
-                            "w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
-                            "hover:bg-background-shade-2"
-                        )}
                     >
-                        ..
+                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-secondary" />
+                        <span>../</span>
                     </button>
 
-                    {contents.children.map((fsNode, index) => (
-                        <button
-                            key={fsNode.tag === "file" ? `${fsNode.data.name}-${index}` : fsNode.data.path}
-                            onClick={() => {
-                                naviHistory.gotoArbitrary(
-                                    fsNode.tag === "file"
-                                        ? naviHistory.getCurrentDirectory()
-                                        : fsNode.data.path
-                                );
+                    {contents.children.map((fsNode) => (
+                        <FSNodeListing
+                            node={fsNode}
+                            onDoubleClick={() => {
+                                if (fsNode.tag === "directory") {
+                                    naviHistory.gotoArbitrary(fsNode.data.path);
+                                }
                             }}
-                            className={clsx(
-                                "font-inter",
-                                "w-full text-left px-1 py-0.5 bg-background text-text rounded-sm",
-                                "hover:bg-background-shade-2"
-                            )}
-                        >
-                            {fsNode.tag === "file"
-                                ? fsNode.data.name
-                                : fsNode.data.path.split("\\").pop()}
-                        </button>
+                        />
                     ))}
                 </div>
-            );
-        }
-    }
-
-    return displayFriendlyContents;
+            )}
+        </div>
+    );
 }

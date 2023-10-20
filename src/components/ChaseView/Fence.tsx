@@ -23,20 +23,18 @@ export default function Fence({ target, size, className }: FenceProps) {
         document.addEventListener("mousemove", onFenceMouseMove);
         document.addEventListener("mouseup", onFenceMouseUp);
 
+        document.documentElement.style.userSelect = "none";
+        document.documentElement.style.pointerEvents = "none";
         document.documentElement.style.cursor = direction === "horizontal" ? "col-resize" : "row-resize";
     }
 
     function onFenceMouseMove(event: MouseEvent) {
         if (direction === "horizontal") {
-            console.log(event.clientX, target.current.offsetLeft);
-
             const newTargetWidth = event.clientX - target.current.offsetLeft;
 
             target.current.style.width = `${newTargetWidth}px`;
         }
         else {
-            console.log(event.clientY, target.current.offsetTop);
-
             const newTargetHeight = event.clientY - target.current.offsetTop;
 
             target.current.style.height = `${newTargetHeight}px`;
@@ -47,6 +45,8 @@ export default function Fence({ target, size, className }: FenceProps) {
         document.removeEventListener("mousemove", onFenceMouseMove);
         document.removeEventListener("mouseup", onFenceMouseUp);
 
+        document.documentElement.style.userSelect = "auto";
+        document.documentElement.style.pointerEvents = "auto";
         document.documentElement.style.cursor = "auto";
     }
 
