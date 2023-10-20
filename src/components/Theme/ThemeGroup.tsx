@@ -32,7 +32,7 @@ export default function ThemeGroup() {
 	const [selectedIndex, setSelectedIndex] = useState(themeIndex);
 
 	return (
-		<div className="flex flex-row gap-x-2 gap-y-2 flex-wrap">
+		<div className="flex flex-row flex-wrap gap-2">
 			<ThemeGroupItem
 				name="Light"
 				dataTheme="light"

@@ -55,7 +55,6 @@ export default function Fence({ target, size, className }: FenceProps) {
             onMouseDown={onFenceMouseDown}
             style={style}
             className={clsx(
-                "bg-black",
                 { "hover:cursor-col-resize" : direction === "horizontal" },
                 { "hover:cursor-row-resize" : direction === "vertical" },
                 className

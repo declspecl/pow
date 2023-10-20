@@ -14,21 +14,23 @@ export default function ThemeGroupItem({ name, dataTheme, selected, onClick }: T
 		<button
 			onClick={onClick}
 			className={clsx(
-				"px-2 py-0.5 flex flex-row gap-1 items-center bg-background border border-text rounded-md border-opacity-40 cursor-pointer transition-[background-color]",
-				"hover:bg-background-shade-1"
+				"px-2 py-0.5 flex flex-row gap-1 items-center border border-text rounded-md bg-background transition-[background-color]",
+                "hover:bg-background-100"
 			)}
 		>
 			<div data-theme={dataTheme} className="relative w-[1.125rem] h-[1.125rem]">
 				<div
 					className={clsx(
-						"absolute w-full h-full rounded-full bg-background",
+						"absolute w-full h-full rounded-full bg-accent"
 					)}
 				/>
 
-				{ selected && <CheckIcon className="absolute top-full left-full -translate-y-full -translate-x-[105%] w-full h-full stroke-text z-10" /> }
+				{selected && (
+                    <CheckIcon className="absolute top-full left-full -translate-y-full -translate-x-[105%] z-10 w-full h-full stroke-text" />
+                )}
 			</div>
 
-			<span className="flex flex-row justify-center items-center text-text">
+			<span className="flex flex-row justify-center items-center">
 				{name}
 			</span>
 		</button>

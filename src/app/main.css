@@ -1,0 +1,235 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    [data-theme="light"] {
+        --text: 0 0% 0%;
+        --text-50: 0 0% 4%;
+        --text-100: 0 0% 8%;
+        --text-150: 0 0% 12%;
+        --text-200: 0 0% 18%;
+        --text-250: 0 0% 20%;
+        --text-300: 0 0% 24%;
+
+        --background: 0 0% 100%;
+        --background-50: 0 0% 96%;
+        --background-100: 0 0% 92%;
+        --background-150: 0 0% 88%;
+        --background-200: 0 0% 84%;
+        --background-250: 0 0% 80%;
+        --background-300: 0 0% 76%;
+
+        --primary-300: 336 77% 16%;
+        --primary-350: 336 77% 20%;
+        --primary-400: 336 77% 24%;
+        --primary-450: 336 77% 28%;
+        --primary-500: 336 77% 32%;
+        --primary-550: 336 77% 36%;
+        --primary-600: 336 77% 40%;
+        --primary-650: 336 77% 44%;
+        --primary-700: 336 77% 48%;
+
+        --secondary-300: 58 59% 63%;
+        --secondary-350: 58 59% 67%;
+        --secondary-400: 58 59% 71%;
+        --secondary-450: 58 59% 75%;
+        --secondary-500: 58 59% 79%;
+        --secondary-550: 58 59% 83%;
+        --secondary-600: 58 59% 88%;
+        --secondary-650: 58 59% 92%;
+        --secondary-700: 58 59% 96%;
+
+        --accent-300: 260 38% 33%; 
+        --accent-350: 260 38% 37%; 
+        --accent-400: 260 38% 41%; 
+        --accent-450: 260 38% 45%; 
+        --accent-500: 260 38% 49%; 
+        --accent-550: 260 38% 53%; 
+        --accent-600: 260 38% 57%; 
+        --accent-650: 260 38% 61%; 
+        --accent-700: 260 38% 65%; 
+    }
+	
+	[data-theme="dark"] {
+        --text: 0 0% 100%;
+        --text-50: 0 0% 96%;
+        --text-100: 0 0% 92%;
+        --text-150: 0 0% 88%;
+        --text-200: 0 0% 84%;
+        --text-250: 0 0% 80%;
+        --text-300: 0 0% 76%;
+
+        --background: 0 0% 3%;
+        --background-50: 0 0% 7%;
+        --background-100: 0 0% 11%;
+        --background-150: 0 0% 15%;
+        --background-200: 0 0% 19%;
+        --background-250: 0 0% 23%;
+        --background-300: 0 0% 27%;
+
+        --primary-300: 336 72% 21%;
+        --primary-350: 336 72% 25%;
+        --primary-400: 336 72% 29%;
+        --primary-450: 336 72% 33%;
+        --primary-500: 336 72% 37%;
+        --primary-550: 336 72% 41%;
+        --primary-600: 336 72% 45%;
+        --primary-650: 336 72% 49%;
+        --primary-700: 336 72% 53%;
+
+        --secondary-300: 58 59% 63%;
+        --secondary-350: 58 59% 67%;
+        --secondary-400: 58 59% 71%;
+        --secondary-450: 58 59% 75%;
+        --secondary-500: 58 59% 79%;
+        --secondary-550: 58 59% 83%;
+        --secondary-600: 58 59% 87%;
+        --secondary-650: 58 59% 91%;
+        --secondary-700: 58 59% 95%;
+
+        --accent-300: 259 38% 35%;
+        --accent-350: 259 38% 39%;
+        --accent-400: 259 38% 43%;
+        --accent-450: 259 38% 47%;
+        --accent-500: 259 38% 51%;
+        --accent-550: 259 38% 55%;
+        --accent-600: 259 38% 59%;
+        --accent-650: 259 38% 63%;
+        --accent-700: 259 38% 67%;
+    }
+
+	[data-theme="rose-pine"] {
+        --text: 245 50% 91%;
+        --text-50: 245 50% 87%;
+        --text-100: 245 50% 83%;
+        --text-150: 245 50% 79%;
+        --text-200: 245 50% 75%;
+        --text-250: 245 50% 71%;
+        --text-300: 245 50% 67%;
+
+        --background: 249 22% 12%;
+        --background-50: 249 22% 16%;
+        --background-100: 249 22% 20%;
+        --background-150: 249 22% 24%;
+        --background-200: 249 22% 28%;
+        --background-250: 249 22% 32%;
+        --background-300: 249 22% 36%;
+
+        --primary-300: 189 43% 57%;
+        --primary-350: 189 43% 61%;
+        --primary-400: 189 43% 65%;
+        --primary-450: 189 43% 69%;
+        --primary-500: 189 43% 73%;
+        --primary-550: 189 43% 77%;
+        --primary-600: 189 43% 81%;
+        --primary-650: 189 43% 85%;
+        --primary-700: 189 43% 89%;
+
+        --secondary-300: 35 74% 54%;
+        --secondary-350: 35 74% 58%;
+        --secondary-400: 35 74% 62%;
+        --secondary-450: 35 74% 66%;
+        --secondary-500: 35 74% 70%;
+        --secondary-550: 35 74% 74%;
+        --secondary-600: 35 74% 78%;
+        --secondary-650: 35 74% 82%;
+        --secondary-700: 35 74% 86%;
+
+        --accent-300: 343 51% 37%;
+        --accent-350: 343 51% 41%;
+        --accent-400: 343 51% 45%;
+        --accent-450: 343 51% 49%;
+        --accent-500: 343 51% 53%;
+        --accent-550: 343 51% 57%;
+        --accent-600: 343 51% 61%;
+        --accent-650: 343 51% 65%;
+        --accent-700: 343 51% 69%;
+    }
+
+	[data-theme="tokyonight"] {
+        --text: 229 73% 86%;
+        --text-50: 229 73% 82%;
+        --text-100: 229 73% 78%;
+        --text-150: 229 73% 74%;
+        --text-200: 229 73% 70%;
+        --text-250: 229 73% 66%;
+        --text-300: 229 73% 62%;
+
+        --background: 235 19% 13%;
+        --background-50: 235 19% 17%;
+        --background-100: 235 19% 21%;
+        --background-150: 235 19% 25%;
+        --background-200: 235 19% 29%;
+        --background-250: 235 19% 33%;
+
+        --primary-300: 221 82% 58%;
+        --primary-350: 221 82% 62%;
+        --primary-400: 221 82% 66%;
+        --primary-450: 221 82% 70%;
+        --primary-500: 221 82% 74%;
+        --primary-550: 221 82% 78%;
+        --primary-600: 221 82% 82%;
+        --primary-650: 221 82% 86%;
+        --primary-700: 221 82% 90%;
+
+        --secondary-300: 261 85% 63%;
+        --secondary-350: 261 85% 67%;
+        --secondary-400: 261 85% 71%;
+        --secondary-450: 261 85% 75%;
+        --secondary-500: 261 85% 79%;
+        --secondary-550: 261 85% 83%;
+        --secondary-600: 261 85% 87%;
+        --secondary-650: 261 85% 91%;
+        --secondary-700: 261 85% 95%;
+
+        --accent-300: 229 23% 17%;
+        --accent-350: 229 23% 21%;
+        --accent-400: 229 23% 25%;
+        --accent-450: 229 23% 29%;
+        --accent-500: 229 23% 33%;
+        --accent-550: 229 23% 37%;
+        --accent-600: 229 23% 41%;
+        --accent-650: 229 23% 45%;
+        --accent-700: 229 23% 49%;
+    }
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/*
+::-webkit-scrollbar, ::-webkit-scrollbar-track {
+    width: 8px;
+    background-color: var(--background-shade-2);
+}
+
+::-webkit-scrollbar-thumb, ::-webkit-scrollbar-track-piece {
+    background-color: var(--text);
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+
+}
+
+::-webkit-scrollbar-button {
+
+}
+
+::-webkit-scrollbar-corner {
+
+}
+
+::-webkit-scrollbar-track-piece {
+
+}
+*/

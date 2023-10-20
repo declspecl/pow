@@ -49,7 +49,7 @@ export default function FolderContents() {
                                 })
                         }}
                     >
-                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-secondary" />
+                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] " />
                         <span>../</span>
                     </button>
 

@@ -60,7 +60,7 @@ export default function App() {
     }, [naviHistoryGotoArbitrary, naviHistoryReset]);
 
     return (
-        <main className="w-full h-full bg-background">
+        <main className="w-full h-full">
             {userConfig === null ? (
                 <Loading />
             ) : (

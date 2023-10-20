@@ -24,7 +24,8 @@ export default defineConfig({
 		Unfonts({
 			google: {
 				families: [
-					"Inter"
+					"Inter",
+                    "Poppins"
 				]
 			}
 		})

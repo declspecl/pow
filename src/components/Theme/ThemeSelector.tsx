@@ -38,36 +38,36 @@ export default function ThemeSelector() {
 				<button
 					onClick={() => setIsPortalOpen(true)}
 					className={clsx(
-						"p-2 bg-background text-text rounded-xl transition-[background-color]",
-						"hover:bg-background-shade-2"
+						"p-2 rounded-xl bg-background transition-[background-color]",
+                        "hover:bg-background-100"
 					)}
 				>
-					<PaletteIcon />
+					<PaletteIcon className="stroke-text" />
 				</button>
 			</Popover.Trigger>
 
 			<AnimatePresence>
 				{isPortalOpen && (
 					<Popover.Portal forceMount>
-						<Popover.Content className={clsx("relative top-1.5 p-3 w-80 bg-background text-text border border-text rounded-s")} asChild>
+						<Popover.Content className="relative top-1.5 p-3 w-80 border border-text rounded-s bg-background text-text" asChild>
 							<motion.div
 								variants={contentVariants}
 								initial="initial"
 								animate="animate"
 								exit="exit"
 							>
-								<Popover.Arrow className="w-3 h-1.5 fill-text" />
+								<Popover.Arrow className="w-3 h-1.5" />
 
 								<div className="flex flex-col gap-8">
 									<div className="flex flex-row justify-between items-center">
-										<h1 className="text-2xl font-semibold text-text">Select Theme</h1>
+										<h1 className="text-2xl font-semibold">Select Theme</h1>
 
 										<Popover.Close asChild>
 											<button
 												onClick={() => setIsPortalOpen(false)}
 												className={clsx(
-													"p-1 flex flex-row justify-center items-center bg-background text-text rounded-lg transition-[background-color]",
-													"hover:bg-background-shade-2"
+													"p-1 flex flex-row justify-center items-center rounded-lg transition-[background-color]",
+                                                    "hover:bg-background-100"
 												)}
 											>
 												<XIcon />

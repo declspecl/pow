@@ -14,8 +14,7 @@ export default function FileTree() {
 					key={folderName}
 					onClick={() => gotoArbitrary(folderName)}
 					className={clsx(
-						"p-1 bg-background text-text rounded-md transition-[background-color]",
-						"hover:bg-background-shade-2"
+						"p-1 rounded-md transition-[background-color]",
 					)}
 				>
 					{folderName}

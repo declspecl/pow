@@ -11,26 +11,26 @@ export default function Pow() {
     const lambRef = useRef<HTMLDivElement>(null!);
 
 	return (
-		<div className="w-auto h-full flex flex-col">
+		<div className="w-auto h-full flex flex-col bg-background text-text">
 			<NavBar />
 		
             <ChaseView
                 direction="horizontal"
-                className="flex-1 w-auto bg-background overflow-y-hidden"
+                className="flex-1 w-auto overflow-y-hidden"
             >
                 <LambView
                     ref={lambRef}
                     defaultSize="35ex"
                     minSize="30ex"
                     maxSize="calc(100% - 30ex)"
-                    className="bg-background"
+                    className="px-2 py-1"
                 >
                     <FileTree />
                 </LambView>
 
-                <Fence target={lambRef} className="bg-background-shade-2" />
+                <Fence target={lambRef} className="bg-background-200" />
 
-                <WolfView className="bg-background text-text overflow-y-auto">
+                <WolfView className="px-2 py-1 overflow-y-auto">
                     <FolderContents />
                 </WolfView>
             </ChaseView>
