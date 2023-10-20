@@ -30,7 +30,7 @@ export default function App() {
                                 naviHistoryGotoArbitrary(initialFolder);
                             })
                             .catch((err) => {
-                                console.error(err); // some error happened internally with resolving the env var
+                                console.error(err); // some error happened internally with resolving the env var or its not real
                                 naviHistoryGotoArbitrary(user_config.default_folder);
                             });
                     }
