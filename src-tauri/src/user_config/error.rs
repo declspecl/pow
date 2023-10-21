@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use std::{io, fmt, error, convert::From, path::PathBuf};
 
-// exporting custom Result type
+// exporting custom Result wrapper type
 pub type UserConfigResult<T> = Result<T, UserConfigError>;
 
 // ------------------------------

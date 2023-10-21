@@ -1,7 +1,7 @@
+use crate::{user_config::UserConfigError, system::SystemError};
+
 use std::{error, fmt, convert};
 use serde::{Serialize, Deserialize};
-
-use crate::{user_config::UserConfigError, system::SystemError};
 
 // declaring custom Result wrapper type
 pub type PowResult<T> = Result<T, PowError>;
@@ -17,11 +17,11 @@ pub enum PowError
     SystemError(SystemError)
 }
 
-impl error::Error for PowError {}
+// ---------------------------
+// - PowError implementation -
+// ---------------------------
 
-// --------------------------------------------
-// - fmt::Display implementation for PowError -
-// --------------------------------------------
+impl error::Error for PowError {}
 
 impl fmt::Display for PowError
 {
@@ -34,6 +34,10 @@ impl fmt::Display for PowError
         }
     }
 }
+
+// ----------------------------
+// - PowError conversionsions -
+// ----------------------------
 
 impl convert::From<UserConfigError> for PowError
 {

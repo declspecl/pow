@@ -1,8 +1,7 @@
-use serde::Serialize;
-
 use super::{FSNode, fs_info::FSInfo};
 use crate::system::{SystemError, SystemResult};
 
+use serde::Serialize;
 use std::{path::PathBuf, fs::{self, DirEntry}, convert};
 
 // --------------------------

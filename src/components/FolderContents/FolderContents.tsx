@@ -1,10 +1,8 @@
 import { invoke } from "@tauri-apps/api";
-import { FolderIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import FSNodeListing from "./FSNodeListing";
 import { FSDirectory } from "@/backend/FSNode";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import clsx from "clsx";
 import ParentDirectoryListing from "./ParentDirectoryListing";
 
 export default function FolderContents() {
@@ -17,7 +15,7 @@ export default function FolderContents() {
         let isCancelled = false;
 
         if (naviHistory.history[naviHistory.current]) {
-            invoke<FSDirectory>("get_directory_contents", { directory: naviHistory.getCurrentDirectory() })
+            invoke<FSDirectory>("access_directory", { directory: naviHistory.getCurrentDirectory() })
                 .then((fsDirectory) => {
                     console.log(fsDirectory);
 
@@ -65,7 +63,7 @@ export default function FolderContents() {
                                 if (fsNode.tag === "directory") {
                                     setCurrentDirectory(null);
 
-                                    invoke<FSDirectory>("get_directory_contents", { directory: fsNode.data.path })
+                                    invoke<FSDirectory>("access_directory", { directory: fsNode.data.path })
                                         .then((directory) => {
                                             naviHistory.gotoArbitrary(directory.path);
                                         })

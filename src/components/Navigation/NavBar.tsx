@@ -31,7 +31,7 @@ export default function NavBar() {
                 onSubmit={(e) => {
                     e.preventDefault();
 
-                    invoke<FSDirectory>("get_directory_contents", { directory: inputVal })
+                    invoke<FSDirectory>("access_directory", { directory: inputVal })
                         .then((directory) => {
                             naviHistory.gotoArbitrary(directory.path);
 

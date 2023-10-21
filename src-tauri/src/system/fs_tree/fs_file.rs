@@ -1,10 +1,8 @@
-use std::{path::PathBuf, fs::DirEntry, convert, ffi::OsString};
-
-use serde::{Serialize, ser::SerializeStruct};
-
+use super::{FSNode, fs_info::FSInfo};
 use crate::system::{SystemError, SystemResult};
 
-use super::{FSNode, fs_info::FSInfo};
+use serde::{Serialize, ser::SerializeStruct};
+use std::{path::PathBuf, fs::DirEntry, convert, ffi::OsString};
 
 // ---------------------
 // - FSFile definition -

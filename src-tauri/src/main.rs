@@ -4,11 +4,9 @@ pub mod error;
 pub mod system;
 pub mod user_config;
 
-use std::path::{Path, PathBuf};
-
 use error::PowResult;
-use user_config::{UserConfig, {serialize_user_config, deserialize_user_config}};
-use system::{get_directory_contents, get_parent_directory, resolve_environment_variable, fs_tree};
+use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config}};
+use system::commands::{access_directory, get_parent_directory, resolve_environment_variable};
 
 fn main() -> PowResult<()>
 {
@@ -31,7 +29,7 @@ fn main() -> PowResult<()>
             return Ok(());
         })
         .invoke_handler(tauri::generate_handler![
-            get_directory_contents,
+            access_directory,
             get_parent_directory,
             serialize_user_config,
             deserialize_user_config,
