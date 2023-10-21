@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import FSNodeListing from "./FSNodeListing";
 import { FSDirectory } from "@/backend/FSNode";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import clsx from "clsx";
 
 export default function FolderContents() {
-    const [contents, setContents] = useState<FSDirectory | null>(null);
+    const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
+    const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
     const naviHistory = useNaviHistoryStore();
 
     useEffect(() => {
@@ -18,7 +21,7 @@ export default function FolderContents() {
                     console.log(fsDirectory);
 
                     if (!isCancelled) {
-                        setContents(fsDirectory);
+                        setCurrentDirectory(fsDirectory);
                     }
                 })
                 .catch((error) => console.error(error));
@@ -31,35 +34,53 @@ export default function FolderContents() {
 
     return (
         <div>
-            {contents === null ? (
+            {currentDirectory === null ? (
                 <p>loading...</p>
-            ) : contents.children.length === 0 ? (
+            ) : currentDirectory.children.length === 0 ? (
                 <p>empty!</p>
             ) : (
                 <div className="flex flex-col">
                     <button
-                        className="flex flex-row items-center gap-2"
-                        onDoubleClick={() => {
-                            invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
-                                .then((parentDir) => {
-                                    naviHistory.gotoArbitrary(parentDir.path);
-                                })
-                                .catch((err) => {
-                                    console.error(err);
-                                })
+                        className={clsx(
+                            "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
+                            { "bg-background-150" : selectedIndex === 0 },
+                            { "hover:bg-background-100" : selectedIndex !== 0 }
+                        )}
+                        onClick={(e) => {
+                            if (e.detail === 1) {
+                                setSelectedIndex(0)
+                            }
+                            else if (e.detail >= 2) {
+                                invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
+                                    .then((parentDir) => {
+                                        naviHistory.gotoArbitrary(parentDir.path);
+                                    })
+                                    .catch((err) => {
+                                        console.error(err);
+                                    })
+                            }
                         }}
                     >
-                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] " />
+                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-accent" />
                         <span>../</span>
                     </button>
 
-                    {contents.children.map((fsNode) => (
+                    {currentDirectory.children.map((fsNode, index) => (
                         <FSNodeListing
+                            key={fsNode.tag === "directory" ? fsNode.data.path : fsNode.data.name}
                             node={fsNode}
+                            selected={selectedIndex === index + 1}
+                            onClick={() => {
+                                setSelectedIndex(index + 1)
+                            }}
                             onDoubleClick={() => {
-                                if (fsNode.tag === "directory") {
-                                    naviHistory.gotoArbitrary(fsNode.data.path);
-                                }
+                                invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
+                                    .then((parentDir) => {
+                                        naviHistory.gotoArbitrary(parentDir.path);
+                                    })
+                                    .catch((err) => {
+                                        console.error(err);
+                                    })
                             }}
                         />
                     ))}
