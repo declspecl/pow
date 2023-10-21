@@ -7,10 +7,13 @@ type LandmarkFolders = {
 const landmarkFolders: LandmarkFolders = {
 	pinnedFolders: [],
 	shellFolders: [
-		"C:\\Users\\Gavin\\Downloads\\",
-		"C:\\Users\\Gavin\\Documents\\",
-		"C:\\Users\\Gavin\\Pictures\\",
-		"C:\\Users\\Gavin\\Videos\\",
+        "%HOMEPATH%",
+        "$HOMEPATH",
+        "$NVIM_HOME",
+		"C:\\Users\\Gavin\\Downloads",
+		"C:\\Users\\Gavin\\Documents",
+		"C:\\Users\\Gavin\\Pictures",
+		"C:\\Users\\Gavin\\Videos",
 	],
 	drives: [
 		"C:\\",

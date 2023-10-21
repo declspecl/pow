@@ -1,3 +1,4 @@
+import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
 import { create } from "zustand";
 
 export interface NaviHistory {
@@ -17,13 +18,25 @@ export interface NaviHistoryState extends NaviHistory {
 export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
     history: [],
     current: -1,
-    gotoArbitrary: (directory: string) => {
+    gotoArbitrary: async (directory: string) => {
         console.log(`goto arbitrary: ${directory}`);
 
-        set((state) => ({
-            history: state.history.slice(0, state.current + 1).concat(directory),
-            current: state.current + 1
-        }));
+        if (isEnvironmentVariable(directory)) {
+            const resolvedDirectory = await resolveEnvironmentVariable(directory);
+
+            console.log(resolvedDirectory);
+
+            set((state) => ({
+                history: state.history.slice(0, state.current + 1).concat(resolvedDirectory),
+                current: state.current + 1
+            }));
+        }
+        else {
+            set((state) => ({
+                history: state.history.slice(0, state.current + 1).concat(directory),
+                current: state.current + 1
+            }));
+        }
     },
     gotoNext: () => {
         if (get().current < get().history.length - 1) {

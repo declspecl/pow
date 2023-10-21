@@ -5,6 +5,7 @@ import FSNodeListing from "./FSNodeListing";
 import { FSDirectory } from "@/backend/FSNode";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import clsx from "clsx";
+import ParentDirectoryListing from "./ParentDirectoryListing";
 
 export default function FolderContents() {
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
@@ -37,33 +38,20 @@ export default function FolderContents() {
             {currentDirectory === null ? (
                 <p>loading...</p>
             ) : currentDirectory.children.length === 0 ? (
-                <p>empty!</p>
+                <ParentDirectoryListing
+                    selected={selectedIndex === 0}
+                    onClick={() => {
+                        setSelectedIndex(0);
+                    }}
+                />
             ) : (
                 <div className="flex flex-col">
-                    <button
-                        className={clsx(
-                            "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
-                            { "bg-background-150" : selectedIndex === 0 },
-                            { "hover:bg-background-100" : selectedIndex !== 0 }
-                        )}
-                        onClick={(e) => {
-                            if (e.detail === 1) {
-                                setSelectedIndex(0)
-                            }
-                            else if (e.detail >= 2) {
-                                invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
-                                    .then((parentDir) => {
-                                        naviHistory.gotoArbitrary(parentDir.path);
-                                    })
-                                    .catch((err) => {
-                                        console.error(err);
-                                    })
-                            }
+                    <ParentDirectoryListing
+                        selected={selectedIndex === 0}
+                        onClick={() => {
+                            setSelectedIndex(0);
                         }}
-                    >
-                        <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-accent" />
-                        <span>../</span>
-                    </button>
+                    />
 
                     {currentDirectory.children.map((fsNode, index) => (
                         <FSNodeListing
@@ -74,13 +62,17 @@ export default function FolderContents() {
                                 setSelectedIndex(index + 1)
                             }}
                             onDoubleClick={() => {
-                                invoke<FSDirectory>("get_parent_directory", { path: naviHistory.getCurrentDirectory() })
-                                    .then((parentDir) => {
-                                        naviHistory.gotoArbitrary(parentDir.path);
-                                    })
-                                    .catch((err) => {
-                                        console.error(err);
-                                    })
+                                if (fsNode.tag === "directory") {
+                                    setCurrentDirectory(null);
+
+                                    invoke<FSDirectory>("get_directory_contents", { directory: fsNode.data.path })
+                                        .then((directory) => {
+                                            naviHistory.gotoArbitrary(directory.path);
+                                        })
+                                        .catch((err) => {
+                                            console.error(err);
+                                        })
+                                }
                             }}
                         />
                     ))}

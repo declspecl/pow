@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import React, { useRef } from "react";
 import { FSNode } from "@/backend/FSNode";
 import { FileIcon, FolderIcon } from "lucide-react";
 
@@ -12,13 +11,12 @@ interface FSNodeListingProps {
 }
 
 export default function FSNodeListing({ node, selected, onClick, onDoubleClick, className }: FSNodeListingProps) {
-    const canDoubleClick = useRef<boolean | null>(true);
+    const contents = node.tag === "directory" ? node.data.path.split("\\").pop() : node.data.name;
 
     return (
         <button
-            onClick={() => {
-
-            }}
+            onClick={onClick}
+            onDoubleClick={onDoubleClick}
             className={clsx(
                 "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
                 { "bg-background-150" : selected },
@@ -29,12 +27,12 @@ export default function FSNodeListing({ node, selected, onClick, onDoubleClick, 
             {node.tag === "directory" ? (
                 <>
                     <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-primary" />
-                    <span>{node.data.path.split("\\").pop() + "/"}</span>
+                    <span>{contents}</span>
                 </>
             ) : (
                 <>
                     <FileIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-secondary" />
-                    <span>{node.data.name}</span>
+                    <span>{contents}</span>
                 </>
             )}
         </button>
