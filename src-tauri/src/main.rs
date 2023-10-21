@@ -5,7 +5,7 @@ pub mod system;
 pub mod user_config;
 
 use error::PowResult;
-use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config}};
+use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config, get_default_user_config}};
 use system::commands::{access_directory, get_parent_directory, resolve_environment_variable};
 
 fn main() -> PowResult<()>
@@ -33,6 +33,7 @@ fn main() -> PowResult<()>
             get_parent_directory,
             serialize_user_config,
             deserialize_user_config,
+            get_default_user_config,
             resolve_environment_variable
         ])
         .run(tauri::generate_context!())

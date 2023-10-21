@@ -31,3 +31,9 @@ pub fn deserialize_user_config(app_handle: tauri::AppHandle) -> UserConfigResult
         return Err(UserConfigError::AppConfigDirError);
     }
 }
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn get_default_user_config() -> UserConfig
+{
+    return UserConfig::default();
+}

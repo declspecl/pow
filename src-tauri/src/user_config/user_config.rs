@@ -95,7 +95,7 @@ impl Default for UserConfig
             theme: "system".into(),
             window_title: "pow".into(),
             pinned_folders: vec![],
-            default_folder: "%USERPROFILE%".into(),
+            default_folder: "%HOMEPATH%".into(),
             excluded_extensions: vec![]
         };
     }

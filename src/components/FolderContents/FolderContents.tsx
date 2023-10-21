@@ -61,6 +61,7 @@ export default function FolderContents() {
                             }}
                             onDoubleClick={() => {
                                 if (fsNode.tag === "directory") {
+                                    console.log(currentDirectory);
                                     setCurrentDirectory(null);
 
                                     invoke<FSDirectory>("access_directory", { directory: fsNode.data.path })

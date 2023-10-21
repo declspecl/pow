@@ -6,9 +6,11 @@ import Loading from "@/components/Loading/Loading";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
 import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
+import { UserConfigError} from "@/components/UserConfigError/UserConfigError";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
+    const [errorEncountered, setErrorEncountered] = useState<string | null>(null);
 
     const naviHistoryGotoArbitrary = useNaviHistoryStore().gotoArbitrary;
     const naviHistoryReset = useNaviHistoryStore().reset;
@@ -27,8 +29,7 @@ export default function App() {
                                 naviHistoryGotoArbitrary(initialFolder);
                             })
                             .catch((err) => {
-                                console.error(err); // some error happened internally with resolving the env var or its not real
-                                naviHistoryGotoArbitrary(user_config.default_folder);
+                                setErrorEncountered(JSON.stringify(err));
                             });
                     }
                     else {
@@ -47,9 +48,7 @@ export default function App() {
                 }
             })
             .catch((err) => {
-                // some error happened internally with deserializing the user config (likely improper formatting)
-                // TODO: make global toast system to display errors
-                console.error(err);
+                setErrorEncountered(JSON.stringify(err));
             })
 
         return () => {
@@ -60,11 +59,17 @@ export default function App() {
     }, [naviHistoryGotoArbitrary, naviHistoryReset]);
 
     return (
-        <main className="w-full h-full">
-            {userConfig === null ? (
+        <main className="w-full h-full bg-background">
+            {userConfig === null && errorEncountered === null ? (
                 <Loading />
-            ) : (
+            ) : errorEncountered === null ? (
                 <Pow />
+            ) : (
+                <UserConfigError
+                    errorEncountered={errorEncountered}
+                    setErrorEncountered={setErrorEncountered}
+                    setUserConfig={setUserConfig}
+                />
             )}
         </main>
     );
