@@ -21,7 +21,7 @@ export default function ThemeGroupItem({ name, dataTheme, selected, onClick }: T
 			<div data-theme={dataTheme} className="relative w-[1.125rem] h-[1.125rem]">
 				<div
 					className={clsx(
-						"absolute w-full h-full rounded-full bg-accent"
+						"absolute w-full h-full rounded-full bg-ui-accent"
 					)}
 				/>
 

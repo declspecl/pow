@@ -26,12 +26,12 @@ export default function FSNodeListing({ node, selected, onClick, onDoubleClick, 
         >
             {node.tag === "directory" ? (
                 <>
-                    <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-primary" />
+                    <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
                     <span>{contents}</span>
                 </>
             ) : (
                 <>
-                    <FileIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-secondary" />
+                    <FileIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-file" />
                     <span>{contents}</span>
                 </>
             )}

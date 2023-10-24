@@ -4,8 +4,11 @@ pub mod error;
 pub mod system;
 pub mod user_config;
 
+use std::path::PathBuf;
+
 use error::PowResult;
-use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config, get_default_user_config}};
+use tauri::utils::config::parse::is_configuration_file;
+use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config, get_default_user_config}, UserConfigError};
 use system::commands::{access_directory, get_parent_directory, resolve_environment_variable};
 
 fn main() -> PowResult<()>
@@ -16,14 +19,19 @@ fn main() -> PowResult<()>
 
     tauri::Builder::default()
         .setup(|app| -> Result<(), Box<dyn std::error::Error> > {
-            if !UserConfig::exists(app.path_resolver().app_config_dir().unwrap())
-            {
-                UserConfig::default().serialize_to_config(app.path_resolver().app_config_dir().unwrap())?;
-            }
+            let mut config_file_path: PathBuf = app.path_resolver().app_config_dir().ok_or(UserConfigError::AppConfigDirError)?;
 
-            for (key, value) in std::env::vars_os()
+            config_file_path.push("config.yaml");
+
+            if !config_file_path.exists()
             {
-                println!("{:?} : {:?}", key, value);
+                println!("{} doesnt exist", config_file_path.display());
+
+                UserConfig::default().serialize_to_config(config_file_path)?;
+            }
+            else
+            {
+                println!("{} does exist!", config_file_path.display());
             }
 
             return Ok(());

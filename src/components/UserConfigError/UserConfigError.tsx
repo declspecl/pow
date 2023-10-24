@@ -23,8 +23,9 @@ export function UserConfigError({ errorEncountered, setErrorEncountered, setUser
             <div className="flex flex-col gap-1 text-base">
                 <p>
                     The following error occured in attempting to load your user configuration:
-                    <span className="text-secondary"> {errorEncountered}</span>
                 </p>
+
+                <p className="text-ui-secondary">{errorEncountered}</p>
 
                 <p>
                     To fix the problem, refer to the documentation on how to structure the configuration file. Select one of the following options:
@@ -37,7 +38,7 @@ export function UserConfigError({ errorEncountered, setErrorEncountered, setUser
                         await exit(0);
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-primary text-background"
+                        "px-2 py-1.5 rounded-md bg-ui-primary text-background"
                     )}
                 >
                     Close the application
@@ -48,7 +49,7 @@ export function UserConfigError({ errorEncountered, setErrorEncountered, setUser
                         console.log("open config file");
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-secondary text-background"
+                        "px-2 py-1.5 rounded-md bg-ui-secondary text-background"
                     )}
                 >
                     Open configuration file
@@ -63,7 +64,7 @@ export function UserConfigError({ errorEncountered, setErrorEncountered, setUser
                         naviHistoryGotoArbitrary(default_user_config.default_folder);
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-accent text-text"
+                        "px-2 py-1.5 rounded-md bg-ui-accent text-text"
                     )}
                 >
                     Proceed with default configuration

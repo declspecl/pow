@@ -19,7 +19,7 @@ export default function ParentDirectoryListing({ selected, onClick, onDoubleClic
                 className,
             )}
         >
-            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-primary" />
+            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
             <span>..</span>
         </button>
     );

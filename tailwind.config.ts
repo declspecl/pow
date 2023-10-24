@@ -25,42 +25,44 @@ const config: Config = {
                 250: "hsl(var(--background-250) / <alpha-value>)",
                 300: "hsl(var(--background-300) / <alpha-value>)"
             },
-            "primary": {
-                300: "hsl(var(--primary-300) / <alpha-value>)",
-                350: "hsl(var(--primary-350) / <alpha-value>)",
-                400: "hsl(var(--primary-400) / <alpha-value>)",
-                450: "hsl(var(--primary-450) / <alpha-value>)",
-                500: "hsl(var(--primary-500) / <alpha-value>)",
-                550: "hsl(var(--primary-550) / <alpha-value>)",
-                600: "hsl(var(--primary-600) / <alpha-value>)",
-                650: "hsl(var(--primary-650) / <alpha-value>)",
-                700: "hsl(var(--primary-700) / <alpha-value>)",
-                "DEFAULT": "hsl(var(--primary-500) / <alpha-value>)"
+            "ui-primary": {
+                300: "hsl(var(--ui-primary-300) / <alpha-value>)",
+                350: "hsl(var(--ui-primary-350) / <alpha-value>)",
+                400: "hsl(var(--ui-primary-400) / <alpha-value>)",
+                450: "hsl(var(--ui-primary-450) / <alpha-value>)",
+                500: "hsl(var(--ui-primary-500) / <alpha-value>)",
+                550: "hsl(var(--ui-primary-550) / <alpha-value>)",
+                600: "hsl(var(--ui-primary-600) / <alpha-value>)",
+                650: "hsl(var(--ui-primary-650) / <alpha-value>)",
+                700: "hsl(var(--ui-primary-700) / <alpha-value>)",
+                "DEFAULT": "hsl(var(--ui-primary-500) / <alpha-value>)"
             },
-            "secondary": {
-                300: "hsl(var(--secondary-300) / <alpha-value>)",
-                350: "hsl(var(--secondary-350) / <alpha-value>)",
-                400: "hsl(var(--secondary-400) / <alpha-value>)",
-                450: "hsl(var(--secondary-450) / <alpha-value>)",
-                500: "hsl(var(--secondary-500) / <alpha-value>)",
-                550: "hsl(var(--secondary-550) / <alpha-value>)",
-                600: "hsl(var(--secondary-600) / <alpha-value>)",
-                650: "hsl(var(--secondary-650) / <alpha-value>)",
-                700: "hsl(var(--secondary-700) / <alpha-value>)",
-                "DEFAULT": "hsl(var(--secondary-500) / <alpha-value>)"
+            "ui-secondary": {
+                300: "hsl(var(--ui-secondary-300) / <alpha-value>)",
+                350: "hsl(var(--ui-secondary-350) / <alpha-value>)",
+                400: "hsl(var(--ui-secondary-400) / <alpha-value>)",
+                450: "hsl(var(--ui-secondary-450) / <alpha-value>)",
+                500: "hsl(var(--ui-secondary-500) / <alpha-value>)",
+                550: "hsl(var(--ui-secondary-550) / <alpha-value>)",
+                600: "hsl(var(--ui-secondary-600) / <alpha-value>)",
+                650: "hsl(var(--ui-secondary-650) / <alpha-value>)",
+                700: "hsl(var(--ui-secondary-700) / <alpha-value>)",
+                "DEFAULT": "hsl(var(--ui-secondary-500) / <alpha-value>)"
             },
-            "accent": {
-                300: "hsl(var(--accent-300) / <alpha-value>)",
-                350: "hsl(var(--accent-350) / <alpha-value>)",
-                400: "hsl(var(--accent-400) / <alpha-value>)",
-                450: "hsl(var(--accent-450) / <alpha-value>)",
-                500: "hsl(var(--accent-500) / <alpha-value>)",
-                550: "hsl(var(--accent-550) / <alpha-value>)",
-                600: "hsl(var(--accent-600) / <alpha-value>)",
-                650: "hsl(var(--accent-650) / <alpha-value>)",
-                700: "hsl(var(--accent-700) / <alpha-value>)",
-                "DEFAULT": "hsl(var(--accent-500) / <alpha-value>)"
+            "ui-accent": {
+                300: "hsl(var(--ui-accent-300) / <alpha-value>)",
+                350: "hsl(var(--ui-accent-350) / <alpha-value>)",
+                400: "hsl(var(--ui-accent-400) / <alpha-value>)",
+                450: "hsl(var(--ui-accent-450) / <alpha-value>)",
+                500: "hsl(var(--ui-accent-500) / <alpha-value>)",
+                550: "hsl(var(--ui-accent-550) / <alpha-value>)",
+                600: "hsl(var(--ui-accent-600) / <alpha-value>)",
+                650: "hsl(var(--ui-accent-650) / <alpha-value>)",
+                700: "hsl(var(--ui-accent-700) / <alpha-value>)",
+                "DEFAULT": "hsl(var(--ui-accent-500) / <alpha-value>)"
             },
+            "folder": "hsl(var(--folder) / <alpha-value>)",
+            "file": "hsl(var(--file) / <alpha-value>)",
 
             "white": "hsl(0, 0%, 100%)",
             "black": "hsl(0, 0%, 0%)"

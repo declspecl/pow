@@ -25,12 +25,10 @@ pub struct UserConfig
 
 impl UserConfig
 {
-    pub fn deserialize_from_config(mut config_file_path: PathBuf) -> UserConfigResult<UserConfig>
+    pub fn deserialize_from_config(config_file_path: PathBuf) -> UserConfigResult<UserConfig>
     {
         // create parent and own directories if they don't exist
-        fs::create_dir_all(&config_file_path)?;
-
-        config_file_path.push("config.yaml");
+        fs::create_dir_all(config_file_path.parent().ok_or(UserConfigError::AppConfigDirError)?)?;
 
         // create file if it doesn't exist (need to use write), in read mode to deserialization
         let mut config_file = OpenOptions::new()
@@ -52,12 +50,10 @@ impl UserConfig
         };
     }
 
-    pub fn serialize_to_config(&self, mut config_file_path: PathBuf) -> UserConfigResult<()>
+    pub fn serialize_to_config(&self, config_file_path: PathBuf) -> UserConfigResult<()>
     {
         // create parent and own directories if they don't exist
-        fs::create_dir_all(&config_file_path)?;
-
-        config_file_path.push("config.yaml");
+        fs::create_dir_all(config_file_path.parent().ok_or(UserConfigError::AppConfigDirError)?)?;
 
         // open config file in write mode and create it if it doesn't exist
         let mut config_file = OpenOptions::new()
@@ -74,13 +70,6 @@ impl UserConfig
             },
             Err(why) => Err(UserConfigError::SerializationError(why.to_string()))
         };
-    }
-
-    pub fn exists(mut config_file_path: PathBuf) -> bool
-    {
-        config_file_path.push("config.yaml");
-
-        return config_file_path.exists();
     }
 }
 

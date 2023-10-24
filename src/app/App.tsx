@@ -48,7 +48,7 @@ export default function App() {
                 }
             })
             .catch((err) => {
-                setErrorEncountered(JSON.stringify(err));
+                setErrorEncountered(JSON.stringify(err, null, 2));
             })
 
         return () => {
@@ -63,13 +63,13 @@ export default function App() {
             {userConfig === null && errorEncountered === null ? (
                 <Loading />
             ) : errorEncountered === null ? (
-                <Pow />
-            ) : (
                 <UserConfigError
-                    errorEncountered={errorEncountered}
+                    errorEncountered={"no real reason"}
                     setErrorEncountered={setErrorEncountered}
                     setUserConfig={setUserConfig}
                 />
+            ) : (
+                <Pow />
             )}
         </main>
     );
