@@ -75,6 +75,7 @@ impl UserConfig
 
 impl Default for UserConfig
 {
+    #[cfg(target_os = "windows")]
     fn default() -> Self
     {
         return Self
@@ -85,6 +86,21 @@ impl Default for UserConfig
             window_title: "pow".into(),
             pinned_folders: vec![],
             default_folder: "%HOMEPATH%".into(),
+            excluded_extensions: vec![]
+        };
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    fn default() -> Self
+    {
+        return Self
+        {
+            width: 960,
+            height: 540,
+            theme: "system".into(),
+            window_title: "pow".into(),
+            pinned_folders: vec![],
+            default_folder: "$HOME".into(),
             excluded_extensions: vec![]
         };
     }
