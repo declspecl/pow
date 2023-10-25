@@ -62,7 +62,7 @@ export default function App() {
         <main className="w-full h-full bg-background">
             {userConfig === null && errorEncountered === null ? (
                 <Loading />
-            ) : errorEncountered === null ? (
+            ) : errorEncountered !== null ? (
                 <UserConfigError
                     errorEncountered={"no real reason"}
                     setErrorEncountered={setErrorEncountered}

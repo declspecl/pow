@@ -30,27 +30,27 @@
         --ui-primary-650: 336 77% 44%;
         --ui-primary-700: 336 77% 48%;
 
-        --ui-secondary-300: 58 59% 63%;
-        --ui-secondary-350: 58 59% 67%;
-        --ui-secondary-400: 58 59% 71%;
-        --ui-secondary-450: 58 59% 75%;
-        --ui-secondary-500: 58 59% 79%;
-        --ui-secondary-550: 58 59% 83%;
-        --ui-secondary-600: 58 59% 88%;
-        --ui-secondary-650: 58 59% 92%;
-        --ui-secondary-700: 58 59% 96%;
+        --ui-secondary-300: 260 38% 33%; 
+        --ui-secondary-350: 260 38% 37%; 
+        --ui-secondary-400: 260 38% 41%; 
+        --ui-secondary-450: 260 38% 45%; 
+        --ui-secondary-500: 260 38% 49%; 
+        --ui-secondary-550: 260 38% 53%; 
+        --ui-secondary-600: 260 38% 57%; 
+        --ui-secondary-650: 260 38% 61%; 
+        --ui-secondary-700: 260 38% 65%; 
 
-        --ui-accent-300: 260 38% 33%; 
-        --ui-accent-350: 260 38% 37%; 
-        --ui-accent-400: 260 38% 41%; 
-        --ui-accent-450: 260 38% 45%; 
-        --ui-accent-500: 260 38% 49%; 
-        --ui-accent-550: 260 38% 53%; 
-        --ui-accent-600: 260 38% 57%; 
-        --ui-accent-650: 260 38% 61%; 
-        --ui-accent-700: 260 38% 65%; 
+        --ui-accent-300: 58 59% 63%;
+        --ui-accent-350: 58 59% 67%;
+        --ui-accent-400: 58 59% 71%;
+        --ui-accent-450: 58 59% 75%;
+        --ui-accent-500: 58 59% 79%;
+        --ui-accent-550: 58 59% 83%;
+        --ui-accent-600: 58 59% 88%;
+        --ui-accent-650: 58 59% 92%;
+        --ui-accent-700: 58 59% 96%;
 
-        --folder: 212 56% 68%;
+        --folder: 212 70% 35%;
         --file: 336 77% 32%;
     }
 	
@@ -71,15 +71,15 @@
         --background-250: 0 0% 23%;
         --background-300: 0 0% 27%;
 
-        --ui-primary-300: 336 72% 21%;
-        --ui-primary-350: 336 72% 25%;
-        --ui-primary-400: 336 72% 29%;
-        --ui-primary-450: 336 72% 33%;
-        --ui-primary-500: 336 72% 37%;
-        --ui-primary-550: 336 72% 41%;
-        --ui-primary-600: 336 72% 45%;
-        --ui-primary-650: 336 72% 49%;
-        --ui-primary-700: 336 72% 53%;
+        --ui-primary-300: 259 85% 64%;
+        --ui-primary-350: 259 85% 68%;
+        --ui-primary-400: 259 85% 72%;
+        --ui-primary-450: 259 85% 76%;
+        --ui-primary-500: 259 85% 80%;
+        --ui-primary-550: 259 85% 84%;
+        --ui-primary-600: 259 85% 88%;
+        --ui-primary-650: 259 85% 92%;
+        --ui-primary-700: 259 85% 96%;
 
         --ui-secondary-300: 58 59% 63%;
         --ui-secondary-350: 58 59% 67%;
@@ -91,15 +91,15 @@
         --ui-secondary-650: 58 59% 91%;
         --ui-secondary-700: 58 59% 95%;
 
-        --ui-accent-300: 259 38% 35%;
-        --ui-accent-350: 259 38% 39%;
-        --ui-accent-400: 259 38% 43%;
-        --ui-accent-450: 259 38% 47%;
-        --ui-accent-500: 259 38% 51%;
-        --ui-accent-550: 259 38% 55%;
-        --ui-accent-600: 259 38% 59%;
-        --ui-accent-650: 259 38% 63%;
-        --ui-accent-700: 259 38% 67%;
+        --ui-accent-300: 336 72% 21%;
+        --ui-accent-350: 336 72% 25%;
+        --ui-accent-400: 336 72% 29%;
+        --ui-accent-450: 336 72% 33%;
+        --ui-accent-500: 336 72% 37%;
+        --ui-accent-550: 336 72% 41%;
+        --ui-accent-600: 336 72% 45%;
+        --ui-accent-650: 336 72% 49%;
+        --ui-accent-700: 336 72% 53%;
 
         --folder: 212 56% 68%;
         --file: 336 72% 37%;
@@ -202,8 +202,8 @@
         --ui-accent-650: 229 23% 45%;
         --ui-accent-700: 229 23% 49%;
 
-        --folder: 22 100% 70%;
-        --file: 89 51% 61%;
+        --folder: 349 89% 72%;
+        --file: 179 85% 84%;
     }
 }
 
