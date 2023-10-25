@@ -26,8 +26,8 @@ export async function access_directory(directory: string): Promise<FSDirectory> 
     return invoke<FSDirectory>("access_directory", { directory: directory });
 }
 
-export async function get_parent_directory(directory: string): Promise<string> {
-    return invoke<string>("get_parent_directory", { directory: directory });
+export async function get_parent_directory(path: string): Promise<FSDirectory> {
+    return invoke<FSDirectory>("get_parent_directory", { path: path });
 }
 
 export async function resolve_environment_variable(environmentVariable: string): Promise<string> {

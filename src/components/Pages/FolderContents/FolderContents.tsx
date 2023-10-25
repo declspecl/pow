@@ -1,9 +1,9 @@
 import FSNodeListing from "./FSNodeListing";
 import { useEffect, useState } from "react";
 import { FSDirectory } from "@/backend/FSNode";
-import { access_directory } from "@/backend/Commands";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import ArbitraryDirectoryListing from "./ArbitraryDirectoryListing";
+import { access_directory, get_parent_directory } from "@/backend/Commands";
 
 export default function FolderContents() {
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
@@ -42,7 +42,14 @@ export default function FolderContents() {
                 setSelectedIndex(0);
             }}
             onDoubleClick={() => {
-
+                console.log("double clicked");
+                access_directory(naviHistory.getCurrentDirectory())
+                    .then((directory) => {
+                        naviHistory.gotoArbitrary(directory.path);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
             }}
         />,
         <ArbitraryDirectoryListing
@@ -51,6 +58,15 @@ export default function FolderContents() {
             selected={selectedIndex === 1}
             onClick={() => {
                 setSelectedIndex(1);
+            }}
+            onDoubleClick={() => {
+                get_parent_directory(naviHistory.getCurrentDirectory())
+                    .then((parent_directory) => {
+                        naviHistory.gotoArbitrary(parent_directory.path);
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
             }}
         />
     ];
@@ -80,8 +96,6 @@ export default function FolderContents() {
             );
         });
     }
-
-    console.log(directoryListings);
 
     return (
         <div>

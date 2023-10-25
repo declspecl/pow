@@ -13,6 +13,7 @@ export default function ParentDirectoryListing({ directory, selected, onClick, o
     return (
         <button
             onClick={onClick}
+            onDoubleClick={onDoubleClick}
             className={clsx(
                 "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
                 { "bg-background-150" : selected },
