@@ -2,13 +2,14 @@ import clsx from "clsx";
 import { FolderIcon } from "lucide-react";
 
 interface ParentDirectoryListingProps {
+    directory: string,
     selected?: boolean,
     onClick?: () => void,
     onDoubleClick?: () => void,
     className?: string,
 }
 
-export default function ParentDirectoryListing({ selected, onClick, onDoubleClick, className }: ParentDirectoryListingProps) {
+export default function ParentDirectoryListing({ directory, selected, onClick, onDoubleClick, className }: ParentDirectoryListingProps) {
     return (
         <button
             onClick={onClick}
@@ -20,7 +21,7 @@ export default function ParentDirectoryListing({ selected, onClick, onDoubleClic
             )}
         >
             <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
-            <span>..</span>
+            <span>{directory}</span>
         </button>
     );
 }

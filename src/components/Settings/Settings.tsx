@@ -1,6 +1,6 @@
 import { useState, Dispatch, SetStateAction  } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
 import { UserConfig } from "@/backend/UserConfig";
+import { serialize_user_config } from "@/backend/Commands";
 
 interface SettingsProps {
 	userConfig: UserConfig,
@@ -39,7 +39,7 @@ export default function Settings({ userConfig, setUserConfig }: SettingsProps) {
 					newUserConfig.height = height;
 
 					setTimeout(async () => {
-						await invoke("serialize_user_config", { user_config: newUserConfig });
+						await serialize_user_config(newUserConfig);
 						
 						setUserConfig(newUserConfig);
 

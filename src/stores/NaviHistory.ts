@@ -1,5 +1,6 @@
-import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
 import { create } from "zustand";
+import { isEnvironmentVariable } from "@/lib/Utils";
+import { resolve_environment_variable } from "@/backend/Commands";
 
 export interface NaviHistory {
     history: string[],
@@ -22,7 +23,7 @@ export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
         console.log(`goto arbitrary: ${directory}`);
 
         if (isEnvironmentVariable(directory)) {
-            const resolvedDirectory = await resolveEnvironmentVariable(directory);
+            const resolvedDirectory = await resolve_environment_variable(directory);
 
             console.log(resolvedDirectory);
 

@@ -1,9 +1,9 @@
 import clsx from "clsx";
-import { invoke } from "@tauri-apps/api";
 import { exit } from "@tauri-apps/api/process";
 import { Dispatch, SetStateAction } from "react";
 import { UserConfig } from "@/backend/UserConfig";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import { get_default_user_config } from "@/backend/Commands";
 
 interface UserConfigErrorProps {
     errorEncountered: string,
@@ -57,7 +57,7 @@ export function UserConfigError({ errorEncountered, setErrorEncountered, setUser
 
                 <button
                     onClick={async () => {
-                        const default_user_config: UserConfig = await invoke<UserConfig>("get_default_user_config");
+                        const default_user_config: UserConfig = await get_default_user_config();
 
                         setErrorEncountered(null);
                         setUserConfig(default_user_config);

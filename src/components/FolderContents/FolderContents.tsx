@@ -1,9 +1,9 @@
-import { invoke } from "@tauri-apps/api";
 import { useEffect, useState } from "react";
 import FSNodeListing from "./FSNodeListing";
 import { FSDirectory } from "@/backend/FSNode";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import ParentDirectoryListing from "./ParentDirectoryListing";
+import ArbitraryDirectoryListing from "./ArbitraryDirectoryListing";
+import { access_directory } from "@/backend/Commands";
 
 export default function FolderContents() {
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
@@ -14,8 +14,10 @@ export default function FolderContents() {
     useEffect(() => {
         let isCancelled = false;
 
-        if (naviHistory.history[naviHistory.current]) {
-            invoke<FSDirectory>("access_directory", { directory: naviHistory.getCurrentDirectory() })
+        setCurrentDirectory(null);
+
+        if (naviHistory.getCurrentDirectory()) {
+            access_directory(naviHistory.getCurrentDirectory())
                 .then((fsDirectory) => {
                     console.log(fsDirectory);
 
@@ -31,50 +33,63 @@ export default function FolderContents() {
         }
     }, [naviHistory]);
 
+    const directoryListings: React.ReactNode[] = [
+        <ArbitraryDirectoryListing
+            key="."
+            directory="."
+            selected={selectedIndex === 0}
+            onClick={() => {
+                setSelectedIndex(0);
+            }}
+            onDoubleClick={() => {
+
+            }}
+        />,
+        <ArbitraryDirectoryListing
+            key=".."
+            directory=".."
+            selected={selectedIndex === 1}
+            onClick={() => {
+                setSelectedIndex(1);
+            }}
+        />
+    ];
+
+    if (currentDirectory !== null && currentDirectory.children.length > 0) {
+        currentDirectory.children.forEach((fsNode, index) => {
+            directoryListings.push(
+                <FSNodeListing
+                    key={fsNode.tag === "directory" ? fsNode.data.path + index : fsNode.data.name}
+                    node={fsNode}
+                    selected={selectedIndex === index + 2}
+                    onClick={() => {
+                        setSelectedIndex(index + 2)
+                    }}
+                    onDoubleClick={() => {
+                        if (fsNode.tag === "directory") {
+                            access_directory(fsNode.data.path)
+                                .then((directory) => {
+                                    naviHistory.gotoArbitrary(directory.path);
+                                })
+                                .catch((err) => {
+                                    console.error(err);
+                                })
+                        }
+                    }}
+                />
+            );
+        });
+    }
+
+    console.log(directoryListings);
+
     return (
         <div>
             {currentDirectory === null ? (
                 <p>loading...</p>
-            ) : currentDirectory.children.length === 0 ? (
-                <ParentDirectoryListing
-                    selected={selectedIndex === 0}
-                    onClick={() => {
-                        setSelectedIndex(0);
-                    }}
-                />
-            ) : (
+            ) :  (
                 <div className="flex flex-col">
-                    <ParentDirectoryListing
-                        selected={selectedIndex === 0}
-                        onClick={() => {
-                            setSelectedIndex(0);
-                        }}
-                    />
-
-                    {currentDirectory.children.map((fsNode, index) => (
-                        <FSNodeListing
-                            key={fsNode.tag === "directory" ? fsNode.data.path : fsNode.data.name}
-                            node={fsNode}
-                            selected={selectedIndex === index + 1}
-                            onClick={() => {
-                                setSelectedIndex(index + 1)
-                            }}
-                            onDoubleClick={() => {
-                                if (fsNode.tag === "directory") {
-                                    console.log(currentDirectory);
-                                    setCurrentDirectory(null);
-
-                                    invoke<FSDirectory>("access_directory", { directory: fsNode.data.path })
-                                        .then((directory) => {
-                                            naviHistory.gotoArbitrary(directory.path);
-                                        })
-                                        .catch((err) => {
-                                            console.error(err);
-                                        })
-                                }
-                            }}
-                        />
-                    ))}
+                    {directoryListings}
                 </div>
             )}
         </div>

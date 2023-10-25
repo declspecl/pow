@@ -2,8 +2,7 @@ import { useState } from "react";
 import ThemeSelector from "../Theme/ThemeSelector";
 import DirectoryNavButton from "./DirectoryNavButton";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import { invoke } from "@tauri-apps/api";
-import { FSDirectory } from "@/backend/FSNode";
+import { access_directory } from "@/backend/Commands";
 
 export default function NavBar() {
     const [inputVal, setInputVal] = useState("");
@@ -31,7 +30,7 @@ export default function NavBar() {
                 onSubmit={(e) => {
                     e.preventDefault();
 
-                    invoke<FSDirectory>("access_directory", { directory: inputVal })
+                    access_directory(inputVal)
                         .then((directory) => {
                             naviHistory.gotoArbitrary(directory.path);
 

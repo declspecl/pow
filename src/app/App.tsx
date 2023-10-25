@@ -1,12 +1,12 @@
 import Pow from "@/components/Pow/Pow";
 import { useState, useEffect } from "react";
-import { invoke } from "@tauri-apps/api/tauri";
 import { UserConfig } from "@/backend/UserConfig";
 import Loading from "@/components/Loading/Loading";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
-import { isEnvironmentVariable, resolveEnvironmentVariable } from "@/lib/Utils";
+import { isEnvironmentVariable } from "@/lib/Utils";
 import { UserConfigError} from "@/components/UserConfigError/UserConfigError";
+import { deserialize_user_config, resolve_environment_variable } from "@/backend/Commands";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -20,11 +20,11 @@ export default function App() {
 
         let isCancelled = false;
 
-        invoke<UserConfig>("deserialize_user_config")
+        deserialize_user_config()
             .then((user_config) => {
                 if (!isCancelled) {
                     if (isEnvironmentVariable(user_config.default_folder)) {
-                        resolveEnvironmentVariable(user_config.default_folder)
+                        resolve_environment_variable(user_config.default_folder)
                             .then((initialFolder) => {
                                 naviHistoryGotoArbitrary(initialFolder);
                             })
