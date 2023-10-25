@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
 import FSNodeListing from "./FSNodeListing";
+import { useEffect, useState } from "react";
 import { FSDirectory } from "@/backend/FSNode";
+import { access_directory } from "@/backend/Commands";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import ArbitraryDirectoryListing from "./ArbitraryDirectoryListing";
-import { access_directory } from "@/backend/Commands";
 
 export default function FolderContents() {
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);

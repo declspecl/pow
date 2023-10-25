@@ -5,5 +5,5 @@ export interface UserConfig {
 	window_title: string,
 	pinned_folders: string[],
 	default_folder: string,
-	excluded_extensions: string[],
+	excluded_extensions: string[]
 }

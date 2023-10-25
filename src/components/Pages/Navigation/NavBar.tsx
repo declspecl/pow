@@ -1,8 +1,8 @@
 import { useState } from "react";
-import ThemeSelector from "../Theme/ThemeSelector";
 import DirectoryNavButton from "./DirectoryNavButton";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { access_directory } from "@/backend/Commands";
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import ThemeSelector from "@/components/Theme/ThemeSelector";
 
 export default function NavBar() {
     const [inputVal, setInputVal] = useState("");

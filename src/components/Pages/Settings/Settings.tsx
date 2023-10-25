@@ -1,6 +1,6 @@
-import { useState, Dispatch, SetStateAction  } from "react";
 import { UserConfig } from "@/backend/UserConfig";
 import { serialize_user_config } from "@/backend/Commands";
+import { useState, Dispatch, SetStateAction } from "react";
 
 interface SettingsProps {
 	userConfig: UserConfig,

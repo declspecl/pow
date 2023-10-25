@@ -11,7 +11,7 @@ interface UserConfigErrorProps {
     setUserConfig: Dispatch< SetStateAction<UserConfig | null> >
 }
 
-export function UserConfigError({ errorEncountered, setErrorEncountered, setUserConfig }: UserConfigErrorProps) {
+export default function UserConfigError({ errorEncountered, setErrorEncountered, setUserConfig }: UserConfigErrorProps) {
     const naviHistoryGotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     return (

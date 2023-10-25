@@ -1,11 +1,13 @@
 import { useRef } from "react";
-import Fence from "../ChaseView/Fence";
-import NavBar from "../Navigation/NavBar";
-import FileTree from "../FileTree/FileTree";
-import LambView from "../ChaseView/LambView";
-import WolfView from "../ChaseView/WolfView";
-import ChaseView from "../ChaseView/ChaseView";
-import FolderContents from "../FolderContents/FolderContents";
+import Fence from "@/components/ChaseView/Fence";
+import LambView from "@/components/ChaseView/LambView";
+import WolfView from "@/components/ChaseView/WolfView";
+import ChaseView from "@/components/ChaseView/ChaseView";
+
+// pages
+import NavBar from "@/components/Pages/Navigation/NavBar";
+import FileTree from "@/components/Pages/FileTree/FileTree";
+import FolderContents from "@/components/Pages/FolderContents/FolderContents";
 
 export default function Pow() {
     const lambRef = useRef<HTMLDivElement>(null!);

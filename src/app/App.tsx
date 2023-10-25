@@ -1,12 +1,13 @@
-import Pow from "@/components/Pow/Pow";
 import { useState, useEffect } from "react";
 import { UserConfig } from "@/backend/UserConfig";
-import Loading from "@/components/Loading/Loading";
+import { isEnvironmentVariable } from "@/lib/Utils";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
-import { isEnvironmentVariable } from "@/lib/Utils";
-import { UserConfigError} from "@/components/UserConfigError/UserConfigError";
 import { deserialize_user_config, resolve_environment_variable } from "@/backend/Commands";
+
+import Pow from "@/components/Pages/Pow/Pow";
+import Loading from "@/components/Pages/Loading/Loading";
+import UserConfigError from "@/components/Pages/UserConfigError/UserConfigError";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -64,7 +65,7 @@ export default function App() {
                 <Loading />
             ) : errorEncountered !== null ? (
                 <UserConfigError
-                    errorEncountered={"no real reason"}
+                    errorEncountered={errorEncountered}
                     setErrorEncountered={setErrorEncountered}
                     setUserConfig={setUserConfig}
                 />
