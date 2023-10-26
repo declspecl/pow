@@ -10,7 +10,7 @@ interface FSNodeListingProps {
     className?: string,
 }
 
-export default function FSNodeListing({ node, selected, onClick, onDoubleClick, className }: FSNodeListingProps) {
+export function FSNodeListing({ node, selected, onClick, onDoubleClick, className }: FSNodeListingProps) {
     const contents = node.tag === "directory" ? node.data.path.split("\\").pop() : node.data.name;
 
     return (
@@ -18,7 +18,7 @@ export default function FSNodeListing({ node, selected, onClick, onDoubleClick, 
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className={clsx(
-                "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
+                "flex flex-row items-center gap-1 bg-background whitespace-nowrap",
                 { "bg-background-150" : selected },
                 { "hover:bg-background-100" : !selected },
                 className,

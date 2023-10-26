@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { FolderIcon } from "lucide-react";
 
-interface ParentDirectoryListingProps {
+interface ArbitraryDirectoryListingProps {
     directory: string,
     selected?: boolean,
     onClick?: () => void,
@@ -9,13 +9,13 @@ interface ParentDirectoryListingProps {
     className?: string,
 }
 
-export default function ParentDirectoryListing({ directory, selected, onClick, onDoubleClick, className }: ParentDirectoryListingProps) {
+export function ArbitraryDirectoryListing({ directory, selected, onClick, onDoubleClick, className }: ArbitraryDirectoryListingProps) {
     return (
         <button
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className={clsx(
-                "flex flex-row items-center gap-2 bg-background whitespace-nowrap",
+                "flex flex-row items-center gap-1 bg-background whitespace-nowrap",
                 { "bg-background-150" : selected },
                 { "hover:bg-background-100" : !selected },
                 className,

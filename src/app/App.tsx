@@ -6,7 +6,7 @@ import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
 import { deserialize_user_config, resolve_environment_variable } from "@/backend/Commands";
 
 import Pow from "@/components/Pages/Pow/Pow";
-import Loading from "@/components/Pages/Loading/Loading";
+import { Loading } from "@/components/Pages/Loading/Loading";
 import UserConfigError from "@/components/Pages/UserConfigError/UserConfigError";
 
 export default function App() {

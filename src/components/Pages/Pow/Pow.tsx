@@ -1,26 +1,23 @@
 import { useRef } from "react";
-import Fence from "@/components/ChaseView/Fence";
-import LambView from "@/components/ChaseView/LambView";
-import WolfView from "@/components/ChaseView/WolfView";
-import ChaseView from "@/components/ChaseView/ChaseView";
+import * as ChaseView from "@/components/ChaseView";
 
 // pages
-import NavBar from "@/components/Pages/Navigation/NavBar";
-import FileTree from "@/components/Pages/FileTree/FileTree";
-import FolderContents from "@/components/Pages/FolderContents/FolderContents";
+import { Navbar } from "./Navbar/Navbar";
+import { FileTree } from "./FileTree/FileTree";
+import { FolderContents } from "./FolderContents/FolderContents";
 
 export default function Pow() {
     const lambRef = useRef<HTMLDivElement>(null!);
 
 	return (
 		<div className="w-auto h-full flex flex-col bg-background text-text font-inter">
-			<NavBar />
+			<Navbar />
 		
-            <ChaseView
+            <ChaseView.Root
                 direction="horizontal"
                 className="flex-1 w-auto overflow-y-hidden"
             >
-                <LambView
+                <ChaseView.Lamb
                     ref={lambRef}
                     defaultSize="35ex"
                     minSize="30ex"
@@ -28,14 +25,14 @@ export default function Pow() {
                     className="p-1"
                 >
                     <FileTree />
-                </LambView>
+                </ChaseView.Lamb>
 
-                <Fence target={lambRef} size="0.25rem" className="bg-background-200" />
+                <ChaseView.Fence target={lambRef} size="0.25rem" className="bg-background-200" />
 
-                <WolfView className="p-1 overflow-y-auto">
+                <ChaseView.Wolf className="p-1 overflow-y-auto">
                     <FolderContents />
-                </WolfView>
-            </ChaseView>
+                </ChaseView.Wolf>
+            </ChaseView.Root>
 		</div>
 	);
 }

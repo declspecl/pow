@@ -8,7 +8,7 @@ interface SpinnerProps {
 	className?: string
 }
 
-export default function Spinner({ width, height, fill, stroke, className }: SpinnerProps) {
+export function Spinner({ width, height, fill, stroke, className }: SpinnerProps) {
 	const spinnerPathVariants: Variants = {
 		initial: {
 			pathLength: 0,

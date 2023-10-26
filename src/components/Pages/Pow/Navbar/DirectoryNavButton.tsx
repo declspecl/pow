@@ -7,7 +7,7 @@ interface DirectoryNavProps {
     disabled: boolean
 }
 
-export default function DirectoryNavButton({ direction, onClick, disabled }: DirectoryNavProps) {
+export function DirectoryNavButton({ direction, onClick, disabled }: DirectoryNavProps) {
     return (
         <button
             onClick={onClick}

@@ -2,7 +2,7 @@ import landmarkFolders from "./LandmarkFolders";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import clsx from "clsx";
 
-export default function FileTree() {
+export function FileTree() {
 	const shellFolders: string[] = landmarkFolders.shellFolders;
 
 	const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
