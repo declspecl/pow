@@ -189,6 +189,7 @@
         --background-150: 235 19% 25%;
         --background-200: 235 19% 29%;
         --background-250: 235 19% 33%;
+        --background-300: 235 19% 37%;
 
         --ui-primary-300: 221 82% 58%;
         --ui-primary-350: 221 82% 62%;
@@ -240,16 +241,20 @@
     }
     
     ::-webkit-scrollbar {
-        width: 0.65rem;
-        height: 0.65rem;
+        width: 0.55rem;
+        height: 0.55rem;
 
+        background-color: hsl(var(--background));
+    }
+
+    ::-webkit-scrollbar-corner {
         background-color: hsl(var(--background));
     }
     
     ::-webkit-scrollbar-thumb {
         background-color: hsl(var(--background-300));
         
-        border-radius: 1.3rem;
+        border-radius: 1.1rem;
     }
     
     ::-webkit-scrollbar-thumb:hover {

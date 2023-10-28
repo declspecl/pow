@@ -16,7 +16,7 @@ export default function Pow() {
 
     return (
         <Toast.Provider swipeDirection="right" duration={3000} label="ErrorEncountered">
-            <div className="relative w-auto h-full flex flex-col bg-background text-text font-inter">
+            <div className="w-auto h-full flex flex-col bg-background text-text font-inter">
                 <Navbar />
             
                 <ChaseView.Root
@@ -41,7 +41,7 @@ export default function Pow() {
                     </ChaseView.Wolf>
                 </ChaseView.Root>
 
-                <Toast.Viewport className="absolute m-4 p-3 bottom-0 right-0 flex justify-center items-center w-[390px] max-w-full z-50" />
+                <Toast.Viewport className="absolute p-3 bottom-0 right-0 flex justify-center items-center w-[390px] max-w-full z-50" />
             </div>
 
             <ErrorToast ref={errorToastRef} title="Error encountered!">
