@@ -53,18 +53,6 @@
         },
         "updater": {
             "active": false
-        },
-        "windows": [
-            {
-                "title": "pow",
-                "center": true,
-                "width": 880,
-                "height": 495,
-                "minWidth": 520,
-                "minHeight": 380,
-                "fullscreen": false,
-                "resizable": true
-            }
-        ]
+        }
     }
 }

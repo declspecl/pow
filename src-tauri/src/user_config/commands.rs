@@ -11,7 +11,7 @@ pub fn serialize_user_config(user_config: UserConfig, app_handle: tauri::AppHand
 
     config_file_path.push("config.yaml");
 
-    return user_config.serialize_to_config(config_file_path);
+    return user_config.serialize_to_config(&config_file_path);
 }
 
 #[tauri::command(rename_all = "snake_case")]
@@ -21,7 +21,7 @@ pub fn deserialize_user_config(app_handle: tauri::AppHandle) -> UserConfigResult
 
     config_file_path.push("config.yaml");
 
-    return UserConfig::deserialize_from_config(config_file_path);
+    return UserConfig::deserialize_from_config(&config_file_path);
 }
 
 #[tauri::command(rename_all = "snake_case")]

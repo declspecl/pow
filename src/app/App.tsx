@@ -8,6 +8,7 @@ import { deserialize_user_config, resolve_environment_variable } from "@/backend
 import Pow from "@/components/Pages/Pow/Pow";
 import { Loading } from "@/components/Pages/Loading/Loading";
 import UserConfigError from "@/components/Pages/UserConfigError/UserConfigError";
+import { invoke } from "@tauri-apps/api/tauri";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);

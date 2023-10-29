@@ -1,4 +1,4 @@
-use super::{UserConfigResult, UserConfigError};
+use super::{UserConfigResult, UserConfigError, window_properties::WindowProperties, pow_properties::PowProperties};
 
 use serde::{Serialize, Deserialize};
 use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
@@ -7,16 +7,15 @@ use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
 // - UserConfig definition -
 // -------------------------
 
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct UserConfig
 {
-    pub width: u32,
-    pub height: u32,
-    pub theme: String,
-    pub window_title: String,
-    pub pinned_folders: Vec<String>,
-    pub default_folder: String,
-    pub excluded_extensions: Vec<String>
+    // window properties
+    pub window_properties: WindowProperties,
+
+    // pow properties
+    pub pow_properties: PowProperties
 }
 
 // -----------------------------
@@ -25,7 +24,7 @@ pub struct UserConfig
 
 impl UserConfig
 {
-    pub fn deserialize_from_config(config_file_path: PathBuf) -> UserConfigResult<UserConfig>
+    pub fn deserialize_from_config(config_file_path: &PathBuf) -> UserConfigResult<UserConfig>
     {
         // create parent and own directories if they don't exist
         fs::create_dir_all(config_file_path.parent().ok_or(UserConfigError::AppConfigDirError)?)?;
@@ -35,7 +34,7 @@ impl UserConfig
             .create(true)
             .write(true)
             .read(true)
-            .open(&config_file_path)?;
+            .open(config_file_path)?;
 
         let mut config_file_contents: String = String::with_capacity(200);
 
@@ -50,7 +49,7 @@ impl UserConfig
         };
     }
 
-    pub fn serialize_to_config(&self, config_file_path: PathBuf) -> UserConfigResult<()>
+    pub fn serialize_to_config(&self, config_file_path: &PathBuf) -> UserConfigResult<()>
     {
         // create parent and own directories if they don't exist
         fs::create_dir_all(config_file_path.parent().ok_or(UserConfigError::AppConfigDirError)?)?;
@@ -73,35 +72,18 @@ impl UserConfig
     }
 }
 
+// -------------------------------------
+// - UserConfig default implementation -
+// -------------------------------------
+
 impl Default for UserConfig
 {
-    #[cfg(target_os = "windows")]
     fn default() -> Self
     {
         return Self
         {
-            width: 960,
-            height: 540,
-            theme: "system".into(),
-            window_title: "pow".into(),
-            pinned_folders: vec![],
-            default_folder: "%HOMEPATH%".into(),
-            excluded_extensions: vec![]
-        };
-    }
-
-    #[cfg(not(target_os = "windows"))]
-    fn default() -> Self
-    {
-        return Self
-        {
-            width: 960,
-            height: 540,
-            theme: "system".into(),
-            window_title: "pow".into(),
-            pinned_folders: vec![],
-            default_folder: "$HOME".into(),
-            excluded_extensions: vec![]
+            pow_properties: PowProperties::default(),
+            window_properties: WindowProperties::default()
         };
     }
 }
