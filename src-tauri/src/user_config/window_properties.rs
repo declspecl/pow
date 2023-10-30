@@ -14,8 +14,15 @@ pub struct WindowProperties
     pub minimum_height: Option<f64>,
     pub maximum_width: Option<f64>,
     pub maximum_height: Option<f64>,
+    
+    // position
+    pub centered: bool,
+    pub fullscreen: bool,
+    pub x_position: Option<f64>,
+    pub y_position: Option<f64>,
 
     // misc
+    pub title: String,
     pub dynamic_title: bool,
 }
 
@@ -35,6 +42,11 @@ impl Default for WindowProperties
             minimum_height: None,
             maximum_width: None,
             maximum_height: None,
+            centered: false,
+            fullscreen: false,
+            x_position: None,
+            y_position: None,
+            title: "pow".into(),
             dynamic_title: false
         };
     }

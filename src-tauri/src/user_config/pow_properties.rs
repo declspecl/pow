@@ -24,15 +24,15 @@ impl Default for PowProperties
         return Self
         {
             pinned_directories: vec![
-                "%HOMEPATH%".into(),
-                "%HOMEPATH%/Desktop".into(),
-                "%HOMEPATH%/Downloads".into(),
-                "%HOMEPATH%/Documents".into(),
-                "%HOMEPATH%/Pictures".into(),
-                "%HOMEPATH%/Videos".into(),
-                "%HOMEPATH%/Music".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Desktop".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Downloads".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Documents".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Pictures".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Videos".into(),
+                "%HOMEDRIVE%\\%HOMEPATH%\\Music".into(),
             ],
-            default_directory: "%HOMEPATH%".into(),
+            default_directory: "%HOMEDRIVE%\\%HOMEPATH%".into(),
             excluded_extensions: vec![
                 ".git".into()
             ]

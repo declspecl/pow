@@ -67,3 +67,23 @@ pub fn resolve_environment_variable(environment_variable: String) -> Option<Stri
         return None
     }
 }
+
+#[cfg(target_os = "windows")]
+#[tauri::command(rename_all = "snake_case")]
+pub fn parse_path(path: String) -> SystemResult<String>
+{
+    let mut path_components: Vec<String> = path.replace('/', "\\").split('\\').map(|component| component.to_string()).collect();
+    println!("{:#?}", path_components);
+
+    for component in path_components.iter_mut()
+    {
+        *component = match resolve_environment_variable(component.to_string())
+        {
+            Some(val) => val,
+            None => component.to_string()
+        }.trim_matches('\\').to_string();
+    }
+    println!("{:#?}", path_components);
+
+    return Ok(path_components.join("\\").to_string());
+}

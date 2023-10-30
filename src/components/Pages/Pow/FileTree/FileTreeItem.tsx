@@ -1,7 +1,15 @@
-export default function FileTreeItem() {
-	return (
-		<div>
+interface FileTreeItemProps {
+    directory: string,
+    onClick: () => void
+}
 
-		</div>
+export default function FileTreeItem({ directory, onClick }: FileTreeItemProps) {
+	return (
+		<button
+            className="text-text"
+            onClick={onClick}
+        >
+            {directory}
+		</button>
 	);
 }

@@ -1,25 +1,61 @@
-import landmarkFolders from "./LandmarkFolders";
+"use client";
+
+import FileTreeItem from "./FileTreeItem";
+import { parsePath } from "@/backend/Utils";
+import { useContext, useState, useEffect } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import clsx from "clsx";
+import { UserConfigContext } from "@/contexts/UserConfigContext";
 
 export function FileTree() {
-	const shellFolders: string[] = landmarkFolders.shellFolders;
+    const pinnedDirectories = useContext(UserConfigContext).pow.pinned_directories;
+    const [parsedPinnedDirectories, setParsedPinnedDirectories] = useState<string[]>(null!);
 
-	const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
+    useEffect(() => {
+        let isCancelled = false;
 
-	return (
-		<div className="flex flex-col items-start">
-			{shellFolders.map((folderName) => (
-				<button
-					key={folderName}
-					onClick={() => gotoArbitrary(folderName)}
-					className={clsx(
-						"p-1 rounded-md transition-[background-color]",
-					)}
-				>
-					{folderName}
-				</button>
-			))}
-		</div>
-	);
+        const tmpParsedPinnedDirectories: string[] = [];
+
+        for (const pinnedDirectory of pinnedDirectories) {
+            parsePath(pinnedDirectory)
+                .then((parsedPinnedDirectory) => {
+                    if (!isCancelled) {
+                        tmpParsedPinnedDirectories.push(parsedPinnedDirectory);
+                    }
+                })
+                .catch((err) => {
+                    console.error(err);
+                })
+        }
+
+        setParsedPinnedDirectories(tmpParsedPinnedDirectories);
+
+        return () => {
+            isCancelled = true;
+        }
+    }, [pinnedDirectories])
+
+    const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
+
+    return (
+        <div>
+            {parsedPinnedDirectories ? (
+                <div className="flex flex-col items-start">
+                    {parsedPinnedDirectories.map((parsedPinnedDirectory) => (
+                    <>
+                        <p>{parsedPinnedDirectory}</p>
+                        <FileTreeItem
+                            key={parsedPinnedDirectory}
+                            directory={parsedPinnedDirectory}
+                            onClick={() => {}}
+                        />
+                    </>
+                    ))}
+                </div>
+            ) : (
+                <p>
+                    loading...
+                </p>
+            )}
+        </div>
+    );
 }

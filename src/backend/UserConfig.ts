@@ -1,9 +1,25 @@
 export interface UserConfig {
-	width: number,
-	height: number,
-	theme: string,
-	window_title: string,
-	pinned_folders: string[],
-	default_folder: string,
-	excluded_extensions: string[]
+    window: {
+        initial_width: number,
+        initial_height: number,
+        minimum_width: number,
+        minimum_height: number,
+        maximum_width: number,
+        maximum_height: number,
+        
+        // position
+        centered: boolean,
+        fullscreen: boolean,
+        x_position: number,
+        y_position: number,
+
+        // misc
+        title: string,
+        dynamic_title: boolean,
+    },
+    pow: {
+        pinned_directories: string[]
+        default_directory: string,
+        excluded_extensions: string[]
+    }
 }

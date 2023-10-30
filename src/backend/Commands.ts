@@ -33,3 +33,7 @@ export async function get_parent_directory(path: string): Promise<FSDirectory> {
 export async function resolve_environment_variable(environmentVariable: string): Promise<string> {
 	return invoke<string>("resolve_environment_variable", { environment_variable: environmentVariable });
 }
+
+export async function parsePath(path: string): Promise<string> {
+    return invoke<string>("parse_path", { path: path });
+}

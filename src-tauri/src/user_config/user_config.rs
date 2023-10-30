@@ -12,10 +12,10 @@ use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
 pub struct UserConfig
 {
     // window properties
-    pub window_properties: WindowProperties,
+    pub window: WindowProperties,
 
     // pow properties
-    pub pow_properties: PowProperties
+    pub pow: PowProperties
 }
 
 // -----------------------------
@@ -82,8 +82,8 @@ impl Default for UserConfig
     {
         return Self
         {
-            pow_properties: PowProperties::default(),
-            window_properties: WindowProperties::default()
+            pow: PowProperties::default(),
+            window: WindowProperties::default()
         };
     }
 }

@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
 import { UserConfig } from "@/backend/UserConfig";
-import { isEnvironmentVariable } from "@/lib/Utils";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
-import { deserialize_user_config, resolve_environment_variable } from "@/backend/Commands";
+import { deserialize_user_config, parsePath } from "@/backend/Commands";
 
 import Pow from "@/components/Pages/Pow/Pow";
 import { Loading } from "@/components/Pages/Loading/Loading";
 import UserConfigError from "@/components/Pages/UserConfigError/UserConfigError";
-import { invoke } from "@tauri-apps/api/tauri";
+import { UserConfigContext } from "@/contexts/UserConfigContext";
 
 export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
@@ -24,30 +23,19 @@ export default function App() {
 
         deserialize_user_config()
             .then((user_config) => {
+                console.log(user_config);
                 if (!isCancelled) {
-                    if (isEnvironmentVariable(user_config.default_folder)) {
-                        resolve_environment_variable(user_config.default_folder)
-                            .then((initialFolder) => {
-                                naviHistoryGotoArbitrary(initialFolder);
-                            })
-                            .catch((err) => {
-                                setErrorEncountered(JSON.stringify(err));
-                            });
-                    }
-                    else {
-                        naviHistoryGotoArbitrary(user_config.default_folder);
-                    }
-
-                    setUserConfig({
-                        width: user_config.width,
-                        height: user_config.height,
-                        theme: user_config.theme,
-                        window_title: user_config.window_title,
-                        pinned_folders: user_config.pinned_folders,
-                        default_folder: user_config.default_folder,
-                        excluded_extensions: user_config.excluded_extensions
-                    });
+                    parsePath(user_config.pow.default_directory)
+                        .then((parsedDefaultDirectory) => {
+                            console.log(parsedDefaultDirectory);
+                            naviHistoryGotoArbitrary(parsedDefaultDirectory);
+                        })
+                        .catch((err) => {
+                            setErrorEncountered(JSON.stringify(err));
+                        })
                 }
+
+                setUserConfig(user_config);
             })
             .catch((err) => {
                 setErrorEncountered(JSON.stringify(err, null, 2));
@@ -71,7 +59,9 @@ export default function App() {
                     setUserConfig={setUserConfig}
                 />
             ) : (
-                <Pow />
+                <UserConfigContext.Provider value={userConfig as UserConfig}>
+                    <Pow />
+                </UserConfigContext.Provider>
             )}
         </main>
     );
