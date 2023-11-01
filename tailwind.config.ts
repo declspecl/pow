@@ -75,6 +75,25 @@ const config: Config = {
             data: {
                 "state-open": "state~=open",
                 "state-closed": "state~=closed"
+            },
+            keyframes: {
+                fadeIn: {
+                    to: { opacity: "1" },
+                    from: { opacity: "0" }
+                },
+                fadeOut: {
+                    from: { opacity: "1" },
+                    to: { opacity: "0" }
+                },
+                slideInRTL: {
+                    from: { transform: "translateX(calc(100% + var(--viewport-padding)))" },
+                    to: { transform: "translateX(0)" }
+                }
+            },
+            animation: {
+                fadeIn: "fadeIn 100ms ease-in",
+                fadeOut: "fadeOut 100ms ease-in",
+                slideInRTL: "slideInRTL 150ms cubic-bezier(0.16, 1, 0.3, 1)"
             }
         }
 	},

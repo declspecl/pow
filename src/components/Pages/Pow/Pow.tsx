@@ -7,7 +7,7 @@ import { ErrorToast } from "@/components/ErrorToast/ErrorToast";
 import { Navbar } from "./Navbar/Navbar";
 import { FileTree } from "./FileTree/FileTree";
 import { FolderContents } from "./FolderContents/FolderContents";
-import { ErrorLogContext } from "@/contexts/ErrorLogContext";
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 export default function Pow() {
     const [errorLog, setErrorLog] = useState<string[]>([]);
@@ -15,9 +15,9 @@ export default function Pow() {
     const lambRef = useRef<HTMLDivElement>(null!);
 
     return (
-        <Toast.Provider>
+        <Toast.Provider swipeDirection="right">
             <div className="w-auto h-full flex flex-col bg-background text-text font-inter">
-                <ErrorLogContext.Provider value={{ errorLog, setErrorLog }}>
+                <SetErrorLogContext.Provider value={setErrorLog}>
                     <Navbar />
 
                     <ChaseView.Root
@@ -40,11 +40,10 @@ export default function Pow() {
                             <FolderContents />
                         </ChaseView.Wolf>
                     </ChaseView.Root>
-                </ErrorLogContext.Provider>
+                </SetErrorLogContext.Provider>
 
-                <ErrorToast />
-
-                <Toast.Viewport className="[--viewport-padding:_25px] fixed bottom-0 right-0 flex flex-col p-[var(--viewport-padding)] gap-[10px] w-[390px] max-w-[100vw] m-0 list-none z-[2147483647] outline-none" />
+                <ErrorToast errorLog={errorLog} />
+                <Toast.Viewport className="[--viewport-padding:_25px] p-[var(--viewport-padding)] fixed bottom-0 right-0 flex flex-col gap-2.5 w-[390px] max-w-[100vw] list-none z-[10] outline-none" />
             </div>
         </Toast.Provider>
     );

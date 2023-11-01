@@ -1,13 +1,16 @@
 import { FSNodeListing } from "./FSNodeListing";
-import { useEffect, useState } from "react";
 import { FSDirectory } from "@/backend/FSNode";
+import { useState, useEffect, useContext } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { ArbitraryDirectoryListing } from "./ArbitraryDirectoryListing";
 import { access_directory, get_parent_directory } from "@/backend/Commands";
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 export function FolderContents() {
-    const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
+
+    const setErrorLog = useContext(SetErrorLogContext);
 
     const naviHistory = useNaviHistoryStore();
 
@@ -25,13 +28,13 @@ export function FolderContents() {
                         setCurrentDirectory(fsDirectory);
                     }
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
         }
 
         return () => {
             isCancelled = true;
         }
-    }, [naviHistory]);
+    }, [naviHistory, setErrorLog]);
 
     const directoryListings: React.ReactNode[] = [
         <ArbitraryDirectoryListing

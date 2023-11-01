@@ -10,7 +10,7 @@ export function Navbar() {
     const naviHistory = useNaviHistoryStore();
 
     return (
-        <div className="p-2 flex flex-row items-center gap-4 border-b-4 border-b-background-200">
+        <div className="p-2 flex flex-row items-center gap-4 border-b-4 border-b-background-200 bg-background z-20">
             <div className="flex flex-row gap-2">
                 <DirectoryNavButton
                     direction="left"
