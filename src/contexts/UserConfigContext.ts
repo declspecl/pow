@@ -1,4 +1,9 @@
-import { createContext } from "react";
+import React, { createContext } from "react";
 import { UserConfig } from "@/backend/UserConfig";
 
-export const UserConfigContext = createContext<UserConfig>(null!);
+interface UserConfigContextType {
+    userConfig: UserConfig,
+    setUserConfig: React.Dispatch< React.SetStateAction<UserConfig> >
+}
+
+export const UserConfigContext = createContext<UserConfigContextType>(null!);

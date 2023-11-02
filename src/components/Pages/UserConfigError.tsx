@@ -7,8 +7,8 @@ import { get_default_user_config } from "@/backend/Commands";
 
 interface UserConfigErrorProps {
     errorEncountered: string,
-    setErrorEncountered: Dispatch< SetStateAction<string | null> >
-    setUserConfig: Dispatch< SetStateAction<UserConfig | null> >
+    setErrorEncountered: Dispatch< SetStateAction<string| null> >
+    setUserConfig: Dispatch< SetStateAction<UserConfig> >
 }
 
 export default function UserConfigError({ errorEncountered, setErrorEncountered, setUserConfig }: UserConfigErrorProps) {

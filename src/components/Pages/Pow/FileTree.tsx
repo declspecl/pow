@@ -1,13 +1,17 @@
-"use client";
-
-import FileTreeItem from "./FileTreeItem";
 import { parsePath } from "@/backend/Utils";
-import { useContext, useState, useEffect } from "react";
+import { FSDirectory } from "@/backend/FSNode";
+import FileTreeItem from "./FileTree/FileTreeItem";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import React, { useContext, useState, useEffect } from "react";
 import { UserConfigContext } from "@/contexts/UserConfigContext";
 
-export function FileTree() {
-    const pinnedDirectories = useContext(UserConfigContext).pow.pinned_directories;
+interface FileTreeProps {
+    currentDirectory: FSDirectory | null,
+    setCurrentDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
+}
+
+export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProps) {
+    const pinnedDirectories = useContext(UserConfigContext).userConfig.pow.pinned_directories;
     const [parsedPinnedDirectories, setParsedPinnedDirectories] = useState<string[]>(null!);
 
     useEffect(() => {

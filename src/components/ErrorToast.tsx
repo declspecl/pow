@@ -12,6 +12,7 @@ export function ErrorToast({ errorLog } : ErrorToastProps) {
             {Array.from({ length: errorLog.length }).map((_, i) => (
                 <Toast.Root
                     key={`${errorLog[i]}-${i}`}
+                    // TODO: add duration
                     className={clsx(
                         "p-2.5 flex flex-row justify-between items-center gap-2.5 bg-background-50 border border-background-250 rounded-lg",
                         "data-state-closed:animate-fadeOut",

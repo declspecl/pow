@@ -2,6 +2,10 @@ import clsx from "clsx";
 import React, { useContext } from "react";
 import { DirectionContext } from "@/contexts/DirectionContext";
 
+// ----------------------------
+// - ChaseView.Root component -
+// ----------------------------
+
 interface RootProps {
     direction: "vertical" | "horizontal",
     children: React.ReactNode,
@@ -29,6 +33,10 @@ export function Root({ direction, children, className }: RootProps) {
         </div>
     )
 }
+
+// ----------------------------
+// - ChaseView.Lamb component -
+// ----------------------------
 
 interface LambProps extends React.HTMLAttributes<HTMLDivElement> {
     defaultSize: string,
@@ -66,6 +74,10 @@ export const Lamb = React.forwardRef<HTMLDivElement, LambProps>((props, ref) => 
     );
 });
 
+// ----------------------------
+// - ChaseView.Wolf component -
+// ----------------------------
+
 interface WolfProps extends React.HTMLAttributes<HTMLDivElement> {
     children?: React.ReactNode,
     className?: string
@@ -92,6 +104,10 @@ export function Wolf({ children, className }: WolfProps) {
         </div>
     );
 }
+
+// -----------------------------
+// - ChaseView.Fence component -
+// -----------------------------
 
 interface FenceProps {
     target: React.MutableRefObject<HTMLElement>,

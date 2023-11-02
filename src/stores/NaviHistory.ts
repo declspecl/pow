@@ -22,6 +22,9 @@ export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
     gotoArbitrary: async (directory: string) => {
         console.log(`goto arbitrary: ${directory}`);
 
+        // TODO: change to parsing directory
+        // TODO squared: need to change how parse directory works
+
         if (isEnvironmentVariable(directory)) {
             const resolvedDirectory = await resolve_environment_variable(directory);
 
