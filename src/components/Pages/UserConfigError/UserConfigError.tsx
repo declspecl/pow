@@ -15,12 +15,12 @@ export default function UserConfigError({ errorEncountered, setErrorEncountered,
     const naviHistoryGotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     return (
-        <div className="p-8 fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-start gap-4 rounded-lg bg-background-50 text-text font-inter">
-            <h1 className="text-4xl">
+        <div className="p-8 fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-start gap-4 rounded-lg bg-background-50">
+            <h1 className="text-4xl text-text">
                 An error occured in loading your user configuration.
             </h1>
 
-            <div className="flex flex-col gap-1 text-base">
+            <div className="flex flex-col gap-1 text-base text-text">
                 <p>
                     The following error occured in attempting to load your user configuration:
                 </p>
@@ -38,7 +38,7 @@ export default function UserConfigError({ errorEncountered, setErrorEncountered,
                         await exit(0);
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-ui-primary text-background"
+                        "px-4 py-1.5 rounded-md bg-ui-primary text-background"
                     )}
                 >
                     Close the application
@@ -49,7 +49,7 @@ export default function UserConfigError({ errorEncountered, setErrorEncountered,
                         console.log("open config file");
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-ui-secondary text-background"
+                        "px-4 py-1.5 rounded-md bg-ui-secondary text-background"
                     )}
                 >
                     Open configuration file
@@ -61,10 +61,10 @@ export default function UserConfigError({ errorEncountered, setErrorEncountered,
 
                         setErrorEncountered(null);
                         setUserConfig(default_user_config);
-                        naviHistoryGotoArbitrary(default_user_config.default_folder);
+                        naviHistoryGotoArbitrary(default_user_config.pow.default_directory);
                     }}
                     className={clsx(
-                        "px-2 py-1.5 rounded-md bg-ui-accent text-text"
+                        "px-4 py-1.5 rounded-md bg-ui-accent text-text"
                     )}
                 >
                     Proceed with default configuration
