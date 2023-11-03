@@ -38,7 +38,7 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
         return () => {
             isCancelled = true;
         }
-    }, [naviHistory, setErrorLog]);
+    }, [naviHistory, setCurrentDirectory, setErrorLog]);
 
     const directoryListings: React.ReactNode[] = [
         <ArbitraryDirectoryListing
@@ -54,9 +54,7 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
                     .then((directory) => {
                         naviHistory.gotoArbitrary(directory.path);
                     })
-                    .catch((err) => {
-                        console.error(err);
-                    })
+                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
             }}
         />,
         <ArbitraryDirectoryListing
@@ -71,9 +69,7 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
                     .then((parent_directory) => {
                         naviHistory.gotoArbitrary(parent_directory.path);
                     })
-                    .catch((err) => {
-                        console.error(err);
-                    })
+                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
             }}
         />
     ];
@@ -94,9 +90,7 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
                                 .then((directory) => {
                                     naviHistory.gotoArbitrary(directory.path);
                                 })
-                                .catch((err) => {
-                                    console.error(err);
-                                })
+                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                         }
                     }}
                 />

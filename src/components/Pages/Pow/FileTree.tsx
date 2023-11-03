@@ -4,6 +4,7 @@ import FileTreeItem from "./FileTree/FileTreeItem";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import React, { useContext, useState, useEffect } from "react";
 import { UserConfigContext } from "@/contexts/UserConfigContext";
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 interface FileTreeProps {
     currentDirectory: FSDirectory | null,
@@ -13,6 +14,8 @@ interface FileTreeProps {
 export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProps) {
     const pinnedDirectories = useContext(UserConfigContext).userConfig.pow.pinned_directories;
     const [parsedPinnedDirectories, setParsedPinnedDirectories] = useState<string[]>(null!);
+
+    const setErrorLog = useContext(SetErrorLogContext);
 
     useEffect(() => {
         let isCancelled = false;
@@ -26,9 +29,7 @@ export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProp
                         tmpParsedPinnedDirectories.push(parsedPinnedDirectory);
                     }
                 })
-                .catch((err) => {
-                    console.error(err);
-                })
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
         }
 
         setParsedPinnedDirectories(tmpParsedPinnedDirectories);
@@ -36,7 +37,7 @@ export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProp
         return () => {
             isCancelled = true;
         }
-    }, [pinnedDirectories])
+    }, [pinnedDirectories, setErrorLog])
 
     const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 

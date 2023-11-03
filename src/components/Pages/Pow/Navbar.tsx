@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { DirectoryNavButton } from "./Navbar/DirectoryNavButton";
 import { access_directory } from "@/backend/Commands";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import ThemeSelector from "@/components/Theme/ThemeSelector";
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 export function Navbar() {
     const [inputVal, setInputVal] = useState("");
 
     const naviHistory = useNaviHistoryStore();
+
+    const setErrorLog = useContext(SetErrorLogContext);
 
     return (
         <div className="p-2 flex flex-row items-center gap-4 border-b-4 border-b-background-200 bg-background z-20">
@@ -36,7 +39,7 @@ export function Navbar() {
 
                             setInputVal("");
                         })
-                        .catch((error) => console.error(error))
+                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                 }}
             >
                 <input
