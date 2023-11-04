@@ -1,13 +1,21 @@
+// utils
 import { useState, useEffect } from "react";
-import { UserConfig } from "@/backend/UserConfig";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
-import { deserialize_user_config, parse_path } from "@/backend/Commands";
 
+// components
 import { Pow } from "@/components/Pages/Pow";
 import { Loading } from "@/components/Pages/Loading";
-import { UserConfigContext } from "@/contexts/UserConfigContext";
 import { UserConfigError } from "@/components/Pages/UserConfigError";
+
+// backend
+import { UserConfig } from "@/backend/UserConfig";
+import { deserialize_user_config, parse_path } from "@/backend/Commands";
+
+// stores
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
+// contexts
+import { UserConfigContext } from "@/contexts/UserConfigContext";
 
 export default function App() {
     // UserConfig state

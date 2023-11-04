@@ -1,17 +1,26 @@
+// utils
 import { useState, useContext } from "react";
-import { FSDirectory } from "@/backend/FSNode";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
-import { FSNodeListing } from "./FolderContents/FSNodeListing";
-import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
-import { access_directory, get_parent_directory } from "@/backend/Commands";
-import { ArbitraryDirectoryListing } from "./FolderContents/ArbitraryDirectoryListing";
 
-interface FolderContentsProps {
+// components
+import { FSNodeListing } from "./DirectoryContents/FSNodeListing";
+import { ArbitraryDirectoryListing } from "./DirectoryContents/ArbitraryDirectoryListing";
+
+// backend
+import { FSDirectory } from "@/backend/FSNode";
+import { access_directory, get_parent_directory } from "@/backend/Commands";
+
+// stores
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
+// contexts
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
+
+interface DirectoryContentsProps {
     currentFSDirectory: FSDirectory | null,
     setCurrentFSDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
 }
 
-export function FolderContents({ currentFSDirectory }: FolderContentsProps) {
+export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
     const setErrorLog = useContext(SetErrorLogContext);

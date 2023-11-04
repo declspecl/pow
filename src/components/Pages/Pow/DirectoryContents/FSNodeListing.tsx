@@ -1,6 +1,11 @@
+// utils
 import clsx from "clsx";
-import { FSNode } from "@/backend/FSNode";
+
+// components
 import { FileIcon, FolderIcon } from "lucide-react";
+
+// backend
+import { FSNode } from "@/backend/FSNode";
 
 interface FSNodeListingProps {
     node: FSNode,

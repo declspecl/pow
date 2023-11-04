@@ -1,8 +1,17 @@
+// utils
 import { useState, useContext } from "react";
-import { DirectoryNavButton } from "./Navbar/DirectoryNavButton";
-import { access_directory } from "@/backend/Commands";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
+// components
 import ThemeSelector from "@/components/Theme/ThemeSelector";
+import { DirectoryNavButton } from "./Navbar/DirectoryNavButton";
+
+// backend
+import { access_directory } from "@/backend/Commands";
+
+// stores
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
+// contexts
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 export function Navbar() {

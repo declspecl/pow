@@ -1,4 +1,7 @@
+// utils
 import clsx from "clsx";
+
+// components
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 
 interface DirectoryNavProps {

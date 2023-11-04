@@ -1,9 +1,14 @@
+// utils
 import clsx from "clsx";
 import { exit } from "@tauri-apps/api/process";
 import { Dispatch, SetStateAction } from "react";
+
+// backend
 import { UserConfig } from "@/backend/UserConfig";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { get_default_user_config } from "@/backend/Commands";
+
+// stores
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 interface UserConfigErrorProps {
     userConfigError: string,

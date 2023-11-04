@@ -1,4 +1,7 @@
+// utils
 import clsx from "clsx";
+
+// components
 import { FolderIcon } from "lucide-react";
 
 interface ArbitraryDirectoryListingProps {

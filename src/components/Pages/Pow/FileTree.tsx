@@ -1,11 +1,16 @@
-import { FileTreeItem } from "./FileTree/FileTreeItem";
+// utils
 import { useContext, useState, useEffect } from "react";
 
-import { UserConfigContext } from "@/contexts/UserConfigContext";
-import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
+// components
+import { FileTreeItem } from "./FileTree/FileTreeItem";
 
+// backend
 import { BipartitePath } from "@/backend/BipartitePath";
 import { get_bipartite_path } from "@/backend/Commands";
+
+// contexts
+import { UserConfigContext } from "@/contexts/UserConfigContext";
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 export function FileTree() {
     const [pinnedDirectories, setPinnedDirectories] = useState<BipartitePath[]>([]);

@@ -1,13 +1,19 @@
+// utils
 import clsx from "clsx";
 import { useContext } from "react";
+
+// components
 import { FolderIcon } from "lucide-react";
 
+// backend
+import { access_directory } from "@/backend/Commands";
+import { BipartitePath } from "@/backend/BipartitePath";
+
+// stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
+// contexts
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
-
-import { BipartitePath } from "@/backend/BipartitePath";
-import { access_directory } from "@/backend/Commands";
 
 interface FileTreeItemProps {
     directory: BipartitePath,

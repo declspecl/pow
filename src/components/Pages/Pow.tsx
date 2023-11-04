@@ -1,18 +1,23 @@
-import * as Toast from "@radix-ui/react-toast";
+// utils
 import { useRef, useState, useEffect } from "react";
-import * as ChaseView from "@/components/ChaseView";
-import { ErrorToast } from "@/components/ErrorToast";
 
+// components
 import { Navbar } from "./Pow/Navbar";
 import { FileTree } from "./Pow/FileTree";
-import { FolderContents } from "./Pow/FolderContents";
+import * as Toast from "@radix-ui/react-toast";
+import * as ChaseView from "@/components/ChaseView";
+import { ErrorToast } from "@/components/ErrorToast";
+import { DirectoryContents } from "./Pow/DirectoryContents";
 
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
-
-import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
-
+// backend
 import { FSDirectory } from "@/backend/FSNode";
 import { access_directory } from "@/backend/Commands";
+
+// stores
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
+// contexts
+import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 // actual top level application component
 export function Pow() {
@@ -76,7 +81,7 @@ export function Pow() {
                         <ChaseView.Fence target={lambRef} size="0.25rem" className="bg-background-200" />
 
                         <ChaseView.Wolf className="p-1 overflow-y-auto">
-                            <FolderContents
+                            <DirectoryContents
                                 currentFSDirectory={currentFSDirectory}
                                 setCurrentFSDirectory={setCurrentFSDirectory}
                             />
