@@ -35,7 +35,7 @@ export default function App() {
             .then((user_config) => {
                 // successfully loaded user config
                 if (!isCancelled) {
-                    parsePath(user_config.pow.default_directory)
+                    parse_path(user_config.pow.default_directory)
                         .then((parsedDefaultDirectory) => {
                             // successfully parsed default directory
                             console.log(parsedDefaultDirectory);

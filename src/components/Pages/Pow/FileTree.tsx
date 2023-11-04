@@ -1,9 +1,10 @@
-import { FSDirectory } from "@/backend/FSNode";
 import { FileTreeItem } from "./FileTree/FileTreeItem";
-import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import React, { useContext, useState, useEffect } from "react";
+
 import { UserConfigContext } from "@/contexts/UserConfigContext";
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
+
+import { FSDirectory } from "@/backend/FSNode";
 import { BipartitePath } from "@/backend/BipartitePath";
 import { get_bipartite_path } from "@/backend/Commands";
 
@@ -12,19 +13,21 @@ interface FileTreeProps {
     setCurrentDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
 }
 
-export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProps) {
-    const userConfig = useContext(UserConfigContext).userConfig;
+export function FileTree({ setCurrentDirectory }: FileTreeProps) {
     const [pinnedDirectories, setPinnedDirectories] = useState<BipartitePath[]>([]);
 
     const setErrorLog = useContext(SetErrorLogContext);
+    const userConfig = useContext(UserConfigContext).userConfig;
 
     useEffect(() => {
         let isCancelled = false;
 
+        // attempting to load all pinned directories from user config
         for (const pinnedDirectory of userConfig.pow.pinned_directories) {
             get_bipartite_path(pinnedDirectory)
                 .then((pinnedDirectory) => {
                     if (!isCancelled) {
+                        // incrementally set pinned directories
                         setPinnedDirectories((pinnedDirectories) => [...pinnedDirectories, pinnedDirectory]);
                     }
                 })
@@ -37,19 +40,23 @@ export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProp
             setPinnedDirectories([]);
         }
     }, [userConfig, setErrorLog])
-
-    const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
+    
+    // -----------------------------------------------
+    // - render logic: loading or pinned directories -
+    // -----------------------------------------------
 
     return (
-        <div>
+        <div className="flex flex-col items-start">
             {pinnedDirectories ? (
-                <div className="flex flex-col items-start">
+                <>
                     {pinnedDirectories.map((pinnedDirectory) => (
-                    <>
-                        <p>{pinnedDirectory.display_friendly_path}</p>
-                    </>
+                        <FileTreeItem
+                            key={pinnedDirectory.real_path}
+                            directory={pinnedDirectory}
+                            setCurrentDirectory={setCurrentDirectory}
+                        />
                     ))}
-                </div>
+                </>
             ) : (
                 <p>
                     loading...

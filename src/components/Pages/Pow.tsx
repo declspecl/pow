@@ -13,10 +13,17 @@ import { FSDirectory } from "@/backend/FSNode";
 
 // actual top level application component
 export function Pow() {
+    // global error log, used as value in context
     const [errorLog, setErrorLog] = useState<string[]>([]);
+
+    // global current directory, given to FileTree and DirectoryContents
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
 
     const lambRef = useRef<HTMLDivElement>(null!);
+
+    // ----------
+    // - render -
+    // ----------
 
     return (
         <Toast.Provider swipeDirection="right">
