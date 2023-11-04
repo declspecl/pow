@@ -40,7 +40,7 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 access_directory(naviHistory.getCurrentDirectory())
                     .then((directory) => {
                         naviHistory.gotoArbitrary(directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                            .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                     })
                     .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
             }}
@@ -58,9 +58,9 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                     .then((parent_directory) => {
                         console.log(parent_directory);
                         naviHistory.gotoArbitrary(parent_directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                            .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
             }}
         />
     ];
@@ -80,9 +80,9 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                             access_directory(fsNode.data.path)
                                 .then((directory) => {
                                     naviHistory.gotoArbitrary(directory.path)
-                                        .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                                 })
-                                .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                         }
                     }}
                 />

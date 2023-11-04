@@ -44,11 +44,12 @@ export function Navbar() {
 
                     access_directory(inputVal)
                         .then((directory) => {
-                            naviHistory.gotoArbitrary(directory.path);
+                            naviHistory.gotoArbitrary(directory.path)
+                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
 
                             setInputVal("");
                         })
-                        .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
                 }}
             >
                 <input

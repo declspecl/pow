@@ -22,7 +22,7 @@ import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 // actual top level application component
 export function Pow() {
     // global error log, used as value in context
-    const [errorLog, setErrorLog] = useState<string[]>([]);
+    const [errorLog, setErrorLog] = useState<object[]>([]);
 
     // total navi history access
     const naviHistory = useNaviHistoryStore();
@@ -43,7 +43,7 @@ export function Pow() {
                     if (!isCancelled)
                         setCurrentFSDirectory(fsDirectory);
                 })
-                .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
         }
 
         return () => {
@@ -72,10 +72,7 @@ export function Pow() {
                             maxSize="calc(100% - 30ex)"
                             className="p-1"
                         >
-                            <FileTree
-                                currentFSDirectory={currentFSDirectory}
-                                setCurrentFSDirectory={setCurrentFSDirectory}
-                            />
+                            <FileTree />
                         </ChaseView.Lamb>
 
                         <ChaseView.Fence target={lambRef} size="0.25rem" className="bg-background-200" />
@@ -91,7 +88,7 @@ export function Pow() {
 
                 <ErrorToast errorLog={errorLog} />
 
-                <Toast.Viewport className="[--viewport-padding:_25px] p-[var(--viewport-padding)] fixed bottom-0 right-0 flex flex-col gap-2.5 w-[390px] max-w-[100vw] list-none z-[10] outline-none" />
+                <Toast.Viewport className="[--viewport-padding:_25px] p-[var(--viewport-padding)] fixed bottom-0 right-0 flex flex-col gap-2.5 min-w-[200px] w-[500px] max-w-[100vw] list-none z-[10] outline-none" />
             </div>
         </Toast.Provider>
     );

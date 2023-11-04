@@ -10,7 +10,7 @@ pub mod windows;
 #[cfg(target_os = "windows")]
 pub use windows::*;
 
-use super::{fs_tree::FSDirectory, {SystemResult, SystemError}, BipartitePath};
+use super::{fs_tree::FSDirectory, {SystemResult, SystemError}};
 
 use std::path::PathBuf;
 

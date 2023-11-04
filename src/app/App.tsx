@@ -22,7 +22,7 @@ export default function App() {
     const [userConfig, setUserConfig] = useState<UserConfig>(null!);
 
     // user config error management state
-    const [userConfigError, setUserConfigError] = useState<string | null>(null);
+    const [userConfigError, setUserConfigError] = useState<object | null>(null);
 
     // NaviHistory state
     const naviHistoryReset = useNaviHistoryStore().reset;
@@ -51,7 +51,7 @@ export default function App() {
                         })
                         .catch((err) => {
                             // if error is encountered, set userConfigError to show UserConfigError page
-                            setUserConfigError(JSON.stringify(err, null, 2));
+                            setUserConfigError(err);
                         })
                 }
 
@@ -59,7 +59,7 @@ export default function App() {
             })
             .catch((err) => {
                 // if error is encountered, set userConfigError to show UserConfigError page
-                setUserConfigError(JSON.stringify(err, null, 2));
+                setUserConfigError(err);
             })
 
         return () => {

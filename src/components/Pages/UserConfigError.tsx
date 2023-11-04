@@ -11,8 +11,8 @@ import { get_default_user_config } from "@/backend/Commands";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 interface UserConfigErrorProps {
-    userConfigError: string,
-    setUserConfigError: Dispatch< SetStateAction<string| null> >
+    userConfigError: object,
+    setUserConfigError: Dispatch< SetStateAction<object | null> >
     setUserConfig: Dispatch< SetStateAction<UserConfig> >
 }
 
@@ -27,7 +27,7 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
             <div className="flex flex-col gap-1 text-base text-text">
                 <p>The following error occured in attempting to load your user configuration:</p>
 
-                <p className="text-ui-secondary">{userConfigError}</p>
+                <p className="text-ui-secondary">{JSON.stringify(userConfigError, null, 2)}</p>
 
                 <p>
                     To fix the problem, refer to the documentation on how to structure the configuration file.
