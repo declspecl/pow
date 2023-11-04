@@ -1,5 +1,5 @@
-import { useRef, useState } from "react";
 import * as Toast from "@radix-ui/react-toast";
+import { useRef, useState, useEffect } from "react";
 import * as ChaseView from "@/components/ChaseView";
 import { ErrorToast } from "@/components/ErrorToast";
 
@@ -7,19 +7,44 @@ import { Navbar } from "./Pow/Navbar";
 import { FileTree } from "./Pow/FileTree";
 import { FolderContents } from "./Pow/FolderContents";
 
+import { useNaviHistoryStore } from "@/stores/NaviHistory";
+
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
 import { FSDirectory } from "@/backend/FSNode";
+import { access_directory } from "@/backend/Commands";
 
 // actual top level application component
 export function Pow() {
     // global error log, used as value in context
     const [errorLog, setErrorLog] = useState<string[]>([]);
 
-    // global current directory, given to FileTree and DirectoryContents
-    const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
+    // total navi history access
+    const naviHistory = useNaviHistoryStore();
+
+    // global current FSDirectory, given to FileTree and DirectoryContents
+    const [currentFSDirectory, setCurrentFSDirectory] = useState<FSDirectory | null>(null);
 
     const lambRef = useRef<HTMLDivElement>(null!);
+
+    useEffect(() => {
+        let isCancelled = false;
+
+        setCurrentFSDirectory(null);
+
+        if (naviHistory.getCurrentDirectory()) {
+            access_directory(naviHistory.getCurrentDirectory())
+                .then((fsDirectory) => {
+                    if (!isCancelled)
+                        setCurrentFSDirectory(fsDirectory);
+                })
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+        }
+
+        return () => {
+            isCancelled = true;
+        }
+    }, [naviHistory]);
 
     // ----------
     // - render -
@@ -43,8 +68,8 @@ export function Pow() {
                             className="p-1"
                         >
                             <FileTree
-                                currentDirectory={currentDirectory}
-                                setCurrentDirectory={setCurrentDirectory}
+                                currentFSDirectory={currentFSDirectory}
+                                setCurrentFSDirectory={setCurrentFSDirectory}
                             />
                         </ChaseView.Lamb>
 
@@ -52,8 +77,8 @@ export function Pow() {
 
                         <ChaseView.Wolf className="p-1 overflow-y-auto">
                             <FolderContents
-                                currentDirectory={currentDirectory}
-                                setCurrentDirectory={setCurrentDirectory}
+                                currentFSDirectory={currentFSDirectory}
+                                setCurrentFSDirectory={setCurrentFSDirectory}
                             />
                         </ChaseView.Wolf>
                     </ChaseView.Root>

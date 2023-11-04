@@ -1,22 +1,20 @@
 import clsx from "clsx";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { FolderIcon } from "lucide-react";
 
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
-import { FSDirectory } from "@/backend/FSNode";
 import { BipartitePath } from "@/backend/BipartitePath";
 import { access_directory } from "@/backend/Commands";
 
 interface FileTreeItemProps {
     directory: BipartitePath,
-    setCurrentDirectory: React.Dispatch< React.SetStateAction<FSDirectory | null> >,
     className?: string,
 }
 
-export function FileTreeItem({ directory, setCurrentDirectory, className }: FileTreeItemProps) {
+export function FileTreeItem({ directory, className }: FileTreeItemProps) {
     const naviHistoryGotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     const setErrorLog = useContext(SetErrorLogContext);
@@ -27,10 +25,8 @@ export function FileTreeItem({ directory, setCurrentDirectory, className }: File
                 access_directory(directory.real_path)
                     .then((directory) => {
                         naviHistoryGotoArbitrary(directory.path);
-                        setCurrentDirectory(directory);
                     })
                     .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
-                naviHistoryGotoArbitrary(directory.real_path);
             }}
             className={clsx(
                 "w-full flex flex-row items-center gap-1 bg-background whitespace-nowrap",

@@ -1,19 +1,13 @@
 import { FileTreeItem } from "./FileTree/FileTreeItem";
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { UserConfigContext } from "@/contexts/UserConfigContext";
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 
-import { FSDirectory } from "@/backend/FSNode";
 import { BipartitePath } from "@/backend/BipartitePath";
 import { get_bipartite_path } from "@/backend/Commands";
 
-interface FileTreeProps {
-    currentDirectory: FSDirectory | null,
-    setCurrentDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
-}
-
-export function FileTree({ setCurrentDirectory }: FileTreeProps) {
+export function FileTree() {
     const [pinnedDirectories, setPinnedDirectories] = useState<BipartitePath[]>([]);
 
     const setErrorLog = useContext(SetErrorLogContext);
@@ -53,7 +47,6 @@ export function FileTree({ setCurrentDirectory }: FileTreeProps) {
                         <FileTreeItem
                             key={pinnedDirectory.real_path}
                             directory={pinnedDirectory}
-                            setCurrentDirectory={setCurrentDirectory}
                         />
                     ))}
                 </>

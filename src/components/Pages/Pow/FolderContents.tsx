@@ -1,5 +1,5 @@
+import { useState, useContext } from "react";
 import { FSDirectory } from "@/backend/FSNode";
-import { useState, useEffect, useContext } from "react";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { FSNodeListing } from "./FolderContents/FSNodeListing";
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
@@ -7,38 +7,16 @@ import { access_directory, get_parent_directory } from "@/backend/Commands";
 import { ArbitraryDirectoryListing } from "./FolderContents/ArbitraryDirectoryListing";
 
 interface FolderContentsProps {
-    currentDirectory: FSDirectory | null,
-    setCurrentDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
+    currentFSDirectory: FSDirectory | null,
+    setCurrentFSDirectory: React.Dispatch< React.SetStateAction< FSDirectory | null> >
 }
 
-export function FolderContents({ currentDirectory, setCurrentDirectory }: FolderContentsProps) {
+export function FolderContents({ currentFSDirectory }: FolderContentsProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
     const setErrorLog = useContext(SetErrorLogContext);
 
     const naviHistory = useNaviHistoryStore();
-
-    useEffect(() => {
-        let isCancelled = false;
-
-        setCurrentDirectory(null);
-
-        if (naviHistory.getCurrentDirectory()) {
-            access_directory(naviHistory.getCurrentDirectory())
-                .then((fsDirectory) => {
-                    console.log(fsDirectory);
-
-                    if (!isCancelled) {
-                        setCurrentDirectory(fsDirectory);
-                    }
-                })
-                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
-        }
-
-        return () => {
-            isCancelled = true;
-        }
-    }, [naviHistory, setCurrentDirectory, setErrorLog]);
 
     const directoryListings: React.ReactNode[] = [
         <ArbitraryDirectoryListing
@@ -74,8 +52,8 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
         />
     ];
 
-    if (currentDirectory !== null && currentDirectory.children.length > 0) {
-        currentDirectory.children.forEach((fsNode, index) => {
+    if (currentFSDirectory !== null && currentFSDirectory.children.length > 0) {
+        currentFSDirectory.children.forEach((fsNode, index) => {
             directoryListings.push(
                 <FSNodeListing
                     key={fsNode.tag === "directory" ? fsNode.data.path + index : fsNode.data.name}
@@ -100,7 +78,7 @@ export function FolderContents({ currentDirectory, setCurrentDirectory }: Folder
 
     return (
         <div>
-            {currentDirectory === null ? (
+            {currentFSDirectory === null ? (
                 <p>loading...</p>
             ) :  (
                 <div className="flex flex-col">
