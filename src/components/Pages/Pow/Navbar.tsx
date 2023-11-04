@@ -48,7 +48,7 @@ export function Navbar() {
 
                             setInputVal("");
                         })
-                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                        .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                 }}
             >
                 <input

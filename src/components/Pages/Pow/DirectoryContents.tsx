@@ -39,7 +39,8 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 console.log("double clicked");
                 access_directory(naviHistory.getCurrentDirectory())
                     .then((directory) => {
-                        naviHistory.gotoArbitrary(directory.path);
+                        naviHistory.gotoArbitrary(directory.path)
+                            .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                     })
                     .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
             }}
@@ -52,11 +53,14 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 setSelectedIndex(1);
             }}
             onDoubleClick={() => {
+                console.log("im here");
                 get_parent_directory(naviHistory.getCurrentDirectory())
                     .then((parent_directory) => {
-                        naviHistory.gotoArbitrary(parent_directory.path);
+                        console.log(parent_directory);
+                        naviHistory.gotoArbitrary(parent_directory.path)
+                            .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                    .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
             }}
         />
     ];
@@ -75,9 +79,10 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                         if (fsNode.tag === "directory") {
                             access_directory(fsNode.data.path)
                                 .then((directory) => {
-                                    naviHistory.gotoArbitrary(directory.path);
+                                    naviHistory.gotoArbitrary(directory.path)
+                                        .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                                 })
-                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                                .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                         }
                     }}
                 />

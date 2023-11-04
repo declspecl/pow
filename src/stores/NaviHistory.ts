@@ -1,6 +1,5 @@
 import { create } from "zustand";
-import { isEnvironmentVariable } from "@/lib/Utils";
-import { resolve_environment_variable } from "@/backend/Commands";
+import { parse_path } from "@/backend/Commands";
 
 export interface NaviHistory {
     history: string[],
@@ -8,7 +7,7 @@ export interface NaviHistory {
 }
 
 export interface NaviHistoryState extends NaviHistory {
-    gotoArbitrary: (directory: string) => void,
+    gotoArbitrary: (directory: string) => Promise<void>,
     gotoNext: () => void,
     gotoPrevious: () => void,
     pop: () => void,
@@ -22,25 +21,12 @@ export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
     gotoArbitrary: async (directory: string) => {
         console.log(`goto arbitrary: ${directory}`);
 
-        // TODO: change to parsing directory
-        // TODO squared: need to change how parse directory works
+        const parsedDirectory = await parse_path(directory);
 
-        if (isEnvironmentVariable(directory)) {
-            const resolvedDirectory = await resolve_environment_variable(directory);
-
-            console.log(resolvedDirectory);
-
-            set((state) => ({
-                history: state.history.slice(0, state.current + 1).concat(resolvedDirectory),
-                current: state.current + 1
-            }));
-        }
-        else {
-            set((state) => ({
-                history: state.history.slice(0, state.current + 1).concat(directory),
-                current: state.current + 1
-            }));
-        }
+        set((state) => ({
+            history: state.history.slice(0, state.current + 1).concat(parsedDirectory),
+            current: state.current + 1
+        }));
     },
     gotoNext: () => {
         if (get().current < get().history.length - 1) {

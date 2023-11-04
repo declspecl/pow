@@ -30,7 +30,7 @@ export function FileTree() {
                         setPinnedDirectories((pinnedDirectories) => [...pinnedDirectories, pinnedDirectory]);
                     }
                 })
-                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
         }
 
         return () => {

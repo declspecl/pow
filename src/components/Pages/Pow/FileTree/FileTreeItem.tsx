@@ -30,9 +30,10 @@ export function FileTreeItem({ directory, className }: FileTreeItemProps) {
             onClick={() => {
                 access_directory(directory.real_path)
                     .then((directory) => {
-                        naviHistoryGotoArbitrary(directory.path);
+                        naviHistoryGotoArbitrary(directory.path)
+                            .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                    .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
             }}
             className={clsx(
                 "w-full flex flex-row items-center gap-1 bg-background whitespace-nowrap",

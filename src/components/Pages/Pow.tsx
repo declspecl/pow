@@ -43,7 +43,7 @@ export function Pow() {
                     if (!isCancelled)
                         setCurrentFSDirectory(fsDirectory);
                 })
-                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                .catch((error) => setErrorLog((errorLog) => [...errorLog, JSON.stringify(error)]));
         }
 
         return () => {
