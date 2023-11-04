@@ -1,10 +1,22 @@
-use super::{fs_tree::FSDirectory, {SystemResult, SystemError}};
+#[cfg(not(target_os = "windows"))]
+pub mod unix;
+
+#[cfg(not(target_os = "windows"))]
+pub use unix::*;
+
+#[cfg(target_os = "windows")]
+pub mod windows;
+
+#[cfg(target_os = "windows")]
+pub use windows::*;
+
+use super::{fs_tree::FSDirectory, {SystemResult, SystemError}, BipartitePath};
 
 use std::path::PathBuf;
 
-// ------------------
-// - tauri commands -
-// ------------------
+// ------------------------------------
+// - platform agnostic tauri commands -
+// ------------------------------------
 
 #[tauri::command(rename_all = "snake_case")]
 pub fn access_directory(directory: String) -> SystemResult<FSDirectory>
@@ -66,24 +78,4 @@ pub fn resolve_environment_variable(environment_variable: String) -> Option<Stri
     {
         return None
     }
-}
-
-#[cfg(target_os = "windows")]
-#[tauri::command(rename_all = "snake_case")]
-pub fn parse_path(path: String) -> SystemResult<String>
-{
-    let mut path_components: Vec<String> = path.replace('/', "\\").split('\\').map(|component| component.to_string()).collect();
-    println!("{:#?}", path_components);
-
-    for component in path_components.iter_mut()
-    {
-        *component = match resolve_environment_variable(component.to_string())
-        {
-            Some(val) => val,
-            None => component.to_string()
-        }.trim_matches('\\').to_string();
-    }
-    println!("{:#?}", path_components);
-
-    return Ok(path_components.join("\\").to_string());
 }

@@ -12,7 +12,7 @@ import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 import { FSDirectory } from "@/backend/FSNode";
 
 // actual top level application component
-export default function Pow() {
+export function Pow() {
     const [errorLog, setErrorLog] = useState<string[]>([]);
     const [currentDirectory, setCurrentDirectory] = useState<FSDirectory | null>(null);
 

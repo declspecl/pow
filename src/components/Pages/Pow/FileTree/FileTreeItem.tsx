@@ -3,7 +3,7 @@ interface FileTreeItemProps {
     onClick: () => void
 }
 
-export default function FileTreeItem({ directory, onClick }: FileTreeItemProps) {
+export function FileTreeItem({ directory, onClick }: FileTreeItemProps) {
 	return (
 		<button
             className="text-text"

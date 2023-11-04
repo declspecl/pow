@@ -6,29 +6,27 @@ import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { get_default_user_config } from "@/backend/Commands";
 
 interface UserConfigErrorProps {
-    errorEncountered: string,
-    setErrorEncountered: Dispatch< SetStateAction<string| null> >
+    userConfigError: string,
+    setUserConfigError: Dispatch< SetStateAction<string| null> >
     setUserConfig: Dispatch< SetStateAction<UserConfig> >
 }
 
-export default function UserConfigError({ errorEncountered, setErrorEncountered, setUserConfig }: UserConfigErrorProps) {
+export function UserConfigError({ userConfigError, setUserConfigError, setUserConfig }: UserConfigErrorProps) {
+    // ability to navigate to default directory when proceeding with default configuration
     const naviHistoryGotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     return (
         <div className="p-8 fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 flex flex-col items-start gap-4 rounded-lg bg-background-50">
-            <h1 className="text-4xl text-text">
-                An error occured in loading your user configuration.
-            </h1>
+            <h1 className="text-4xl text-text">An error occured in loading your user configuration.</h1>
 
             <div className="flex flex-col gap-1 text-base text-text">
-                <p>
-                    The following error occured in attempting to load your user configuration:
-                </p>
+                <p>The following error occured in attempting to load your user configuration:</p>
 
-                <p className="text-ui-secondary">{errorEncountered}</p>
+                <p className="text-ui-secondary">{userConfigError}</p>
 
                 <p>
-                    To fix the problem, refer to the documentation on how to structure the configuration file. Select one of the following options:
+                    To fix the problem, refer to the documentation on how to structure the configuration file.
+                    Select one of the following options:
                 </p>
             </div>
 
@@ -59,7 +57,7 @@ export default function UserConfigError({ errorEncountered, setErrorEncountered,
                     onClick={async () => {
                         const default_user_config: UserConfig = await get_default_user_config();
 
-                        setErrorEncountered(null);
+                        setUserConfigError(null);
                         setUserConfig(default_user_config);
                         naviHistoryGotoArbitrary(default_user_config.pow.default_directory);
                     }}

@@ -1,10 +1,11 @@
-import { parsePath } from "@/backend/Utils";
 import { FSDirectory } from "@/backend/FSNode";
-import FileTreeItem from "./FileTree/FileTreeItem";
+import { FileTreeItem } from "./FileTree/FileTreeItem";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import React, { useContext, useState, useEffect } from "react";
 import { UserConfigContext } from "@/contexts/UserConfigContext";
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
+import { BipartitePath } from "@/backend/BipartitePath";
+import { get_bipartite_path } from "@/backend/Commands";
 
 interface FileTreeProps {
     currentDirectory: FSDirectory | null,
@@ -12,47 +13,40 @@ interface FileTreeProps {
 }
 
 export function FileTree({ currentDirectory, setCurrentDirectory }: FileTreeProps) {
-    const pinnedDirectories = useContext(UserConfigContext).userConfig.pow.pinned_directories;
-    const [parsedPinnedDirectories, setParsedPinnedDirectories] = useState<string[]>(null!);
+    const userConfig = useContext(UserConfigContext).userConfig;
+    const [pinnedDirectories, setPinnedDirectories] = useState<BipartitePath[]>([]);
 
     const setErrorLog = useContext(SetErrorLogContext);
 
     useEffect(() => {
         let isCancelled = false;
 
-        const tmpParsedPinnedDirectories: string[] = [];
-
-        for (const pinnedDirectory of pinnedDirectories) {
-            parsePath(pinnedDirectory)
-                .then((parsedPinnedDirectory) => {
+        for (const pinnedDirectory of userConfig.pow.pinned_directories) {
+            get_bipartite_path(pinnedDirectory)
+                .then((pinnedDirectory) => {
                     if (!isCancelled) {
-                        tmpParsedPinnedDirectories.push(parsedPinnedDirectory);
+                        setPinnedDirectories((pinnedDirectories) => [...pinnedDirectories, pinnedDirectory]);
                     }
                 })
                 .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
         }
 
-        setParsedPinnedDirectories(tmpParsedPinnedDirectories);
-
         return () => {
             isCancelled = true;
+
+            setPinnedDirectories([]);
         }
-    }, [pinnedDirectories, setErrorLog])
+    }, [userConfig, setErrorLog])
 
     const gotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     return (
         <div>
-            {parsedPinnedDirectories ? (
+            {pinnedDirectories ? (
                 <div className="flex flex-col items-start">
-                    {parsedPinnedDirectories.map((parsedPinnedDirectory) => (
+                    {pinnedDirectories.map((pinnedDirectory) => (
                     <>
-                        <p>{parsedPinnedDirectory}</p>
-                        <FileTreeItem
-                            key={parsedPinnedDirectory}
-                            directory={parsedPinnedDirectory}
-                            onClick={() => {}}
-                        />
+                        <p>{pinnedDirectory.display_friendly_path}</p>
                     </>
                     ))}
                 </div>

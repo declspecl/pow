@@ -24,15 +24,15 @@ impl Default for PowProperties
         return Self
         {
             pinned_directories: vec![
-                "%HOMEDRIVE%\\%HOMEPATH%".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Desktop".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Downloads".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Documents".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Pictures".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Videos".into(),
-                "%HOMEDRIVE%\\%HOMEPATH%\\Music".into(),
+                "%USERPROFILE%\\".into(),
+                "%USERPROFILE%\\Desktop".into(),
+                "%USERPROFILE%\\Downloads".into(),
+                "%USERPROFILE%\\Documents".into(),
+                "%USERPROFILE%\\Pictures".into(),
+                "%USERPROFILE%\\Videos".into(),
+                "%USERPROFILE%\\Music".into(),
             ],
-            default_directory: "%HOMEDRIVE%\\%HOMEPATH%".into(),
+            default_directory: "%USERPROFILE%\\".into(),
             excluded_extensions: vec![
                 ".git".into()
             ]
@@ -52,7 +52,7 @@ impl Default for PowProperties
         return Self
         {
             pinned_directories: vec![
-                "$HOME".into(),
+                "$HOME/".into(),
                 "$HOME/Desktop".into(),
                 "$HOME/Downloads".into(),
                 "$HOME/Documents".into(),
@@ -60,7 +60,7 @@ impl Default for PowProperties
                 "$HOME/Videos".into(),
                 "$HOME/Music".into(),
             ],
-            default_directory: String::from("$HOME"),
+            default_directory: String::from("$HOME/"),
             excluded_extensions: vec![
                 ".git".into()
             ]

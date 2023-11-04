@@ -2,19 +2,19 @@ import { useState, useEffect } from "react";
 import { UserConfig } from "@/backend/UserConfig";
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
-import { deserialize_user_config, parsePath } from "@/backend/Commands";
+import { deserialize_user_config, parse_path } from "@/backend/Commands";
 
-import Pow from "@/components/Pages/Pow";
+import { Pow } from "@/components/Pages/Pow";
 import { Loading } from "@/components/Pages/Loading";
-import UserConfigError from "@/components/Pages/UserConfigError";
 import { UserConfigContext } from "@/contexts/UserConfigContext";
+import { UserConfigError } from "@/components/Pages/UserConfigError";
 
 export default function App() {
     // UserConfig state
     const [userConfig, setUserConfig] = useState<UserConfig>(null!);
 
-    // error management state
-    const [errorEncountered, setErrorEncountered] = useState<string | null>(null);
+    // user config error management state
+    const [userConfigError, setUserConfigError] = useState<string | null>(null);
 
     // NaviHistory state
     const naviHistoryReset = useNaviHistoryStore().reset;
@@ -30,6 +30,7 @@ export default function App() {
 
         let isCancelled = false;
 
+        // attempt to load user config and navigate to default directory
         deserialize_user_config()
             .then((user_config) => {
                 // successfully loaded user config
@@ -41,16 +42,16 @@ export default function App() {
                             naviHistoryGotoArbitrary(parsedDefaultDirectory);
                         })
                         .catch((err) => {
-                            // if error is encountered, set errorEncountered to show UserConfigError page
-                            setErrorEncountered(JSON.stringify(err, null, 2));
+                            // if error is encountered, set userConfigError to show UserConfigError page
+                            setUserConfigError(JSON.stringify(err, null, 2));
                         })
                 }
 
                 setUserConfig(user_config);
             })
             .catch((err) => {
-                // if error is encountered, set errorEncountered to show UserConfigError page
-                setErrorEncountered(JSON.stringify(err, null, 2));
+                // if error is encountered, set userConfigError to show UserConfigError page
+                setUserConfigError(JSON.stringify(err, null, 2));
             })
 
         return () => {
@@ -65,13 +66,13 @@ export default function App() {
     // -----------------------------------------------------
 
     if (userConfig === null) {
-        if (errorEncountered === null)
+        if (userConfigError === null)
             return <Loading />;
         else {
             return (
                 <UserConfigError
-                    errorEncountered={errorEncountered}
-                    setErrorEncountered={setErrorEncountered}
+                    userConfigError={userConfigError}
+                    setUserConfigError={setUserConfigError}
                     setUserConfig={setUserConfig}
                 />
             );

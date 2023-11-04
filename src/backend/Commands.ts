@@ -1,6 +1,7 @@
 import { FSDirectory } from "./FSNode";
 import { invoke } from "@tauri-apps/api";
 import { UserConfig } from "./UserConfig";
+import { BipartitePath } from "./BipartitePath";
 
 // -----------------------
 // - UserConfig commands -
@@ -34,6 +35,10 @@ export async function resolve_environment_variable(environmentVariable: string):
 	return invoke<string>("resolve_environment_variable", { environment_variable: environmentVariable });
 }
 
-export async function parsePath(path: string): Promise<string> {
+export async function parse_path(path: string): Promise<string> {
     return invoke<string>("parse_path", { path: path });
+}
+
+export async function get_bipartite_path(path: string): Promise<BipartitePath> {
+    return invoke<BipartitePath>("get_bipartite_path", { path: path });
 }

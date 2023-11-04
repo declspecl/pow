@@ -6,7 +6,7 @@ pub mod user_config;
 
 use error::PowResult;
 use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config, get_default_user_config}, UserConfigError};
-use system::commands::{access_directory, get_parent_directory, resolve_environment_variable, parse_path};
+use system::commands::{access_directory, get_parent_directory, resolve_environment_variable, parse_path, get_bipartite_path};
 
 use std::path::PathBuf;
 
@@ -87,7 +87,8 @@ fn main() -> PowResult<()>
             deserialize_user_config,
             get_default_user_config,
             resolve_environment_variable,
-            parse_path
+            parse_path,
+            get_bipartite_path
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
