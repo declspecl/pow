@@ -1,6 +1,5 @@
 import { defineConfig } from "vite";
 import { fileURLToPath } from "url";
-import Unfonts from "unplugin-fonts/vite";
 import react from "@vitejs/plugin-react-swc";
 
 export default defineConfig({
@@ -19,15 +18,5 @@ export default defineConfig({
 			"@": fileURLToPath(new URL("./src", import.meta.url))
 		}
 	},
-	plugins: [
-		react(),
-		Unfonts({
-			google: {
-				families: [
-					"Inter",
-                    "Poppins"
-				]
-			}
-		})
-	],
+	plugins: [react()]
 });

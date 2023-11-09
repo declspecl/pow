@@ -16,18 +16,12 @@
 		
 		/* Linting */
 		"strict": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
-		"noFallthroughCasesInSwitch": true,
 
 		/* Configuring type alias */
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["src/*"]
-		},
-
-		/* Unplugin fonts */
-		"types": ["unplugin-fonts/client"]
+		}
 	},
 	"include": ["src"],
 	"references": [{ "path": "./tsconfig.node.json" }]

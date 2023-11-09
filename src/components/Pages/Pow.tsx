@@ -57,7 +57,7 @@ export function Pow() {
 
     return (
         <Toast.Provider swipeDirection="right">
-            <div className="w-auto h-full flex flex-col bg-background text-text font-inter">
+            <div className="w-auto h-full flex flex-col bg-background text-text">
                 <SetErrorLogContext.Provider value={setErrorLog}>
                     <Navbar />
 

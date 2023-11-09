@@ -67,10 +67,6 @@ const config: Config = {
             "white": "hsl(0, 0%, 100%)",
             "black": "hsl(0, 0%, 0%)"
 		},
-		fontFamily: {
-			"inter": "inter",
-            "poppins": "poppins"
-		},
 		extend: {
             data: {
                 "state-open": "state~=open",
