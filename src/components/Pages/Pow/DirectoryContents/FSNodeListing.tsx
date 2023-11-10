@@ -6,6 +6,7 @@ import { FileIcon, FolderIcon } from "lucide-react";
 
 // backend
 import { FSNode } from "@/backend/FSNode";
+import { useAppearanceStateStore } from "@/stores/AppearanceSettings";
 
 interface FSNodeListingProps {
     node: FSNode,
@@ -16,6 +17,8 @@ interface FSNodeListingProps {
 }
 
 export function FSNodeListing({ node, selected, onClick, onDoubleClick, className }: FSNodeListingProps) {
+    const filledIcons = useAppearanceStateStore((state) => state.filledIcons);
+
     const contents = node.tag === "directory" ? node.data.path.split("\\").pop() : node.data.name;
 
     return (
@@ -31,13 +34,27 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
         >
             {node.tag === "directory" ? (
                 <>
-                    <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
-                    <span>{contents}</span>
+                    <FolderIcon
+                        width="1em"
+                        height="1em"
+                        className={clsx(
+                            "min-w-[1em] min-h-[1em] stroke-folder",
+                            { "fill-folder" : filledIcons }
+                        )}
+                    />
+                    <p>{contents}</p>
                 </>
             ) : (
                 <>
-                    <FileIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-file" />
-                    <span>{contents}</span>
+                    <FileIcon
+                        width="1em"
+                        height="1em"
+                        className={clsx(
+                            "min-w-[1em] min-h-[1em] stroke-file",
+                            { "fill-file" : filledIcons }
+                        )}
+                    />
+                    <p>{contents}</p>
                 </>
             )}
         </button>

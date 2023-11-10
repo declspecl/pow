@@ -16,6 +16,7 @@ import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 // contexts
 import { UserConfigContext } from "@/contexts/UserConfigContext";
+import { useAppearanceStateStore } from "@/stores/AppearanceSettings";
 
 export default function App() {
     // UserConfig state
@@ -28,15 +29,17 @@ export default function App() {
     const naviHistoryReset = useNaviHistoryStore().reset;
     const naviHistoryGotoArbitrary = useNaviHistoryStore().gotoArbitrary;
 
+    // appearance settings state
+    const appearanceSettings = useAppearanceStateStore();
+
     // ---------------------------------
     // - Attempting to load UserConfig -
     // ---------------------------------
 
     useEffect(() => {
-        if (userConfig !== null) {
-            document.documentElement.setAttribute("data-theme", userConfig.appearance.theme);
-        }
-    }, [userConfig])
+        document.documentElement.setAttribute("data-theme", appearanceSettings.theme);
+        document.documentElement.setAttribute("style", `font-size: ${appearanceSettings.fontSize}px;`)
+    }, [appearanceSettings])
 
     useEffect(() => {
         let isUserConfigExistsCheckCancelled = false;

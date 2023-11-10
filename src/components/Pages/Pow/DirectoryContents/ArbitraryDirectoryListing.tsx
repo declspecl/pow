@@ -1,4 +1,5 @@
 // utils
+import { useAppearanceStateStore } from "@/stores/AppearanceSettings";
 import clsx from "clsx";
 
 // components
@@ -13,6 +14,8 @@ interface ArbitraryDirectoryListingProps {
 }
 
 export function ArbitraryDirectoryListing({ directory, selected, onClick, onDoubleClick, className }: ArbitraryDirectoryListingProps) {
+    const filledIcons = useAppearanceStateStore((state) => state.filledIcons);
+
     return (
         <button
             onClick={onClick}
@@ -24,7 +27,14 @@ export function ArbitraryDirectoryListing({ directory, selected, onClick, onDoub
                 className,
             )}
         >
-            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-ui-primary" />
+            <FolderIcon
+                width="1em"
+                height="1em"
+                className={clsx(
+                    "min-w-[1em] min-h-[1em] stroke-ui-primary",
+                    { "fill-ui-primary" : filledIcons }
+                )}
+            />
             <span>{directory}</span>
         </button>
     );

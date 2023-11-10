@@ -111,7 +111,7 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
     }
     else {
         return (
-            <div className="flex flex-col">
+            <div className="min-w-max w-full flex flex-col">
                 {directoryListings}
             </div>
         );

@@ -1,4 +1,4 @@
-use super::{UserConfigResult, UserConfigError, window_properties::WindowProperties, pow_properties::PowProperties, appearance_properties::AppearanceProperties};
+use super::{UserConfigResult, UserConfigError, window_properties::WindowProperties, pow_properties::PowProperties};
 
 use serde::{Serialize, Deserialize};
 use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
@@ -15,10 +15,7 @@ pub struct UserConfig
     pub window: WindowProperties,
 
     // pow properties
-    pub pow: PowProperties,
-
-    // appearance properties
-    pub appearance: AppearanceProperties
+    pub pow: PowProperties
 }
 
 // -----------------------------
@@ -84,8 +81,7 @@ impl Default for UserConfig
         return Self
         {
             pow: PowProperties::default(),
-            window: WindowProperties::default(),
-            appearance: AppearanceProperties::default()
+            window: WindowProperties::default()
         };
     }
 }

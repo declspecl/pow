@@ -14,6 +14,7 @@ import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
 // contexts
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
+import { useAppearanceStateStore } from "@/stores/AppearanceSettings";
 
 interface FileTreeItemProps {
     directory: BipartitePath,
@@ -21,6 +22,7 @@ interface FileTreeItemProps {
 }
 
 export function FileTreeItem({ directory, className }: FileTreeItemProps) {
+    const filledIcons = useAppearanceStateStore((state) => state.filledIcons);
     const naviHistoryGotoArbitrary = useNaviHistoryStore((state) => state.gotoArbitrary);
 
     const setErrorLog = useContext(SetErrorLogContext);
@@ -54,7 +56,14 @@ export function FileTreeItem({ directory, className }: FileTreeItemProps) {
                 className,
             )}
         >
-            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
+            <FolderIcon
+                width="1em"
+                height="1em"
+                className={clsx(
+                    "min-w-[1em] min-h-[1em] stroke-folder",
+                    { "fill-folder" : filledIcons }
+                )}
+            />
             <span>{directory.display_friendly_path}</span>
         </button>
 	);

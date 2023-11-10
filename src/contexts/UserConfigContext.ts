@@ -2,7 +2,7 @@ import React, { createContext } from "react";
 import { UserConfig } from "@/backend/UserConfig";
 
 interface UserConfigContextType {
-    userConfig: UserConfig | null,
+    userConfig: UserConfig,
     setUserConfig: React.Dispatch< React.SetStateAction<UserConfig | null> >
 }
 

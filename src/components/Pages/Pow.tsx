@@ -80,14 +80,14 @@ export function Pow() {
                             defaultSize="35ex"
                             minSize="30ex"
                             maxSize="calc(100% - 30ex)"
-                            className="p-1"
+                            className="overflow-auto"
                         >
                             <FileTree />
                         </ChaseView.Lamb>
 
                         <ChaseView.Fence target={lambRef} size="0.25rem" className="bg-background-200" />
 
-                        <ChaseView.Wolf className="p-1 overflow-y-auto">
+                        <ChaseView.Wolf className="overflow-auto">
                             <DirectoryContents
                                 currentFSDirectory={currentFSDirectory}
                                 setCurrentFSDirectory={setCurrentFSDirectory}

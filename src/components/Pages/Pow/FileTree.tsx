@@ -51,7 +51,7 @@ export function FileTree() {
     // -----------------------------------------------
 
     return (
-        <div className="flex flex-col items-start">
+        <div className="min-w-max w-full flex flex-col">
             {pinnedDirectories ? (
                 <>
                     {pinnedDirectories.map((pinnedDirectory) => (
