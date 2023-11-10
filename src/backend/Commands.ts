@@ -4,7 +4,7 @@ import { UserConfig } from "./UserConfig";
 import { BipartitePath } from "./BipartitePath";
 
 // -----------------------
-// - UserConfig commands -
+// - user_config commands -
 // -----------------------
 
 export async function serialize_user_config(user_config: UserConfig): Promise<void> {
@@ -24,7 +24,7 @@ export async function does_user_config_exist(): Promise<boolean> {
 }
 
 // -------------------
-// - System commands -
+// - system commands -
 // -------------------
 
 export async function access_directory(directory: string): Promise<FSDirectory> {
@@ -35,8 +35,8 @@ export async function get_parent_directory(path: string): Promise<FSDirectory> {
     return invoke<FSDirectory>("get_parent_directory", { path: path });
 }
 
-export async function resolve_environment_variable(environmentVariable: string): Promise<string> {
-	return invoke<string>("resolve_environment_variable", { environment_variable: environmentVariable });
+export async function resolve_environment_variable(environment_variable: string): Promise<string> {
+	return invoke<string>("resolve_environment_variable", { environment_variable: environment_variable });
 }
 
 export async function parse_path(path: string): Promise<string> {

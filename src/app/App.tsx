@@ -41,6 +41,7 @@ export default function App() {
     useEffect(() => {
         let isUserConfigExistsCheckCancelled = false;
         let isGettingUserConfigCancelled = false;
+        let isParsingDefaultDirectoryCancelled = false;
         let isDirectoryAccessCancelled = false;
 
         let isSerializingDefaultUserConfigCancelled = false;
@@ -55,18 +56,23 @@ export default function App() {
                             .then((user_config) => {
                                 // successfully loaded user config
                                 if (!isGettingUserConfigCancelled) {
-                                    access_directory(user_config.pow.default_directory)
-                                        .then((directory) => {
-                                            console.log(directory);
-                                            // successfully accessed default directory
-                                            if (!isDirectoryAccessCancelled) {
-                                                // parse default directory and initialize navihistory to it
-                                                naviHistoryGotoArbitrary(directory.path)
-                                                    .then(() => setUserConfig(user_config))
-                                                    .catch((error) => setUserConfigError({ when: "parsing your default directory", error }));
+                                    // parsing default directory
+                                    parse_path(user_config.pow.default_directory)
+                                        .then((parsed_default_directory) => {
+                                            if (!isParsingDefaultDirectoryCancelled) {
+                                                // check if default directory is valid in the file system
+                                                access_directory(parsed_default_directory)
+                                                    .then((directory) => {
+                                                        if (!isDirectoryAccessCancelled) {
+                                                            // initialize naviHistory and UserConfig
+                                                            naviHistoryGotoArbitrary(directory.path);
+                                                            setUserConfig(user_config);
+                                                        }
+                                                    })
+                                                    .catch((error) => setUserConfigError({ when: "accessing your default directory", error }));
                                             }
                                         })
-                                        .catch((error) => setUserConfigError({ when: "accessing your default directory", error }));
+                                        .catch((error) => setUserConfigError({ when: "parsing your default directory", error }));
                                 }
                             })
                             .catch((error) => setUserConfigError({ when: "loading your user configuration from disk", error }));
@@ -80,31 +86,38 @@ export default function App() {
                                     serialize_user_config(default_user_config)
                                         .then(() => {
                                             if (!isSerializingDefaultUserConfigCancelled) {
-                                                access_directory(default_user_config.pow.default_directory)
-                                                    .then((directory) => {
-                                                        // successfully accessed default directory
-                                                        if (!isDirectoryAccessCancelled) {
-                                                            // parse default directory and initialize navihistory to it
-                                                            naviHistoryGotoArbitrary(directory.path)
-                                                                .then(() => setUserConfig(default_user_config))
-                                                                .catch((error) => setUserConfigError({ when: "parsing the default configuration's default directory", error }));
+                                                // parsing default directory
+                                                parse_path(default_user_config.pow.default_directory)
+                                                    .then((parsed_default_directory) => {
+                                                        if (!isParsingDefaultDirectoryCancelled) {
+                                                            // check if default directory is valid in the file system
+                                                            access_directory(parsed_default_directory)
+                                                                .then((directory) => {
+                                                                    if (!isDirectoryAccessCancelled) {
+                                                                        // initialize naviHistory and UserConfig
+                                                                        naviHistoryGotoArbitrary(directory.path);
+                                                                        setUserConfig(default_user_config);
+                                                                    }
+                                                                })
+                                                                .catch((error) => setUserConfigError({ when: "accessing the default configuration's default directory", error }));
                                                         }
                                                     })
-                                                    .catch((error) => setUserConfigError({ when: "accessing the default configuration's default directory", error }));
+                                                    .catch((error) => setUserConfigError({ when: "parsing the default configuration's default directory", error }));
                                             }
                                         })
-                                        .catch((error) => setUserConfigError({ when: "serializing the default user configuration to disk", error }));
+                                        .catch((error) => setUserConfigError({ when: "serializing the default configuration to disk", error }));
                                 }
                             })
-                            .catch((error) => setUserConfigError({ when: "getting the default user configuration", error }));
+                            .catch((error) => setUserConfigError({ when: "getting the default configuration", error }));
                     }
                 }
             })
-            .catch((error) => setUserConfigError({ when: "checking if your user configuration exists", error }));
+            .catch((error) => setUserConfigError({ when: "checking if your configuration exists", error }));
 
         return () => {
             isUserConfigExistsCheckCancelled = true;
             isGettingUserConfigCancelled = true;
+            isParsingDefaultDirectoryCancelled = true;
             isDirectoryAccessCancelled = true;
 
             isSerializingDefaultUserConfigCancelled = true;

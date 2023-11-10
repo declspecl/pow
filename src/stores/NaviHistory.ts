@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { parse_path } from "@/backend/Commands";
 
 export interface NaviHistory {
     history: string[],
@@ -7,7 +6,7 @@ export interface NaviHistory {
 }
 
 export interface NaviHistoryState extends NaviHistory {
-    gotoArbitrary: (directory: string) => Promise<void>,
+    gotoArbitrary: (directory: string) => void,
     gotoNext: () => void,
     gotoPrevious: () => void,
     pop: () => void,
@@ -18,13 +17,11 @@ export interface NaviHistoryState extends NaviHistory {
 export const useNaviHistoryStore = create<NaviHistoryState>()((set, get) => ({
     history: [],
     current: -1,
-    gotoArbitrary: async (directory: string) => {
+    gotoArbitrary: (directory: string) => {
         console.log(`goto arbitrary: ${directory}`);
 
-        const parsedDirectory = await parse_path(directory);
-
         set((state) => ({
-            history: state.history.slice(0, state.current + 1).concat(parsedDirectory),
+            history: state.history.slice(0, state.current + 1).concat(directory),
             current: state.current + 1
         }));
     },
