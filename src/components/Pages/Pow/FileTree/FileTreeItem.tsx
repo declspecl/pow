@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { FolderIcon } from "lucide-react";
 
 // backend
-import { access_directory } from "@/backend/Commands";
+import { access_directory, parse_path } from "@/backend/Commands";
 import { BipartitePath } from "@/backend/BipartitePath";
 
 // stores
@@ -28,13 +28,14 @@ export function FileTreeItem({ directory, className }: FileTreeItemProps) {
 	return (
         <button
             onClick={() => {
-                access_directory(directory.real_path)
-                    .then((directory) => {
-                        naviHistoryGotoArbitrary(directory.path)
+                parse_path(directory.real_path)
+                    .then((parsedPath) => {
+                        access_directory(parsedPath)
+                            .then((directory) => naviHistoryGotoArbitrary(directory.path))
                             .catch((error) => setErrorLog((errorLog) => [
                                 ...errorLog,
                                 {
-                                    when: `trying to navigate to the directory "${directory.path}"`,
+                                    when: `trying to access the directory "${directory.real_path}"`,
                                     error
                                 }
                             ]));
@@ -42,7 +43,7 @@ export function FileTreeItem({ directory, className }: FileTreeItemProps) {
                     .catch((error) => setErrorLog((errorLog) => [
                         ...errorLog,
                         {
-                            when: `trying to access the directory "${directory.real_path}"`,
+                            when: `trying to parse the path "${directory.real_path}"`,
                             error
                         }
                     ]));

@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 
 // backend
 import { UserConfig } from "@/backend/UserConfig";
-import { access_directory, get_default_user_config } from "@/backend/Commands";
+import { access_directory, get_default_user_config, parse_path } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
@@ -69,18 +69,20 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
                     onClick={() => {
                         get_default_user_config()
                             .then(default_user_config => {
-                                access_directory(default_user_config.pow.default_directory)
-                                    .then((directory) => {
-                                        naviHistoryGotoArbitrary(directory.path)
-                                            .then(() => {
+                                parse_path(default_user_config.pow.default_directory)
+                                    .then((parsedPath) => {
+                                        access_directory(parsedPath)
+                                            .then((directory) => {
                                                 setUserConfigError(null);
                                                 setUserConfig(default_user_config);
+
+                                                naviHistoryGotoArbitrary(directory.path);
                                             })
-                                            .catch((err) => setUserConfigError({ when: "parsing the default user configuration's default directory", error: err }));
-                                    })
-                                    .catch((err) => setUserConfigError({ when: "accessing the default user configuration's default directory", error: err }));
+                                            .catch((err) => setUserConfigError({ when: "accessing the default configuration's default directory", error: err }));
+                                        })
+                                    .catch((error) => setUserConfigError({ when: "parsing the default configuration's default directory", error }))
                             })
-                            .catch((err) => setUserConfigError({ when: "getting the default user configuration", error: err }));
+                            .catch((err) => setUserConfigError({ when: "getting the default configuration", error: err }));
                     }}
                     className={clsx(
                         "px-4 py-1.5 rounded-md bg-ui-accent text-text"

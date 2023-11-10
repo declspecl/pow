@@ -38,6 +38,7 @@ export function Pow() {
         setCurrentFSDirectory(null);
 
         if (naviHistory.history.length >= 1) {
+            // only real, parsed paths are added to NaviHistory, so dont need to parse here before accessing
             access_directory(naviHistory.getCurrentDirectory())
                 .then((fsDirectory) => {
                     if (!isCancelled)

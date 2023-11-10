@@ -6,7 +6,7 @@ import ThemeSelector from "@/components/Theme/ThemeSelector";
 import { DirectoryNavButton } from "./Navbar/DirectoryNavButton";
 
 // backend
-import { access_directory } from "@/backend/Commands";
+import { access_directory, parse_path } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
@@ -42,23 +42,26 @@ export function Navbar() {
                 onSubmit={(e) => {
                     e.preventDefault();
 
-                    access_directory(inputVal)
-                        .then((directory) => {
-                            naviHistory.gotoArbitrary(directory.path)
+                    parse_path(inputVal)
+                        .then((parsedPath) => {
+                            access_directory(parsedPath)
+                                .then((directory) => {
+                                    naviHistory.gotoArbitrary(directory.path);
+
+                                    setInputVal("");
+                                })
                                 .catch((error) => setErrorLog((errorLog) => [
                                     ...errorLog,
                                     {
-                                        when: `trying to navigate to the directory "${inputVal}"`,
+                                        when: `trying to access the directory "${inputVal}"`,
                                         error
                                     }
                                 ]));
-
-                            setInputVal("");
-                        })
+                            })
                         .catch((error) => setErrorLog((errorLog) => [
                             ...errorLog,
                             {
-                                when: `trying to access the directory "${inputVal}"`,
+                                when: `trying to parse the path "${inputVal}"`,
                                 error
                             }
                         ]));

@@ -36,18 +36,9 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 setSelectedIndex(0);
             }}
             onDoubleClick={() => {
-                console.log("double clicked");
+                // dont need to parse path because the real_path is already real/parsed
                 access_directory(naviHistory.getCurrentDirectory())
-                    .then((directory) => {
-                        naviHistory.gotoArbitrary(directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [
-                                ...errorLog,
-                                {
-                                    when: `trying to navigate to the directory "${directory.path}"`,
-                                    error
-                                }
-                            ]));
-                    })
+                    .then((directory) => naviHistory.gotoArbitrary(directory.path))
                     .catch((error) => setErrorLog((errorLog) => [
                         ...errorLog,
                         {
@@ -65,17 +56,9 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 setSelectedIndex(1);
             }}
             onDoubleClick={() => {
+                // dont need to parse path because the path is already real/parsed
                 get_parent_directory(naviHistory.getCurrentDirectory())
-                    .then((parent_directory) => {
-                        naviHistory.gotoArbitrary(parent_directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [
-                                ...errorLog,
-                                {
-                                    when: `trying to navigate to the directory "${parent_directory.path}"`,
-                                    error
-                                }
-                            ]));
-                    })
+                    .then((parent_directory) => naviHistory.gotoArbitrary(parent_directory.path))
                     .catch((error) => setErrorLog((errorLog) => [
                         ...errorLog,
                         {
@@ -99,17 +82,9 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                     }}
                     onDoubleClick={() => {
                         if (fsNode.tag === "directory") {
+                            // dont need to parse path because the path is already real/parsed
                             access_directory(fsNode.data.path)
-                                .then((directory) => {
-                                    naviHistory.gotoArbitrary(directory.path)
-                                        .catch((error) => setErrorLog((errorLog) => [
-                                            ...errorLog,
-                                            {
-                                                when: `trying to navigate to the directory "${directory.path}"`,
-                                                error
-                                            }
-                                        ]));
-                                })
+                                .then((directory) => naviHistory.gotoArbitrary(directory.path))
                                 .catch((error) => setErrorLog((errorLog) => [
                                     ...errorLog,
                                     {
