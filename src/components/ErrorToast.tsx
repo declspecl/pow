@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useState, useEffect } from "react";
 import * as Toast from "@radix-ui/react-toast";
 import { AlertCircleIcon, XIcon } from "lucide-react";
 
@@ -12,6 +13,11 @@ interface ErrorToastProps {
 }
 
 export function ErrorToast({ errorLog } : ErrorToastProps) {
+    const [errorLogExpanded, setErrorLogExpanded] = useState<boolean[]>([]);
+
+    useEffect(() => {
+        setErrorLogExpanded((prevErrorLogExpanded) => [...prevErrorLogExpanded, false]);
+    }, [errorLog]);
 
     return (
         <>
@@ -38,9 +44,28 @@ export function ErrorToast({ errorLog } : ErrorToastProps) {
                             <Toast.Description className="flex flex-col gap-1 break-normal text-text">
                                 <p>An error occured when {currentError.when}.</p>
 
-                                <p className="text-ui-accent">
-                                    {Object.keys(currentError.error)[0].toString()}: {Object.values(currentError.error)[0].toString()}
-                                </p>
+                                {errorLogExpanded[i] && (
+                                    <p className="text-ui-accent">
+                                        {Object.keys(currentError.error)[0].toString()}: {Object.values(currentError.error)[0].toString()}
+                                    </p>
+                                )}
+
+                                <button onClick={() => {
+                                    setErrorLogExpanded((prevErrorLogExpanded) => {
+                                        const newErrorLogExpanded = [...prevErrorLogExpanded];
+
+                                        newErrorLogExpanded[i] = !newErrorLogExpanded[i];
+
+                                        return newErrorLogExpanded;
+                                    });
+                                }}>
+                                    {errorLogExpanded[i] ? (
+                                        <span>Show less</span>
+                                    ) : (
+                                        <span>Show more</span>
+                                    )}
+                                </button>
+
                             </Toast.Description>
                         </div>
                     </div>
