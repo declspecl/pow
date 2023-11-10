@@ -19,6 +19,10 @@ export async function get_default_user_config(): Promise<UserConfig> {
     return invoke<UserConfig>("get_default_user_config");
 }
 
+export async function does_user_config_exist(): Promise<boolean> {
+    return invoke<boolean>("does_user_config_exist");
+}
+
 // -------------------
 // - System commands -
 // -------------------

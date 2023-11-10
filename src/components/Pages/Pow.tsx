@@ -6,7 +6,7 @@ import { Navbar } from "./Pow/Navbar";
 import { FileTree } from "./Pow/FileTree";
 import * as Toast from "@radix-ui/react-toast";
 import * as ChaseView from "@/components/ChaseView";
-import { ErrorToast } from "@/components/ErrorToast";
+import { ErrorToast, PowError } from "@/components/ErrorToast";
 import { DirectoryContents } from "./Pow/DirectoryContents";
 
 // backend
@@ -22,7 +22,7 @@ import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
 // actual top level application component
 export function Pow() {
     // global error log, used as value in context
-    const [errorLog, setErrorLog] = useState<object[]>([]);
+    const [errorLog, setErrorLog] = useState<PowError[]>([]);
 
     // total navi history access
     const naviHistory = useNaviHistoryStore();
@@ -43,7 +43,16 @@ export function Pow() {
                     if (!isCancelled)
                         setCurrentFSDirectory(fsDirectory);
                 })
-                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                .catch((error) => setErrorLog((errorLog) => [
+                    ...errorLog,
+                    {
+                        when: `trying to access the directory "${naviHistory.getCurrentDirectory()}"`,
+                        error
+                    }
+                ]));
+        }
+        else {
+            console.error("ruh roh");
         }
 
         return () => {

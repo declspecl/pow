@@ -5,8 +5,8 @@ pub mod system;
 pub mod user_config;
 
 use error::PowResult;
-use user_config::{UserConfig, commands::{serialize_user_config, deserialize_user_config, get_default_user_config}, UserConfigError};
-use system::commands::{access_directory, get_parent_directory, resolve_environment_variable, parse_path, get_bipartite_path};
+use user_config::{UserConfig, commands::*, UserConfigError};
+use system::commands::*;
 
 use std::path::PathBuf;
 
@@ -25,14 +25,7 @@ fn main() -> PowResult<()>
             let user_config: UserConfig = match UserConfig::deserialize_from_config(&config_file_path)
             {
                 Ok(user_config) => user_config,
-                Err(_) =>
-                {
-                    let default_user_config: UserConfig = get_default_user_config();
-
-                    default_user_config.serialize_to_config(&config_file_path)?;
-
-                    default_user_config
-                }
+                Err(_) => UserConfig::default()
             };
 
             // defining main window
@@ -86,6 +79,7 @@ fn main() -> PowResult<()>
             serialize_user_config,
             deserialize_user_config,
             get_default_user_config,
+            does_user_config_exist,
             resolve_environment_variable,
             parse_path,
             get_bipartite_path

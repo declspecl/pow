@@ -40,9 +40,21 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 access_directory(naviHistory.getCurrentDirectory())
                     .then((directory) => {
                         naviHistory.gotoArbitrary(directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                            .catch((error) => setErrorLog((errorLog) => [
+                                ...errorLog,
+                                {
+                                    when: `trying to navigate to the directory "${directory.path}"`,
+                                    error
+                                }
+                            ]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                    .catch((error) => setErrorLog((errorLog) => [
+                        ...errorLog,
+                        {
+                            when: `trying to access the directory "${naviHistory.getCurrentDirectory()}"`,
+                            error
+                        }
+                    ]));
             }}
         />,
         <ArbitraryDirectoryListing
@@ -53,14 +65,24 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                 setSelectedIndex(1);
             }}
             onDoubleClick={() => {
-                console.log("im here");
                 get_parent_directory(naviHistory.getCurrentDirectory())
                     .then((parent_directory) => {
-                        console.log(parent_directory);
                         naviHistory.gotoArbitrary(parent_directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                            .catch((error) => setErrorLog((errorLog) => [
+                                ...errorLog,
+                                {
+                                    when: `trying to navigate to the directory "${parent_directory.path}"`,
+                                    error
+                                }
+                            ]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                    .catch((error) => setErrorLog((errorLog) => [
+                        ...errorLog,
+                        {
+                            when: `trying to get the parent directory of "${naviHistory.getCurrentDirectory()}"`,
+                            error
+                        }
+                    ]));
             }}
         />
     ];
@@ -80,9 +102,21 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
                             access_directory(fsNode.data.path)
                                 .then((directory) => {
                                     naviHistory.gotoArbitrary(directory.path)
-                                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                                        .catch((error) => setErrorLog((errorLog) => [
+                                            ...errorLog,
+                                            {
+                                                when: `trying to navigate to the directory "${directory.path}"`,
+                                                error
+                                            }
+                                        ]));
                                 })
-                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                                .catch((error) => setErrorLog((errorLog) => [
+                                    ...errorLog,
+                                    {
+                                        when: `trying to access the directory "${fsNode.data.path}"`,
+                                        error
+                                    }
+                                ]));
                         }
                     }}
                 />

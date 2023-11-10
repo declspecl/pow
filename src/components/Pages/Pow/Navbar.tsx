@@ -45,11 +45,23 @@ export function Navbar() {
                     access_directory(inputVal)
                         .then((directory) => {
                             naviHistory.gotoArbitrary(directory.path)
-                                .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                                .catch((error) => setErrorLog((errorLog) => [
+                                    ...errorLog,
+                                    {
+                                        when: `trying to navigate to the directory "${inputVal}"`,
+                                        error
+                                    }
+                                ]));
 
                             setInputVal("");
                         })
-                        .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                        .catch((error) => setErrorLog((errorLog) => [
+                            ...errorLog,
+                            {
+                                when: `trying to access the directory "${inputVal}"`,
+                                error
+                            }
+                        ]));
                 }}
             >
                 <input

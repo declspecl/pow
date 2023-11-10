@@ -1,4 +1,4 @@
-use super::{UserConfigResult, UserConfigError, window_properties::WindowProperties, pow_properties::PowProperties};
+use super::{UserConfigResult, UserConfigError, window_properties::WindowProperties, pow_properties::PowProperties, appearance_properties::AppearanceProperties};
 
 use serde::{Serialize, Deserialize};
 use std::{io::{Read, Write}, path::PathBuf, fs::{self, OpenOptions}};
@@ -15,7 +15,10 @@ pub struct UserConfig
     pub window: WindowProperties,
 
     // pow properties
-    pub pow: PowProperties
+    pub pow: PowProperties,
+
+    // appearance properties
+    pub appearance: AppearanceProperties
 }
 
 // -----------------------------
@@ -31,8 +34,6 @@ impl UserConfig
 
         // create file if it doesn't exist (need to use write), in read mode to deserialization
         let mut config_file = OpenOptions::new()
-            .create(true)
-            .write(true)
             .read(true)
             .open(config_file_path)?;
 
@@ -83,7 +84,8 @@ impl Default for UserConfig
         return Self
         {
             pow: PowProperties::default(),
-            window: WindowProperties::default()
+            window: WindowProperties::default(),
+            appearance: AppearanceProperties::default()
         };
     }
 }

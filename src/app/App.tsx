@@ -9,7 +9,7 @@ import { UserConfigError } from "@/components/Pages/UserConfigError";
 
 // backend
 import { UserConfig } from "@/backend/UserConfig";
-import { deserialize_user_config, parse_path } from "@/backend/Commands";
+import { deserialize_user_config, does_user_config_exist, get_default_user_config, parse_path, serialize_user_config } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
@@ -36,34 +36,61 @@ export default function App() {
         // set theme stored in local storage
         setVisibleTheme(getLocalStorageTheme());
 
-        let isCancelled = false;
+        let isUserConfigExistsCheckCancelled = false;
+        let isGettingUserConfigCancelled = false;
 
-        // attempt to load user config and navigate to default directory
-        deserialize_user_config()
-            .then((user_config) => {
-                // successfully loaded user config
-                if (!isCancelled) {
-                    parse_path(user_config.pow.default_directory)
-                        .then((parsedDefaultDirectory) => {
-                            // successfully parsed default directory
-                            console.log(parsedDefaultDirectory);
-                            naviHistoryGotoArbitrary(parsedDefaultDirectory);
-                        })
-                        .catch((err) => {
-                            // if error is encountered, set userConfigError to show UserConfigError page
-                            setUserConfigError(err);
-                        })
+        let isSerializingDefaultUserConfigCancelled = false;
+
+        // check if user config exists. if it doesnt, create it and set it to default
+        does_user_config_exist()
+            .then((exists) => {
+                if (!isUserConfigExistsCheckCancelled) {
+                    if (exists) {
+                        // if user config does exist, attempt to load it and navigate to default directory
+                        deserialize_user_config()
+                            .then((user_config) => {
+                                // successfully loaded user config
+                                if (!isGettingUserConfigCancelled) {
+                                    // parse default directory and initialize navihistory to it
+                                    naviHistoryGotoArbitrary(user_config.pow.default_directory)
+                                        .then(() => setUserConfig(user_config))
+                                        .catch((err) => setUserConfigError(err));
+                                }
+                            })
+                            .catch((err) => {
+                                // if error is encountered, set userConfigError to show UserConfigError page
+                                setUserConfigError(err);
+                            })
+                    }
+                    else {
+                        // if user config doesnt exist, set user config to default and serialize it on disk
+                        get_default_user_config()
+                            .then((default_user_config) => {
+                                // if default user config is successfully retrieved, serialize it
+                                if (!isGettingUserConfigCancelled) {
+                                    serialize_user_config(default_user_config)
+                                        .then(() => {
+                                            if (!isSerializingDefaultUserConfigCancelled) {
+                                                // parse default directory and initialize navihistory to it
+                                                naviHistoryGotoArbitrary(default_user_config.pow.default_directory)
+                                                    .then(() => setUserConfig(default_user_config))
+                                                    .catch((err) => setUserConfigError(err));
+                                            }
+                                        })
+                                        .catch((err) => setUserConfigError(err));
+                                }
+                            })
+                            .catch((err) => setUserConfigError(err));
+                    }
                 }
-
-                setUserConfig(user_config);
             })
-            .catch((err) => {
-                // if error is encountered, set userConfigError to show UserConfigError page
-                setUserConfigError(err);
-            })
+            .catch((err) => setUserConfigError(err));
 
         return () => {
-            isCancelled = true;
+            isUserConfigExistsCheckCancelled = true;
+            isGettingUserConfigCancelled = true;
+
+            isSerializingDefaultUserConfigCancelled = true;
 
             naviHistoryReset();
         }

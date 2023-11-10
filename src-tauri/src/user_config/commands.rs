@@ -1,3 +1,5 @@
+use std::path::PathBuf;
+
 use super::{UserConfig, UserConfigResult, UserConfigError};
 
 // ------------------
@@ -28,4 +30,14 @@ pub fn deserialize_user_config(app_handle: tauri::AppHandle) -> UserConfigResult
 pub fn get_default_user_config() -> UserConfig
 {
     return UserConfig::default();
+}
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn does_user_config_exist(app_handle: tauri::AppHandle) -> UserConfigResult<bool>
+{
+    let mut config_file_path: PathBuf = app_handle.path_resolver().app_config_dir().ok_or(UserConfigError::AppConfigDirError)?;
+
+    config_file_path.push("config.yaml");
+
+    return Ok(config_file_path.exists());
 }

@@ -5,7 +5,7 @@ use super::resolve_environment_variable;
 #[tauri::command(rename_all = "snake_case")]
 pub fn parse_path(path: String) -> SystemResult<String>
 {
-    let mut path_components: Vec<String> = path.split('\\').map(|component| component.to_string()).collect();
+    let mut path_components: Vec<String> = path.replace('/', "\\").split('\\').map(|component| component.to_string()).collect();
 
     for component in path_components.iter_mut()
     {

@@ -31,9 +31,21 @@ export function FileTreeItem({ directory, className }: FileTreeItemProps) {
                 access_directory(directory.real_path)
                     .then((directory) => {
                         naviHistoryGotoArbitrary(directory.path)
-                            .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                            .catch((error) => setErrorLog((errorLog) => [
+                                ...errorLog,
+                                {
+                                    when: `trying to navigate to the directory "${directory.path}"`,
+                                    error
+                                }
+                            ]));
                     })
-                    .catch((error) => setErrorLog((errorLog) => [...errorLog, error]));
+                    .catch((error) => setErrorLog((errorLog) => [
+                        ...errorLog,
+                        {
+                            when: `trying to access the directory "${directory.real_path}"`,
+                            error
+                        }
+                    ]));
             }}
             className={clsx(
                 "w-full flex flex-row items-center gap-1 bg-background whitespace-nowrap",

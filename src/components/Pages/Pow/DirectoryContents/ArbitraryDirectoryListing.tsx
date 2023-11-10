@@ -24,7 +24,7 @@ export function ArbitraryDirectoryListing({ directory, selected, onClick, onDoub
                 className,
             )}
         >
-            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-folder" />
+            <FolderIcon width="1em" height="1em" className="min-w-[1em] min-h-[1em] stroke-ui-primary" />
             <span>{directory}</span>
         </button>
     );
