@@ -2,11 +2,13 @@
 
 pub mod error;
 pub mod system;
+pub mod commands;
 pub mod user_config;
 
+use commands::*;
 use error::PowResult;
-use user_config::{UserConfig, commands::*, UserConfigError};
 use system::commands::*;
+use user_config::{UserConfig, UserConfigError, commands::*};
 
 use std::path::PathBuf;
 
@@ -74,6 +76,7 @@ fn main() -> PowResult<()>
             return Ok(());
         })
         .invoke_handler(tauri::generate_handler![
+            set_window_title,
             access_directory,
             get_parent_directory,
             serialize_user_config,

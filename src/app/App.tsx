@@ -5,11 +5,11 @@ import { setVisibleTheme, getLocalStorageTheme } from "@/lib/Theme";
 // components
 import { Pow } from "@/components/Pages/Pow";
 import { Loading } from "@/components/Pages/Loading";
-import { UserConfigError } from "@/components/Pages/UserConfigError";
+import { RuntimeUserConfigError, UserConfigError } from "@/components/Pages/UserConfigError";
 
 // backend
 import { UserConfig } from "@/backend/UserConfig";
-import { deserialize_user_config, does_user_config_exist, get_default_user_config, parse_path, serialize_user_config } from "@/backend/Commands";
+import { access_directory, deserialize_user_config, does_user_config_exist, get_default_user_config, parse_path, serialize_user_config } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
@@ -19,10 +19,10 @@ import { UserConfigContext } from "@/contexts/UserConfigContext";
 
 export default function App() {
     // UserConfig state
-    const [userConfig, setUserConfig] = useState<UserConfig>(null!);
+    const [userConfig, setUserConfig] = useState<UserConfig | null>(null);
 
     // user config error management state
-    const [userConfigError, setUserConfigError] = useState<object | null>(null);
+    const [userConfigError, setUserConfigError] = useState<RuntimeUserConfigError | null>(null);
 
     // NaviHistory state
     const naviHistoryReset = useNaviHistoryStore().reset;
@@ -33,11 +33,15 @@ export default function App() {
     // ---------------------------------
 
     useEffect(() => {
-        // set theme stored in local storage
-        setVisibleTheme(getLocalStorageTheme());
+        if (userConfig !== null) {
+            document.documentElement.setAttribute("data-theme", userConfig.appearance.theme);
+        }
+    }, [userConfig])
 
+    useEffect(() => {
         let isUserConfigExistsCheckCancelled = false;
         let isGettingUserConfigCancelled = false;
+        let isDirectoryAccessCancelled = false;
 
         let isSerializingDefaultUserConfigCancelled = false;
 
@@ -51,16 +55,21 @@ export default function App() {
                             .then((user_config) => {
                                 // successfully loaded user config
                                 if (!isGettingUserConfigCancelled) {
-                                    // parse default directory and initialize navihistory to it
-                                    naviHistoryGotoArbitrary(user_config.pow.default_directory)
-                                        .then(() => setUserConfig(user_config))
-                                        .catch((err) => setUserConfigError(err));
+                                    access_directory(user_config.pow.default_directory)
+                                        .then((directory) => {
+                                            console.log(directory);
+                                            // successfully accessed default directory
+                                            if (!isDirectoryAccessCancelled) {
+                                                // parse default directory and initialize navihistory to it
+                                                naviHistoryGotoArbitrary(directory.path)
+                                                    .then(() => setUserConfig(user_config))
+                                                    .catch((error) => setUserConfigError({ when: "parsing your default directory", error }));
+                                            }
+                                        })
+                                        .catch((error) => setUserConfigError({ when: "accessing your default directory", error }));
                                 }
                             })
-                            .catch((err) => {
-                                // if error is encountered, set userConfigError to show UserConfigError page
-                                setUserConfigError(err);
-                            })
+                            .catch((error) => setUserConfigError({ when: "loading your user configuration from disk", error }));
                     }
                     else {
                         // if user config doesnt exist, set user config to default and serialize it on disk
@@ -71,24 +80,32 @@ export default function App() {
                                     serialize_user_config(default_user_config)
                                         .then(() => {
                                             if (!isSerializingDefaultUserConfigCancelled) {
-                                                // parse default directory and initialize navihistory to it
-                                                naviHistoryGotoArbitrary(default_user_config.pow.default_directory)
-                                                    .then(() => setUserConfig(default_user_config))
-                                                    .catch((err) => setUserConfigError(err));
+                                                access_directory(default_user_config.pow.default_directory)
+                                                    .then((directory) => {
+                                                        // successfully accessed default directory
+                                                        if (!isDirectoryAccessCancelled) {
+                                                            // parse default directory and initialize navihistory to it
+                                                            naviHistoryGotoArbitrary(directory.path)
+                                                                .then(() => setUserConfig(default_user_config))
+                                                                .catch((error) => setUserConfigError({ when: "parsing the default configuration's default directory", error }));
+                                                        }
+                                                    })
+                                                    .catch((error) => setUserConfigError({ when: "accessing the default configuration's default directory", error }));
                                             }
                                         })
-                                        .catch((err) => setUserConfigError(err));
+                                        .catch((error) => setUserConfigError({ when: "serializing the default user configuration to disk", error }));
                                 }
                             })
-                            .catch((err) => setUserConfigError(err));
+                            .catch((error) => setUserConfigError({ when: "getting the default user configuration", error }));
                     }
                 }
             })
-            .catch((err) => setUserConfigError(err));
+            .catch((error) => setUserConfigError({ when: "checking if your user configuration exists", error }));
 
         return () => {
             isUserConfigExistsCheckCancelled = true;
             isGettingUserConfigCancelled = true;
+            isDirectoryAccessCancelled = true;
 
             isSerializingDefaultUserConfigCancelled = true;
 

@@ -124,15 +124,21 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
         });
     }
 
-    return (
-        <div>
-            {currentFSDirectory === null ? (
-                <p>loading...</p>
-            ) :  (
-                <div className="flex flex-col">
-                    {directoryListings}
-                </div>
-            )}
-        </div>
-    );
+    if (currentFSDirectory === null) {
+        if (naviHistory.history.length <= 0) {
+            console.log(naviHistory.history);
+            return <p>ruh roh</p>;
+        }
+        else {
+            console.log(naviHistory.history);
+            return <p>loading</p>
+        }
+    }
+    else {
+        return (
+            <div className="flex flex-col">
+                {directoryListings}
+            </div>
+        );
+    }
 }

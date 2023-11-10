@@ -37,7 +37,7 @@ export function Pow() {
 
         setCurrentFSDirectory(null);
 
-        if (naviHistory.getCurrentDirectory()) {
+        if (naviHistory.history.length >= 1) {
             access_directory(naviHistory.getCurrentDirectory())
                 .then((fsDirectory) => {
                     if (!isCancelled)

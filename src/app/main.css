@@ -3,25 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-    :root {
-        --text: 0 0% 0%;
-        --text-50: 0 0% 4%;
-        --text-100: 0 0% 8%;
-        --text-150: 0 0% 12%;
-        --text-200: 0 0% 18%;
-        --text-250: 0 0% 20%;
-        --text-300: 0 0% 24%;
-
-        --background: 0 0% 100%;
-        --background-50: 0 0% 96%;
-        --background-100: 0 0% 92%;
-        --background-150: 0 0% 88%;
-        --background-200: 0 0% 84%;
-        --background-250: 0 0% 80%;
-        --background-300: 0 0% 76%;
-    }
-
-    [data-theme="light"] {
+    :root, [data-theme="light"] {
         --text: 0 0% 0%;
         --text-50: 0 0% 4%;
         --text-100: 0 0% 8%;

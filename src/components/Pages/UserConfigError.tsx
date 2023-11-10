@@ -5,15 +5,20 @@ import { Dispatch, SetStateAction } from "react";
 
 // backend
 import { UserConfig } from "@/backend/UserConfig";
-import { get_default_user_config } from "@/backend/Commands";
+import { access_directory, get_default_user_config } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
 
+export interface RuntimeUserConfigError {
+    when: string,
+    error: object
+}
+
 interface UserConfigErrorProps {
-    userConfigError: object,
-    setUserConfigError: Dispatch< SetStateAction<object | null> >
-    setUserConfig: Dispatch< SetStateAction<UserConfig> >
+    userConfigError: RuntimeUserConfigError,
+    setUserConfigError: Dispatch< SetStateAction<RuntimeUserConfigError | null> >
+    setUserConfig: Dispatch< SetStateAction<UserConfig | null> >
 }
 
 export function UserConfigError({ userConfigError, setUserConfigError, setUserConfig }: UserConfigErrorProps) {
@@ -25,9 +30,11 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
             <h1 className="text-4xl text-text">An error occured in loading your user configuration.</h1>
 
             <div className="flex flex-col gap-1 text-base text-text">
-                <p>The following error occured in attempting to load your user configuration:</p>
+                <p>The following error occured when {userConfigError.when}:</p>
 
-                <p className="text-ui-secondary">{JSON.stringify(userConfigError, null, 2)}</p>
+                <p className="text-ui-secondary">
+                    {Object.keys(userConfigError.error)[0].toString()}: {Object.values(userConfigError.error)[0].toString()}
+                </p>
 
                 <p>
                     To fix the problem, refer to the documentation on how to structure the configuration file.
@@ -59,12 +66,21 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
                 </button>
 
                 <button
-                    onClick={async () => {
-                        const default_user_config: UserConfig = await get_default_user_config();
-
-                        setUserConfigError(null);
-                        setUserConfig(default_user_config);
-                        naviHistoryGotoArbitrary(default_user_config.pow.default_directory);
+                    onClick={() => {
+                        get_default_user_config()
+                            .then(default_user_config => {
+                                access_directory(default_user_config.pow.default_directory)
+                                    .then((directory) => {
+                                        naviHistoryGotoArbitrary(directory.path)
+                                            .then(() => {
+                                                setUserConfigError(null);
+                                                setUserConfig(default_user_config);
+                                            })
+                                            .catch((err) => setUserConfigError({ when: "parsing the default user configuration's default directory", error: err }));
+                                    })
+                                    .catch((err) => setUserConfigError({ when: "accessing the default user configuration's default directory", error: err }));
+                            })
+                            .catch((err) => setUserConfigError({ when: "getting the default user configuration", error: err }));
                     }}
                     className={clsx(
                         "px-4 py-1.5 rounded-md bg-ui-accent text-text"
