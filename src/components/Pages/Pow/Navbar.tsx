@@ -69,8 +69,10 @@ export function Navbar() {
             >
                 <input
                     type="text"
-                    onChange={(e) => setInputVal(e.target.value)}
-                    className="p-1 grow min-w-[80rex] rounded-sm"
+                    onChange={(event) => setInputVal(event.target.value)}
+                    placeholder={naviHistory.getCurrentDirectory()}
+                    value={inputVal}
+                    className="p-1 grow min-w-[10rex] bg-background-50 text-text border border-text rounded-sm"
                 />
             </form>
 
