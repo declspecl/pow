@@ -82,6 +82,7 @@ fn main() -> PowResult<()>
             serialize_user_config,
             deserialize_user_config,
             get_default_user_config,
+            open_user_config_in_default_program,
             does_user_config_exist,
             resolve_environment_variable,
             parse_path,

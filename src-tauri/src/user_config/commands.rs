@@ -41,3 +41,13 @@ pub fn does_user_config_exist(app_handle: tauri::AppHandle) -> UserConfigResult<
 
     return Ok(config_file_path.exists());
 }
+
+#[tauri::command(rename_all = "snake_case")]
+pub fn open_user_config_in_default_program(app_handle: tauri::AppHandle) -> UserConfigResult<()>
+{
+    let mut config_file_path: PathBuf = app_handle.path_resolver().app_config_dir().ok_or(UserConfigError::AppConfigDirError)?;
+
+    config_file_path.push("config.yaml");
+
+    return Ok(open::that(config_file_path)?);
+}
