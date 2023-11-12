@@ -23,6 +23,10 @@ export async function does_user_config_exist(): Promise<boolean> {
     return invoke<boolean>("does_user_config_exist");
 }
 
+export async function open_user_config_in_default_program(): Promise<void> {
+    return invoke<void>("open_user_config_in_default_program");
+}
+
 // -------------------
 // - system commands -
 // -------------------

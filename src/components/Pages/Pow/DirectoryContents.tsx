@@ -11,6 +11,7 @@ import { access_directory, get_parent_directory } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
+import { useAppearanceStateStore } from "@/stores/AppearanceSettings";
 
 // contexts
 import { SetErrorLogContext } from "@/contexts/SetErrorLogContext";
@@ -22,6 +23,7 @@ interface DirectoryContentsProps {
 
 export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps) {
     const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+    const contentFormat = useAppearanceStateStore((state) => state.contentFormat);
 
     const setErrorLog = useContext(SetErrorLogContext);
 
@@ -99,21 +101,16 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
         });
     }
 
-    if (currentFSDirectory === null) {
-        if (naviHistory.history.length <= 0) {
-            console.log(naviHistory.history);
-            return <p>ruh roh</p>;
-        }
-        else {
-            console.log(naviHistory.history);
-            return <p>loading</p>
-        }
-    }
-    else {
-        return (
-            <div className="min-w-max w-full flex flex-col">
-                {directoryListings}
+    return (
+        <div className="min-w-max w-full flex flex-col">
+            <div className="flex flex-row">
+                {contentFormat.map((info) => (
+                    <p key={`info-header-${info}`} className="px-2">
+                        {info && info}
+                    </p>
+                ))}
             </div>
-        );
-    }
+            {directoryListings}
+        </div>
+    );
 }

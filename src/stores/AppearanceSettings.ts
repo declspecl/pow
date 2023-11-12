@@ -1,9 +1,27 @@
 import { create } from "zustand";
 
+export enum ContentType {
+    Name = "Name",
+    Size = "Size",
+    TimeLastAccessed = "Time last accessed",
+    TimeLastModified = "Time last modified",
+    TimeCreated = "Time created",
+    IsReadonly = "Is readonly"
+}
+
 export interface AppearanceState {
     theme: string,
     fontSize: number,
     filledIcons: boolean,
+    // name, size, time_last_accessed, time_last_modified, time_created, is_readonly
+    contentFormat: [
+        ContentType | null,
+        ContentType | null,
+        ContentType | null,
+        ContentType | null,
+        ContentType | null,
+        ContentType | null
+    ],
 
     setTheme: (theme: string) => void,
     setFontSize: (fontSize: number) => void,
@@ -23,6 +41,14 @@ export const useAppearanceStateStore = create<AppearanceState>()((set) => ({
     fontSize: parseInt(localStorage.getItem("fontSize") || "16"),
     // if no filled icons is set, use false
     filledIcons: localStorage.getItem("filledIcons") === "true" ? true : false,
+    contentFormat: [
+        ContentType.Name,
+        ContentType.Size,
+        ContentType.TimeLastAccessed,
+        ContentType.TimeLastModified,
+        ContentType.TimeCreated,
+        ContentType.IsReadonly
+    ],
 
     setTheme: (theme: string) => {
         localStorage.setItem("theme", theme);

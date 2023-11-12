@@ -16,10 +16,10 @@ pub struct WindowProperties
     pub maximum_height: Option<f64>,
     
     // position
-    pub centered: bool,
-    pub fullscreen: bool,
     pub x_position: Option<f64>,
     pub y_position: Option<f64>,
+    pub fullscreen: bool,
+    pub centered: bool,
 
     // misc
     pub title: String,

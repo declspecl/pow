@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction } from "react";
 
 // backend
 import { UserConfig } from "@/backend/UserConfig";
-import { access_directory, get_default_user_config, parse_path } from "@/backend/Commands";
+import { access_directory, get_default_user_config, open_user_config_in_default_program, parse_path } from "@/backend/Commands";
 
 // stores
 import { useNaviHistoryStore } from "@/stores/NaviHistory";
@@ -32,7 +32,7 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
             <div className="flex flex-col gap-1 text-base text-text">
                 <p>The following error occured when {userConfigError.when}:</p>
 
-                <p className="text-ui-secondary">
+                <p className="text-ui-secondary font-mono">
                     {Object.keys(userConfigError.error)[0].toString()}: {Object.values(userConfigError.error)[0].toString()}
                 </p>
 
@@ -44,22 +44,13 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
 
             <div className="flex flex-row flex-wrap gap-4">
                 <button
-                    onClick={async () => {
-                        await exit(0);
+                    onClick={() => {
+                        open_user_config_in_default_program()
+                            .then(() => console.log("YIPPEE"))
+                            .catch((err) => console.error(err));
                     }}
                     className={clsx(
                         "px-4 py-1.5 rounded-md bg-ui-primary text-background"
-                    )}
-                >
-                    Close the application
-                </button>
-
-                <button
-                    onClick={() => {
-                        console.log("open config file");
-                    }}
-                    className={clsx(
-                        "px-4 py-1.5 rounded-md bg-ui-secondary text-background"
                     )}
                 >
                     Open configuration file
@@ -85,7 +76,7 @@ export function UserConfigError({ userConfigError, setUserConfigError, setUserCo
                             .catch((err) => setUserConfigError({ when: "getting the default configuration", error: err }));
                     }}
                     className={clsx(
-                        "px-4 py-1.5 rounded-md bg-ui-accent text-text"
+                        "px-4 py-1.5 rounded-md bg-ui-secondary text-background"
                     )}
                 >
                     Proceed with default configuration

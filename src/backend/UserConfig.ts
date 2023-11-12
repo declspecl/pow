@@ -21,10 +21,5 @@ export interface UserConfig {
         pinned_directories: string[]
         default_directory: string,
         excluded_extensions: string[]
-    },
-    appearance: {
-        theme: string,
-        font_size: number,
-        filled_icons: boolean
     }
 }

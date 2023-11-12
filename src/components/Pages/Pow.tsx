@@ -78,8 +78,8 @@ export function Pow() {
                         <ChaseView.Lamb
                             ref={lambRef}
                             defaultSize="35ex"
-                            minSize="30ex"
-                            maxSize="calc(100% - 30ex)"
+                            minSize="5ex"
+                            maxSize="calc(100% - 5ex)"
                             className="overflow-auto"
                         >
                             <FileTree />
