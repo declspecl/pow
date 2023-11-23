@@ -29,6 +29,8 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
 
     const naviHistory = useNaviHistoryStore();
 
+    // all the directories that will be listed
+    // the first two are always . and ..
     const directoryListings: React.ReactNode[] = [
         <ArbitraryDirectoryListing
             key="."
@@ -72,34 +74,33 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
         />
     ];
 
-    if (currentFSDirectory !== null && currentFSDirectory.children.length > 0) {
-        currentFSDirectory.children.forEach((fsNode, index) => {
-            directoryListings.push(
-                <FSNodeListing
-                    key={fsNode.tag === "directory" ? fsNode.data.path + index : fsNode.data.name}
-                    node={fsNode}
-                    selected={selectedIndex === index + 2}
-                    onClick={() => {
-                        setSelectedIndex(index + 2)
-                    }}
-                    onDoubleClick={() => {
-                        if (fsNode.tag === "directory") {
-                            // dont need to parse path because the path is already real/parsed
-                            access_directory(fsNode.data.path)
-                                .then((directory) => naviHistory.gotoArbitrary(directory.path))
-                                .catch((error) => setErrorLog((errorLog) => [
-                                    ...errorLog,
-                                    {
-                                        when: `trying to access the directory "${fsNode.data.path}"`,
-                                        error
-                                    }
-                                ]));
-                        }
-                    }}
-                />
-            );
-        });
-    }
+    // add the rest of the directories
+    currentFSDirectory?.children.forEach((fsNode, index) => {
+        directoryListings.push(
+            <FSNodeListing
+                key={fsNode.tag === "directory" ? fsNode.data.path + index : fsNode.data.name}
+                node={fsNode}
+                selected={selectedIndex === index + 2}
+                onClick={() => {
+                    setSelectedIndex(index + 2)
+                }}
+                onDoubleClick={() => {
+                    if (fsNode.tag === "directory") {
+                        // dont need to parse path because the path is already real/parsed
+                        access_directory(fsNode.data.path)
+                            .then((directory) => naviHistory.gotoArbitrary(directory.path))
+                            .catch((error) => setErrorLog((errorLog) => [
+                                ...errorLog,
+                                {
+                                    when: `trying to access the directory "${fsNode.data.path}"`,
+                                    error
+                                }
+                            ]));
+                    }
+                }}
+            />
+        );
+    });
 
     return (
         <div className="min-w-max w-full flex flex-col">

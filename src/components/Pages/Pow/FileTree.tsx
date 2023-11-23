@@ -25,10 +25,10 @@ export function FileTree() {
         for (const pinnedDirectory of userConfig.pow.pinned_directories) {
             get_bipartite_path(pinnedDirectory)
                 .then((pinnedDirectory) => {
-                    if (!isCancelled) {
-                        // incrementally set pinned directories
-                        setPinnedDirectories((pinnedDirectories) => [...pinnedDirectories, pinnedDirectory]);
-                    }
+                    if (isCancelled) return;
+
+                    // incrementally set pinned directories
+                    setPinnedDirectories((pinnedDirectories) => [...pinnedDirectories, pinnedDirectory]);
                 })
                 .catch((error) => setErrorLog((errorLog) => [
                     ...errorLog,

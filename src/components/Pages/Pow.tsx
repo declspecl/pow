@@ -5,9 +5,9 @@ import { useRef, useState, useEffect } from "react";
 import { Navbar } from "./Pow/Navbar";
 import { FileTree } from "./Pow/FileTree";
 import * as Toast from "@radix-ui/react-toast";
-import * as ChaseView from "@/components/ChaseView";
-import { ErrorToast, PowError } from "@/components/ErrorToast";
+import * as ChaseView from "@/components/ui/ChaseView";
 import { DirectoryContents } from "./Pow/DirectoryContents";
+import { ErrorToast, PowError } from "@/components/ui/ErrorToast";
 
 // backend
 import { FSDirectory } from "@/backend/FSNode";
@@ -41,8 +41,9 @@ export function Pow() {
             // only real, parsed paths are added to NaviHistory, so dont need to parse here before accessing
             access_directory(naviHistory.getCurrentDirectory())
                 .then((fsDirectory) => {
-                    if (!isCancelled)
-                        setCurrentFSDirectory(fsDirectory);
+                    if (isCancelled) return;
+
+                    setCurrentFSDirectory(fsDirectory);
                 })
                 .catch((error) => setErrorLog((errorLog) => [
                     ...errorLog,

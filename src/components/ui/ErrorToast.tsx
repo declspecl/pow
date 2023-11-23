@@ -17,6 +17,10 @@ export function ErrorToast({ errorLog } : ErrorToastProps) {
 
     useEffect(() => {
         setErrorLogExpanded((prevErrorLogExpanded) => [...prevErrorLogExpanded, false]);
+
+        return () => {
+            setErrorLogExpanded((prevErrorLogExpanded) => [...prevErrorLogExpanded.slice(0, -1)]);
+        }
     }, [errorLog]);
 
     return (
