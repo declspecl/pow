@@ -32,8 +32,8 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
                 className,
             )}
         >
-            {node.tag === "directory" ? (
-                <>
+            <div className="name flex flex-row items-center gap-1">
+                {node.tag === "directory" ? (
                     <FolderIcon
                         width="1em"
                         height="1em"
@@ -42,10 +42,7 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
                             { "fill-folder" : filledIcons }
                         )}
                     />
-                    <p>{contents}</p>
-                </>
-            ) : (
-                <>
+                ) : (
                     <FileIcon
                         width="1em"
                         height="1em"
@@ -54,9 +51,14 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
                             { "fill-file" : filledIcons }
                         )}
                     />
-                    <p>{contents}</p>
-                </>
-            )}
+                )}
+
+                <p>{contents}</p>
+            </div>
+
+            <div>
+                {node.data.info.len}
+            </div>
         </button>
     );
 }
