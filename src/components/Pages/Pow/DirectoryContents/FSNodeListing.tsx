@@ -26,13 +26,13 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className={clsx(
-                "flex flex-row items-center gap-1 bg-background whitespace-nowrap",
+                "w-max grid grid-cols-[subgrid] col-start-1 col-span-7",
                 { "bg-background-150" : selected },
                 { "hover:bg-background-100" : !selected },
                 className,
             )}
         >
-            <div className="name flex flex-row items-center gap-1">
+            <div className="inline-flex justify-start flex-row items-center gap-1">
                 {node.tag === "directory" ? (
                     <FolderIcon
                         width="1em"
@@ -53,7 +53,7 @@ export function FSNodeListing({ node, selected, onClick, onDoubleClick, classNam
                     />
                 )}
 
-                <p>{contents}</p>
+                <p className="overflow-ellipsis">{contents}</p>
             </div>
 
             <div>

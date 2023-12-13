@@ -21,21 +21,23 @@ export function ArbitraryDirectoryListing({ directory, selected, onClick, onDoub
             onClick={onClick}
             onDoubleClick={onDoubleClick}
             className={clsx(
-                "flex flex-row items-center gap-1 bg-background whitespace-nowrap",
+                "w-max grid grid-cols-[subgrid] col-start-1 col-span-7",
                 { "bg-background-150" : selected },
                 { "hover:bg-background-100" : !selected },
                 className,
             )}
         >
-            <FolderIcon
-                width="1em"
-                height="1em"
-                className={clsx(
-                    "min-w-[1em] min-h-[1em] stroke-ui-primary",
-                    { "fill-ui-primary" : filledIcons }
-                )}
-            />
-            <span>{directory}</span>
+            <div className="flex flex-row items-center gap-1">
+                <FolderIcon
+                    width="1em"
+                    height="1em"
+                    className={clsx(
+                        "min-w-[1em] min-h-[1em] stroke-ui-primary",
+                        { "fill-ui-primary" : filledIcons }
+                    )}
+                />
+                <span>{directory}</span>
+            </div>
         </button>
     );
 }

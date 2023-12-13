@@ -29,10 +29,8 @@ export function DirectoryContents({ currentFSDirectory }: DirectoryContentsProps
 
     const naviHistory = useNaviHistoryStore();
 
-    // add the rest of the directories
-
     return (
-        <div className="min-w-max w-full flex flex-col">
+        <div className="min-w-full grid grid-cols-[repeat(7,_minmax(auto,_500ch))]">
             <ArbitraryDirectoryListing
                 key="."
                 directory="."
